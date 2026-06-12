@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MAPEX-ADHEFAR Hub</title>
-  <meta name="description" content="Hub operativo de la Guía MAPEX-ADHEFAR — SEFH · Grupo ADHEFAR · 2026.">
+  <title>Herramientas de consulta — MAPEX-ADHEFAR Hub</title>
+  <meta name="description" content="Calculadora PDC/MPR, checklists de visita inicial y sucesiva, guion ADHEFAR-EM, clasificador de barreras CMO, plantillas de registro y hoja-resumen. Sin datos de pacientes.">
+  <meta property="og:title" content="Herramientas — MAPEX-ADHEFAR Hub">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
@@ -13,27 +16,878 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/print.css">
+  <style>
+    /* Layout con barra lateral */
+    .herr-layout { display:grid; gap:var(--sp-8); align-items:start; }
+    @media(min-width:1024px) { .herr-layout { grid-template-columns:240px 1fr; } }
+
+    .herr-sidebar {
+      position:sticky; top:80px;
+      background:var(--c-superficie);
+      border-radius:var(--radius-card);
+      border:1.5px solid var(--c-borde-claro);
+      padding:var(--sp-5);
+      box-shadow:var(--shadow-xs);
+    }
+    .herr-sidebar h3 { font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:.08em; color:var(--c-texto-secundario); font-family:var(--ff-body); font-weight:var(--fw-semi); margin-bottom:var(--sp-4); }
+    .herr-nav { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:2px; }
+    .herr-nav a { display:block; padding:var(--sp-3) var(--sp-4); font-size:var(--fs-sm); color:var(--c-texto-secundario); text-decoration:none; border-radius:var(--radius); border-left:2px solid transparent; transition:all var(--t-fast); }
+    .herr-nav a:hover { color:var(--c-texto); background:var(--c-fondo); border-left-color:var(--c-borde); }
+    .herr-nav a.activo { color:var(--c-acento); background:var(--c-acento-claro); border-left-color:var(--c-acento); font-weight:var(--fw-semi); }
+    .herr-selector-mobile { display:block; width:100%; margin-bottom:var(--sp-6); }
+    @media(min-width:1024px) { .herr-selector-mobile { display:none; } .herr-sidebar { display:block; } }
+    @media(max-width:1023px) { .herr-sidebar { display:none; } }
+
+    /* Sección de herramienta */
+    .herr-seccion {
+      background:var(--c-superficie);
+      border-radius:var(--radius-card);
+      border:1.5px solid var(--c-borde-claro);
+      box-shadow:var(--shadow-sm);
+      overflow:hidden;
+      margin-bottom:var(--sp-8);
+      scroll-margin-top:90px;
+    }
+    .herr-seccion-head {
+      padding:var(--sp-5) var(--sp-6);
+      border-bottom:1px solid var(--c-borde-claro);
+      display:flex; flex-wrap:wrap; gap:var(--sp-4); align-items:center; justify-content:space-between;
+    }
+    .herr-seccion-head h2 { font-size:var(--fs-xl); margin:0; }
+    .herr-seccion-desc { font-size:var(--fs-sm); color:var(--c-texto-secundario); margin:0; max-width:60ch; }
+    .herr-body { padding:var(--sp-6); }
+
+    /* Barra de progreso */
+    .progreso-wrap { margin-bottom:var(--sp-5); }
+    .progreso-label { font-size:var(--fs-xs); color:var(--c-texto-secundario); margin-bottom:var(--sp-2); display:flex; justify-content:space-between; }
+    .progreso-bar { height:8px; background:var(--c-borde-claro); border-radius:var(--radius-pill); overflow:hidden; }
+    .progreso-fill { height:100%; background:var(--c-acento); border-radius:var(--radius-pill); width:0; transition:width var(--t-base); }
+
+    /* Fieldset de checklist */
+    .check-fieldset { border:1.5px solid var(--c-borde-claro); border-radius:var(--radius-card); padding:var(--sp-5); margin-bottom:var(--sp-5); }
+    .check-fieldset legend { font-size:var(--fs-sm); font-weight:var(--fw-semi); color:var(--c-texto); padding:0 var(--sp-2); }
+    .check-items { display:flex; flex-direction:column; gap:4px; margin-top:var(--sp-4); }
+    .check-items label { display:flex; align-items:flex-start; gap:var(--sp-3); font-size:var(--fs-sm); cursor:pointer; padding:var(--sp-2) var(--sp-3); border-radius:var(--radius); transition:background var(--t-fast); line-height:var(--lh-snug); }
+    .check-items label:hover { background:var(--c-fondo); }
+    .check-items input[type="checkbox"] { margin-top:2px; flex-shrink:0; accent-color:var(--c-acento); width:16px; height:16px; }
+
+    /* PDC — añadir dispensaciones */
+    .pdc-add-row { display:grid; grid-template-columns:1fr 1fr auto; gap:var(--sp-3); align-items:end; margin-bottom:var(--sp-4); }
+    @media(max-width:600px) { .pdc-add-row { grid-template-columns:1fr 1fr; } .pdc-add-row .btn { grid-column:span 2; } }
+
+    /* Guion de 10 minutos */
+    .guion-bloques { display:flex; flex-direction:column; gap:var(--sp-3); }
+    .guion-bloque {
+      border-radius:var(--radius-card);
+      border:1.5px solid var(--c-borde-claro);
+      overflow:hidden;
+      transition:border-color var(--t-base), box-shadow var(--t-base);
+    }
+    .guion-bloque.bloque-activo { border-color:var(--c-acento); box-shadow:0 0 0 3px rgba(109,40,217,.12); }
+    .guion-bloque-head {
+      display:flex; gap:var(--sp-4); align-items:center;
+      padding:var(--sp-4) var(--sp-5);
+      background:var(--c-fondo);
+    }
+    .guion-tiempo {
+      font-size:var(--fs-xs); font-weight:var(--fw-semi); text-transform:uppercase;
+      letter-spacing:.07em; white-space:nowrap;
+      color:var(--c-texto-secundario);
+      min-width:72px;
+    }
+    .guion-bloque.bloque-activo .guion-tiempo { color:var(--c-acento); }
+    .guion-bloque-head h4 { font-size:var(--fs-base); font-family:var(--ff-body); font-weight:var(--fw-semi); margin:0; }
+    .guion-body { padding:var(--sp-4) var(--sp-5); background:var(--c-superficie); }
+    .guion-body p { font-size:var(--fs-sm); color:var(--c-texto-secundario); margin-bottom:var(--sp-3); }
+    .guion-body p:last-child { margin:0; }
+    .guion-preguntas { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:var(--sp-2); }
+    .guion-preguntas li { font-size:var(--fs-sm); color:var(--c-texto); padding:var(--sp-2) var(--sp-3); background:var(--c-fondo); border-radius:var(--radius); border-left:3px solid var(--c-acento); font-style:italic; line-height:var(--lh-snug); }
+    .timer-box { background:var(--c-institucional); color:#fff; border-radius:var(--radius-card); padding:var(--sp-5); display:flex; align-items:center; gap:var(--sp-5); flex-wrap:wrap; margin-bottom:var(--sp-6); }
+    .timer-display { font-family:var(--ff-display); font-size:var(--fs-3xl); color:#fff; min-width:80px; text-align:center; }
+    .timer-label { font-size:var(--fs-xs); color:rgba(255,255,255,.55); text-transform:uppercase; letter-spacing:.08em; }
+
+    /* Modo consulta */
+    .modo-consulta .site-header,
+    .modo-consulta .site-footer,
+    .modo-consulta .page-hero,
+    .modo-consulta .herr-sidebar,
+    .modo-consulta .herr-selector-mobile,
+    .modo-consulta .notice,
+    .modo-consulta .herr-seccion:not(#guion),
+    .modo-consulta #guion .herr-seccion-desc,
+    .modo-consulta #guion .herr-seccion-head .btn-group,
+    .modo-consulta #guion-modo-consulta { display:none !important; }
+    .modo-consulta #guion-salir-modo { display:inline-flex !important; }
+    .modo-consulta body { background:var(--c-institucional); }
+    .modo-consulta #guion { border-color:rgba(255,255,255,.15); background:rgba(255,255,255,.04); }
+    .modo-consulta .guion-bloque-head { background:rgba(255,255,255,.06); }
+    .modo-consulta .guion-bloque { border-color:rgba(255,255,255,.12); }
+    .modo-consulta .guion-bloque.bloque-activo { border-color:var(--c-acento); }
+    .modo-consulta .guion-bloque-head h4 { color:#fff; }
+    .modo-consulta .guion-body { background:transparent; }
+    .modo-consulta .guion-body p { color:rgba(255,255,255,.7); }
+    .modo-consulta .guion-preguntas li { background:rgba(255,255,255,.08); color:#fff; }
+    .modo-consulta .guion-tiempo { color:rgba(255,255,255,.5); }
+    .modo-consulta .guion-bloque.bloque-activo .guion-tiempo { color:rgba(167,139,250,.9); }
+
+    /* Árbol de decisión */
+    .arbol-grid { display:grid; gap:var(--sp-4); }
+    @media(min-width:640px) { .arbol-grid { grid-template-columns:1fr 1fr; } }
+
+    /* Plantillas — textarea output */
+    #plantilla-output { display:none; width:100%; font-family:monospace; font-size:0.778rem; line-height:1.6; color:var(--c-texto); background:var(--c-fondo); border:1.5px solid var(--c-borde); border-radius:var(--radius); padding:var(--sp-4); resize:vertical; margin-top:var(--sp-4); min-height:260px; }
+
+    /* Hoja resumen */
+    .resumen-tabla { width:100%; border-collapse:collapse; font-size:0.778rem; }
+    .resumen-tabla th { background:var(--c-institucional); color:#fff; font-size:0.667rem; text-transform:uppercase; letter-spacing:.06em; padding:var(--sp-3) var(--sp-3); text-align:left; border:1px solid rgba(255,255,255,.1); }
+    .resumen-tabla td { padding:var(--sp-3); border:1px solid var(--c-borde-claro); vertical-align:top; line-height:var(--lh-snug); color:var(--c-texto); }
+    .resumen-tabla tr:nth-child(even) td { background:var(--c-fondo); }
+    .resumen-tabla .dim { font-weight:600; color:var(--c-institucional); background:var(--c-institucional-claro) !important; }
+    @media print {
+      .resumen-tabla { font-size:8pt; }
+      .resumen-tabla th { font-size:7pt; }
+    }
+  </style>
 </head>
 <body>
   <div id="site-header-placeholder"></div>
+
   <main id="contenido-principal">
+
     <div class="page-hero">
       <div class="container">
-        <span class="eyebrow">Próximamente</span>
-        <h1>Sección en construcción</h1>
-        <p class="lead">Esta sección se completará en las próximas tandas de desarrollo.</p>
+        <nav class="breadcrumb" aria-label="Ruta de navegación">
+          <a href="index.html">Inicio</a>
+          <span class="breadcrumb-sep" aria-hidden="true">›</span>
+          <span aria-current="page">Herramientas de consulta</span>
+        </nav>
+        <span class="eyebrow">Para farmacéuticos de hospital</span>
+        <h1>Herramientas de consulta</h1>
+        <p class="lead">Siete herramientas interactivas para la práctica diaria. Todas funcionan en tu navegador, sin enviar ningún dato. Imprimibles y exportables.</p>
       </div>
     </div>
+
     <section class="section">
       <div class="container">
-        <div class="notice notice-info" style="max-width:640px">
-          <div class="notice-icon" aria-hidden="true">🔧</div>
-          <div>Contenido en desarrollo. La estructura de navegación ya está operativa; el contenido de esta sección se publicará en breve.</div>
+
+        <div class="notice notice-privacidad" style="margin-bottom:var(--sp-6)">
+          <div class="notice-icon" aria-hidden="true">🛡</div>
+          <div><strong>Privacidad.</strong> Estas herramientas no almacenan ni envían datos. No introduzcas datos identificativos de pacientes (nombre, NHC, fecha de nacimiento). Los campos trabajan con datos anónimos de la visita.</div>
         </div>
-      </div>
+
+        <!-- Selector mobile -->
+        <div style="margin-bottom:var(--sp-6)" class="herr-selector-mobile">
+          <label for="herramienta-selector" class="sr-only">Ir a la herramienta</label>
+          <select id="herramienta-selector" class="select" aria-label="Seleccionar herramienta">
+            <option value="">Ir a una herramienta...</option>
+            <option value="pdc-mpr">A · Calculadora PDC/MPR</option>
+            <option value="checklist-inicial">B · Checklist visita inicial</option>
+            <option value="checklist-sucesiva">C · Checklist visita sucesiva</option>
+            <option value="guion">D · Guion ADHEFAR-EM (10 min)</option>
+            <option value="clasificador">E · Clasificador de barreras CMO</option>
+            <option value="plantillas">F · Plantillas de registro</option>
+            <option value="hoja-resumen">G · Hoja-resumen de consulta</option>
+          </select>
+        </div>
+
+        <div class="herr-layout">
+
+          <!-- Barra lateral -->
+          <nav class="herr-sidebar" aria-label="Herramientas disponibles">
+            <h3>Herramientas</h3>
+            <ul class="herr-nav">
+              <li><a href="#pdc-mpr">A · Calculadora PDC/MPR</a></li>
+              <li><a href="#checklist-inicial">B · Checklist visita inicial</a></li>
+              <li><a href="#checklist-sucesiva">C · Checklist visita sucesiva</a></li>
+              <li><a href="#guion">D · Guion 10 minutos</a></li>
+              <li><a href="#clasificador">E · Clasificador CMO</a></li>
+              <li><a href="#plantillas">F · Plantillas de registro</a></li>
+              <li><a href="#hoja-resumen">G · Hoja-resumen</a></li>
+            </ul>
+          </nav>
+
+          <!-- Contenido principal -->
+          <div>
+
+            <!-- ══════════════════════════════════
+                 A. CALCULADORA PDC / MPR
+            ══════════════════════════════════ -->
+            <article class="herr-seccion" id="pdc-mpr" aria-labelledby="h-pdc">
+              <div class="herr-seccion-head">
+                <div>
+                  <div class="pillar-badge capacidad" style="margin-bottom:var(--sp-3)">A · Medición objetiva</div>
+                  <h2 id="h-pdc">Calculadora PDC / MPR</h2>
+                  <p class="herr-seccion-desc">Calcula la Proporción de Días Cubiertos (PDC) y la Tasa de Posesión de la Medicación (MPR) a partir de las dispensaciones del período. Sin datos identificativos.</p>
+                </div>
+                <div class="btn-group no-print">
+                  <button class="btn btn-ghost btn-sm" onclick="window.print()">Imprimir</button>
+                </div>
+              </div>
+              <div class="herr-body">
+                <form id="form-pdc" novalidate>
+                  <div class="grid-2" style="margin-bottom:var(--sp-5)">
+                    <div class="form-group">
+                      <label for="pdc-inicio">Inicio del período</label>
+                      <input type="date" id="pdc-inicio" class="input" required aria-describedby="pdc-inicio-hint">
+                      <span id="pdc-inicio-hint" class="hint">Primera fecha de seguimiento</span>
+                    </div>
+                    <div class="form-group">
+                      <label for="pdc-fin">Fin del período</label>
+                      <input type="date" id="pdc-fin" class="input" required>
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-bottom:var(--sp-5)">
+                    <label for="pdc-umbral">Umbral de adherencia óptima (%)</label>
+                    <select id="pdc-umbral" class="select" aria-describedby="umbral-hint">
+                      <option value="80">80 % (general)</option>
+                      <option value="90">90 % (alta exigencia)</option>
+                      <option value="95">95 % (muy alta exigencia)</option>
+                    </select>
+                    <span id="umbral-hint" class="hint">Configura el umbral según el criterio de tu servicio y la patología. La guía indica &gt;80-90 % según el contexto.</span>
+                  </div>
+
+                  <fieldset class="check-fieldset">
+                    <legend>Dispensaciones del período</legend>
+                    <div class="pdc-add-row">
+                      <div class="form-group" style="margin:0">
+                        <label for="pdc-disp-fecha">Fecha de dispensación</label>
+                        <input type="date" id="pdc-disp-fecha" class="input" aria-label="Fecha de dispensación a añadir">
+                      </div>
+                      <div class="form-group" style="margin:0">
+                        <label for="pdc-disp-dias">Días dispensados</label>
+                        <input type="number" id="pdc-disp-dias" class="input" min="1" max="365" aria-label="Días dispensados en esta dispensación">
+                      </div>
+                      <button type="button" id="pdc-btn-add" class="btn btn-secondary">+ Añadir</button>
+                    </div>
+                    <div id="pdc-lista-disp" aria-live="polite" aria-label="Dispensaciones añadidas"></div>
+                  </fieldset>
+
+                  <div class="btn-group" style="margin-top:var(--sp-5)">
+                    <button type="submit" class="btn btn-primary">Calcular PDC y MPR</button>
+                    <button type="button" id="pdc-exportar" class="btn btn-secondary">Exportar .txt</button>
+                    <button type="button" id="pdc-limpiar" class="btn btn-ghost">Limpiar</button>
+                  </div>
+
+                  <div id="pdc-resultado" class="result-box" style="margin-top:var(--sp-5)" aria-live="polite" aria-label="Resultado del cálculo"></div>
+                </form>
+              </div>
+            </article>
+
+            <!-- ══════════════════════════════════
+                 B. CHECKLIST VISITA INICIAL
+            ══════════════════════════════════ -->
+            <article class="herr-seccion" id="checklist-inicial" aria-labelledby="h-cha" >
+              <div class="herr-seccion-head">
+                <div>
+                  <div class="pillar-badge acento" style="margin-bottom:var(--sp-3)">B · Anexo A</div>
+                  <h2 id="h-cha">Checklist visita inicial</h2>
+                  <p class="herr-seccion-desc">Guía estructurada para la primera consulta de adherencia: preparación, evaluación basal dual, clasificación CMO, estratificación y plan.</p>
+                </div>
+                <div class="btn-group no-print">
+                  <button class="btn btn-ghost btn-sm" onclick="window.print()">Imprimir</button>
+                  <button class="btn btn-secondary btn-sm" id="cha-exportar">Exportar .txt</button>
+                  <button class="btn btn-ghost btn-sm" id="cha-limpiar">Limpiar</button>
+                </div>
+              </div>
+              <div class="herr-body" id="checklist-a">
+                <div class="progreso-wrap">
+                  <div class="progreso-label">
+                    <span>Progreso</span>
+                    <span id="cha-pct">0 / 0 (0 %)</span>
+                  </div>
+                  <div class="progreso-bar" role="progressbar" aria-labelledby="cha-pct"><div class="progreso-fill" id="cha-progreso"></div></div>
+                </div>
+
+                <fieldset class="check-fieldset">
+                  <legend>1 · Preparación previa</legend>
+                  <div class="check-items">
+                    <label><input type="checkbox"> Revisar historial de dispensaciones (PDC/MPR del período previo, si existe)</label>
+                    <label><input type="checkbox"> Identificar diagnóstico, tratamiento activo y tiempo en tratamiento</label>
+                    <label><input type="checkbox"> Revisar eventos adversos previos y consultas recientes</label>
+                    <label><input type="checkbox"> Preparar herramientas de medición subjetiva (cuestionario validado)</label>
+                    <label><input type="checkbox"> Verificar disponibilidad de la historia clínica y acceso al sistema de dispensación</label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="check-fieldset">
+                  <legend>2 · Evaluación basal dual</legend>
+                  <div class="check-items">
+                    <label><input type="checkbox"> Calcular PDC o MPR (método objetivo) con los registros disponibles</label>
+                    <label><input type="checkbox"> Aplicar cuestionario validado de adherencia (Morisky-Green, TAI, MARS u otro según patología)</label>
+                    <label><input type="checkbox"> Registrar resultado basal de PROMs (resultados percibidos por el paciente)</label>
+                    <label><input type="checkbox"> Registrar resultado basal de PREMs (experiencia del paciente con la atención)</label>
+                    <label><input type="checkbox"> Comparar resultado objetivo y subjetivo: ¿son concordantes?</label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="check-fieldset">
+                  <legend>3 · Clasificación ABC y CMO</legend>
+                  <div class="check-items">
+                    <label><input type="checkbox"> Determinar fase de adherencia: ¿iniciación, implementación, persistencia?</label>
+                    <label><input type="checkbox"> Explorar barreras de Capacidad (complejidad, deterioro, efectos adversos, alfabetización)</label>
+                    <label><input type="checkbox"> Explorar barreras de Motivación (creencias, necesidad percibida, miedo, ambivalencia)</label>
+                    <label><input type="checkbox"> Explorar barreras de Oportunidad (acceso, apoyo social, logística, tecnología)</label>
+                    <label><input type="checkbox"> Identificar el pilar CMO predominante</label>
+                    <label><input type="checkbox"> Distinguir si la barrera es de práctica (no puede) o de percepción (no quiere/no cree)</label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="check-fieldset">
+                  <legend>4 · Estratificación y plan</legend>
+                  <div class="check-items">
+                    <label><input type="checkbox"> Estratificar al paciente: Prioridad 1 / 2 / 3</label>
+                    <label><input type="checkbox"> Seleccionar intervención alineada con el pilar CMO identificado</label>
+                    <label><input type="checkbox"> Aplicar intervención en la consulta (educación, EM, organización…)</label>
+                    <label><input type="checkbox"> Pactar el objetivo farmacoterapéutico (concreto, realista, evaluable)</label>
+                    <label><input type="checkbox"> Planificar seguimiento dual: cuándo y cómo (presencial / telemático)</label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="check-fieldset">
+                  <legend>5 · Teach-back y cierre</legend>
+                  <div class="check-items">
+                    <label><input type="checkbox"> Aplicar teach-back: el paciente explica con sus palabras qué ha entendido y qué va a hacer</label>
+                    <label><input type="checkbox"> Corregir malentendidos o lagunas de comprensión</label>
+                    <label><input type="checkbox"> Valorar si se precisa coordinación multidisciplinar (médico, enfermería, trabajo social…)</label>
+                    <label><input type="checkbox"> Acordar señales de alerta y vía de contacto entre visitas</label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="check-fieldset">
+                  <legend>6 · Registro y documentación</legend>
+                  <div class="check-items">
+                    <label><input type="checkbox"> Registrar en la historia clínica: PDC/MPR basal, cuestionario, barreras CMO, estratificación</label>
+                    <label><input type="checkbox"> Documentar intervención realizada y objetivo pactado</label>
+                    <label><input type="checkbox"> Registrar PROMs/PREMs basales</label>
+                    <label><input type="checkbox"> Fijar fecha de próxima visita o contacto telemático</label>
+                    <label><input type="checkbox"> Comunicar al prescriptor si precisa coordinación clínica</label>
+                  </div>
+                </fieldset>
+              </div>
+            </article>
+
+            <!-- ══════════════════════════════════
+                 C. CHECKLIST VISITA SUCESIVA
+            ══════════════════════════════════ -->
+            <article class="herr-seccion" id="checklist-sucesiva" aria-labelledby="h-chb">
+              <div class="herr-seccion-head">
+                <div>
+                  <div class="pillar-badge acento" style="margin-bottom:var(--sp-3)">C · Anexo B</div>
+                  <h2 id="h-chb">Checklist visita sucesiva y reestratificación</h2>
+                  <p class="herr-seccion-desc">Revisión estructurada en visitas de seguimiento: valoración de OFT, árbol de decisión y criterios de reestratificación.</p>
+                </div>
+                <div class="btn-group no-print">
+                  <button class="btn btn-ghost btn-sm" onclick="window.print()">Imprimir</button>
+                  <button class="btn btn-secondary btn-sm" id="chb-exportar">Exportar .txt</button>
+                  <button class="btn btn-ghost btn-sm" id="chb-limpiar">Limpiar</button>
+                </div>
+              </div>
+              <div class="herr-body" id="checklist-b">
+                <div class="progreso-wrap">
+                  <div class="progreso-label"><span>Progreso</span><span id="chb-pct">0 / 0 (0 %)</span></div>
+                  <div class="progreso-bar" role="progressbar" aria-labelledby="chb-pct"><div class="progreso-fill" id="chb-progreso"></div></div>
+                </div>
+
+                <fieldset class="check-fieldset">
+                  <legend>1 · Revisión del período</legend>
+                  <div class="check-items">
+                    <label><input type="checkbox"> Calcular PDC/MPR del período transcurrido desde la última visita</label>
+                    <label><input type="checkbox"> Aplicar cuestionario de adherencia (mismo instrumento que en visita inicial)</label>
+                    <label><input type="checkbox"> Evaluar PROMs y PREMs y comparar con valores previos</label>
+                    <label><input type="checkbox"> Revisar eventos adversos, cambios de tratamiento o incidencias desde la última visita</label>
+                    <label><input type="checkbox"> Preguntar por el objetivo pactado en la visita anterior</label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="check-fieldset">
+                  <legend>2 · Valoración de OFT</legend>
+                  <div class="check-items">
+                    <label><input type="checkbox"> Comparar valores clínicos actuales con los OFT pactados</label>
+                    <label><input type="checkbox"> Verificar que el paciente conoce y recuerda el objetivo pactado</label>
+                    <label><input type="checkbox"> Valorar si la adherencia es suficiente para alcanzar los OFT</label>
+                  </div>
+                </fieldset>
+
+                <!-- Árbol de decisión -->
+                <fieldset class="check-fieldset">
+                  <legend>3 · Árbol de decisión</legend>
+                  <div class="arbol-grid" style="margin-top:var(--sp-4)">
+                    <div class="form-group">
+                      <label for="oft-cumplidos">¿Se han alcanzado los OFT en este período?</label>
+                      <select id="oft-cumplidos" class="select" aria-describedby="oft-hint">
+                        <option value="">Seleccionar...</option>
+                        <option value="si">Sí, OFT alcanzados</option>
+                        <option value="no">No, OFT no alcanzados</option>
+                      </select>
+                      <span id="oft-hint" class="hint">Objetivos farmacoterapéuticos pactados en la visita anterior.</span>
+                    </div>
+                    <div class="form-group" id="causa-group">
+                      <label for="causa-evitable">Causa principal del incumplimiento</label>
+                      <select id="causa-evitable" class="select">
+                        <option value="">Seleccionar...</option>
+                        <option value="cmo">Causa evitable (barrera CMO identificable)</option>
+                        <option value="clinica">Causa clínica (progresión de enfermedad, comorbilidad)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div id="arbol-resultado" class="result-box" style="margin-top:var(--sp-4)" aria-live="polite"></div>
+                </fieldset>
+
+                <fieldset class="check-fieldset">
+                  <legend>4 · Intervención y ajuste de plan</legend>
+                  <div class="check-items">
+                    <label><input type="checkbox"> Aplicar o reforzar intervención CMO según barrera identificada</label>
+                    <label><input type="checkbox"> Revisar o actualizar el objetivo farmacoterapéutico pactado</label>
+                    <label><input type="checkbox"> Aplicar teach-back si se han introducido cambios en el plan</label>
+                    <label><input type="checkbox"> Valorar ajuste de modalidad de seguimiento (presencial / telemático)</label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="check-fieldset">
+                  <legend>5 · Criterios de reestratificación</legend>
+                  <p style="font-size:var(--fs-sm);color:var(--c-texto-secundario);margin-bottom:var(--sp-4)">Marca si concurren los tres criterios. La reestratificación es obligatoria cuando los tres se cumplen simultáneamente.</p>
+                  <div class="check-items">
+                    <label><input type="checkbox" class="criterio-restrat"> <strong>Criterio 1.</strong> Incumplimiento sostenido de los OFT en esta visita de revisión</label>
+                    <label><input type="checkbox" class="criterio-restrat"> <strong>Criterio 2.</strong> Adherencia insuficiente validada por medición dual (PDC/MPR + cuestionario)</label>
+                    <label><input type="checkbox" class="criterio-restrat"> <strong>Criterio 3.</strong> PROMs o PREMs alterados respecto al valor basal o umbral esperado</label>
+                  </div>
+                  <div id="reestrat-resultado" class="result-box" style="margin-top:var(--sp-4)" aria-live="polite"></div>
+                </fieldset>
+
+                <fieldset class="check-fieldset">
+                  <legend>6 · Registro</legend>
+                  <div class="check-items">
+                    <label><input type="checkbox"> Registrar PDC/MPR, cuestionario, PROMs/PREMs del período</label>
+                    <label><input type="checkbox"> Documentar resultado del árbol de decisión y la intervención realizada</label>
+                    <label><input type="checkbox"> Registrar nueva estratificación si ha cambiado</label>
+                    <label><input type="checkbox"> Fijar fecha de próxima revisión y plan de seguimiento</label>
+                  </div>
+                </fieldset>
+              </div>
+            </article>
+
+            <!-- ══════════════════════════════════
+                 D. GUION ADHEFAR-EM 10 MINUTOS
+            ══════════════════════════════════ -->
+            <article class="herr-seccion" id="guion" aria-labelledby="h-guion">
+              <div class="herr-seccion-head">
+                <div>
+                  <div class="pillar-badge acento" style="margin-bottom:var(--sp-3)">D · Anexo D</div>
+                  <h2 id="h-guion">Guion ADHEFAR-EM de 10 minutos</h2>
+                  <p class="herr-seccion-desc">Tarjeta de consulta con la secuencia temporal del algoritmo ADHEFAR-EM. Activa el modo consulta para pantalla limpia y tipografía grande.</p>
+                </div>
+                <div class="btn-group no-print">
+                  <button class="btn btn-primary btn-sm" id="guion-modo-consulta">Modo consulta</button>
+                  <button class="btn btn-ghost btn-sm" style="display:none" id="guion-salir-modo">✕ Salir del modo consulta</button>
+                  <button class="btn btn-ghost btn-sm" onclick="window.print()">Imprimir</button>
+                </div>
+              </div>
+              <div class="herr-body" id="guion-em">
+
+                <!-- Temporizador -->
+                <div class="timer-box no-print" aria-label="Temporizador de consulta">
+                  <div>
+                    <div class="timer-label">Tiempo transcurrido</div>
+                    <div class="timer-display" id="timer-display" aria-live="polite" aria-label="Tiempo">0:00</div>
+                  </div>
+                  <div class="btn-group">
+                    <button class="btn btn-hero-secondary btn-sm" id="timer-start" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3)">Iniciar</button>
+                    <button class="btn btn-ghost btn-sm" id="timer-reset" style="color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.2)">Reiniciar</button>
+                  </div>
+                  <div style="font-size:0.667rem;color:rgba(255,255,255,.4);max-width:200px">El bloque activo se resalta automáticamente según el tiempo transcurrido.</div>
+                </div>
+
+                <div class="guion-bloques" role="list">
+
+                  <div class="guion-bloque" data-from="0" data-to="1" role="listitem">
+                    <div class="guion-bloque-head">
+                      <div class="guion-tiempo">0 – 1 min</div>
+                      <h4>Abrir el foco · Conexión</h4>
+                    </div>
+                    <div class="guion-body">
+                      <p>Establecer la alianza terapéutica. Situar la conversación sobre el tratamiento de forma natural y sin juicio.</p>
+                      <ul class="guion-preguntas" aria-label="Preguntas orientativas">
+                        <li>«¿Cómo le está yendo con el tratamiento desde la última vez que nos vimos?»</li>
+                        <li>«¿Ha habido algún cambio en su día a día que quiera contarme?»</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="guion-bloque" data-from="1" data-to="3" role="listitem">
+                    <div class="guion-bloque-head">
+                      <div class="guion-tiempo">1 – 3 min</div>
+                      <h4>Detectar la barrera · Clasificación CMO</h4>
+                    </div>
+                    <div class="guion-body">
+                      <p>Explorar si hay olvidos, dificultades de organización, creencias o barreras de acceso. Clasificar en C, M u O.</p>
+                      <ul class="guion-preguntas" aria-label="Preguntas orientativas">
+                        <li>«¿Hay algún momento del día en que se le olvida o le cuesta más tomarlo?»</li>
+                        <li>«¿Hay algo en el tratamiento que le preocupe o que no le acabe de convencer?»</li>
+                        <li>«¿Le resulta fácil conseguir la medicación o a veces hay dificultades?»</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="guion-bloque" data-from="3" data-to="5" role="listitem">
+                    <div class="guion-bloque-head">
+                      <div class="guion-tiempo">3 – 5 min</div>
+                      <h4>Explorar la ambivalencia · Escucha activa</h4>
+                    </div>
+                    <div class="guion-body">
+                      <p>Reconocer los dos lados de la ambivalencia: las razones para tomar y para no tomar. Reflejar sin confrontar.</p>
+                      <ul class="guion-preguntas" aria-label="Preguntas orientativas">
+                        <li>«Por un lado me dice que le cuesta… y por otro, ¿qué es lo que le hace seguir tomándolo?»</li>
+                        <li>«Si imaginara que el tratamiento va muy bien, ¿qué sería diferente en su vida?»</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="guion-bloque" data-from="5" data-to="7" role="listitem">
+                    <div class="guion-bloque-head">
+                      <div class="guion-tiempo">5 – 7 min</div>
+                      <h4>Evocar el motivo propio · Refuerzo de la autonomía</h4>
+                    </div>
+                    <div class="guion-body">
+                      <p>Ayudar al paciente a articular su propio motivo para el cambio. No persuadir: evocar y reforzar.</p>
+                      <ul class="guion-preguntas" aria-label="Preguntas orientativas">
+                        <li>«¿Qué es lo más importante para usted en este momento de su vida?»</li>
+                        <li>«¿En qué nota usted que el tratamiento le ayuda (o le ayudaría)?»</li>
+                        <li>«En una escala del 1 al 10, ¿cómo de importante es para usted seguir con el tratamiento?»</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="guion-bloque" data-from="7" data-to="9" role="listitem">
+                    <div class="guion-bloque-head">
+                      <div class="guion-tiempo">7 – 9 min</div>
+                      <h4>Pactar el objetivo · Decisión compartida</h4>
+                    </div>
+                    <div class="guion-body">
+                      <p>Acordar un objetivo concreto, realista y significativo para el paciente. Consignar el plan en la historia clínica.</p>
+                      <ul class="guion-preguntas" aria-label="Preguntas orientativas">
+                        <li>«¿Qué podría hacer de forma diferente esta semana para que sea más fácil tomarlo?»</li>
+                        <li>«¿Qué objetivo concreto le parece alcanzable y que tenga sentido para usted?»</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="guion-bloque" data-from="9" data-to="10" role="listitem">
+                    <div class="guion-bloque-head">
+                      <div class="guion-tiempo">9 – 10 min</div>
+                      <h4>Teach-back y cierre · Confirmar la comprensión</h4>
+                    </div>
+                    <div class="guion-body">
+                      <p>Pedir al paciente que explique con sus propias palabras qué va a hacer. Acordar próxima cita o contacto.</p>
+                      <ul class="guion-preguntas" aria-label="Preguntas orientativas">
+                        <li>«Para asegurarme de que nos hemos entendido bien, ¿puede contarme qué es lo que vamos a hacer?»</li>
+                        <li>«¿Hay algo que no haya quedado claro o que quiera preguntarme antes de irse?»</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </article>
+
+            <!-- ══════════════════════════════════
+                 E. CLASIFICADOR CMO
+            ══════════════════════════════════ -->
+            <article class="herr-seccion" id="clasificador" aria-labelledby="h-cmo">
+              <div class="herr-seccion-head">
+                <div>
+                  <div class="pillar-badge motivacion" style="margin-bottom:var(--sp-3)">E · Clasificador</div>
+                  <h2 id="h-cmo">Clasificador de barreras CMO</h2>
+                  <p class="herr-seccion-desc">Marca las barreras observadas. La herramienta identifica el pilar predominante (C, M u O) y sugiere el tipo de intervención correspondiente.</p>
+                </div>
+                <div class="btn-group no-print">
+                  <button class="btn btn-ghost btn-sm" onclick="window.print()">Imprimir</button>
+                </div>
+              </div>
+              <div class="herr-body">
+                <form id="form-cmo" novalidate>
+                  <div style="display:grid;gap:var(--sp-5)">
+                    <fieldset class="check-fieldset" style="border-color:rgba(37,99,235,.25)">
+                      <legend style="color:var(--c-capacidad-texto)">Barreras de Capacidad</legend>
+                      <div class="check-items">
+                        <label><input type="checkbox" id="cmo-q1"> El paciente tiene dificultades para recordar las tomas o para organizar su medicación.</label>
+                        <label><input type="checkbox" id="cmo-q2"> Existen barreras físicas o cognitivas para la administración (destreza, visión, comprensión).</label>
+                        <label><input type="checkbox" id="cmo-q3"> El régimen terapéutico es complejo (múltiples fármacos, distintos horarios, formas especiales).</label>
+                        <label><input type="checkbox" id="cmo-q4"> El paciente refiere o muestra eventos adversos que le dificultan o desalientan la toma.</label>
+                      </div>
+                    </fieldset>
+
+                    <fieldset class="check-fieldset" style="border-color:rgba(217,119,6,.25)">
+                      <legend style="color:var(--c-motivacion-texto)">Barreras de Motivación</legend>
+                      <div class="check-items">
+                        <label><input type="checkbox" id="cmo-q5"> El paciente expresa dudas, miedos o creencias negativas sobre su medicación o su enfermedad.</label>
+                        <label><input type="checkbox" id="cmo-q6"> El paciente no percibe la necesidad del tratamiento («me encuentro bien», «para qué sirve»).</label>
+                        <label><input type="checkbox" id="cmo-q7"> El paciente muestra ambivalencia, resistencia o baja disposición al cambio.</label>
+                        <label><input type="checkbox" id="cmo-q8"> Hay discrepancia entre lo que el paciente dice y los datos objetivos de adherencia.</label>
+                      </div>
+                    </fieldset>
+
+                    <fieldset class="check-fieldset" style="border-color:rgba(5,150,105,.25)">
+                      <legend style="color:var(--c-oportunidad-texto)">Barreras de Oportunidad</legend>
+                      <div class="check-items">
+                        <label><input type="checkbox" id="cmo-q9"> El paciente tiene dificultades de acceso al centro, a la dispensación o al transporte.</label>
+                        <label><input type="checkbox" id="cmo-q10"> El entorno familiar o social no apoya o interfiere en la toma correcta del tratamiento.</label>
+                        <label><input type="checkbox" id="cmo-q11"> El paciente carece de recordatorios, rutinas o estructura de toma en su vida diaria.</label>
+                        <label><input type="checkbox" id="cmo-q12"> Existen barreras logísticas o tecnológicas para el seguimiento telemático.</label>
+                      </div>
+                    </fieldset>
+                  </div>
+
+                  <div class="btn-group" style="margin-top:var(--sp-5)">
+                    <button type="submit" class="btn btn-primary">Clasificar barreras</button>
+                    <button type="button" id="cmo-limpiar" class="btn btn-ghost">Limpiar</button>
+                  </div>
+                  <div id="cmo-clasificador-resultado" class="result-box" style="margin-top:var(--sp-5)" aria-live="polite" aria-label="Resultado de la clasificación"></div>
+                </form>
+              </div>
+            </article>
+
+            <!-- ══════════════════════════════════
+                 F. PLANTILLAS DE REGISTRO
+            ══════════════════════════════════ -->
+            <article class="herr-seccion" id="plantillas" aria-labelledby="h-plt">
+              <div class="herr-seccion-head">
+                <div>
+                  <div class="pillar-badge oportunidad" style="margin-bottom:var(--sp-3)">F · Anexos C y F</div>
+                  <h2 id="h-plt">Plantillas de registro y comunicación</h2>
+                  <p class="herr-seccion-desc">Genera un texto estructurado listo para copiar y pegar en la historia clínica del centro. La web no guarda ningún dato.</p>
+                </div>
+                <div class="btn-group no-print">
+                  <button class="btn btn-ghost btn-sm" onclick="window.print()">Imprimir</button>
+                </div>
+              </div>
+              <div class="herr-body">
+                <form id="form-plantilla" novalidate>
+                  <div style="display:grid;gap:var(--sp-5)">
+
+                    <div class="form-group">
+                      <label for="plt-tipo">Tipo de visita</label>
+                      <select id="plt-tipo" class="select">
+                        <option value="">Seleccionar...</option>
+                        <option value="Visita inicial">Visita inicial</option>
+                        <option value="Visita sucesiva presencial">Visita sucesiva presencial</option>
+                        <option value="Seguimiento telemático">Seguimiento telemático (telefarmacia)</option>
+                        <option value="Contacto telefónico">Contacto telefónico</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="plt-barrera">Señal de alerta / motivo de intervención</label>
+                      <textarea id="plt-barrera" class="textarea" rows="2" aria-describedby="plt-barrera-hint"></textarea>
+                      <span id="plt-barrera-hint" class="hint">Describe qué ha activado la intervención: PDC bajo, cuestionario positivo, falta de respuesta, cambio en PROMs, etc.</span>
+                    </div>
+
+                    <div class="grid-2">
+                      <div class="form-group">
+                        <label for="plt-barrera">Barrera CMO predominante</label>
+                        <select id="plt-intervencion" class="select">
+                          <option value="">Seleccionar...</option>
+                          <option value="Capacidad — barrera de práctica">Capacidad — barrera de práctica</option>
+                          <option value="Motivación — barrera de percepción">Motivación — barrera de percepción</option>
+                          <option value="Oportunidad — barrera de entorno">Oportunidad — barrera de entorno</option>
+                          <option value="CMO mixta — múltiples pilares">CMO mixta — múltiples pilares</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="plt-inter-desc">Intervención realizada</label>
+                        <textarea id="plt-inter-desc" class="textarea" rows="2"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="plt-objetivo">Objetivo farmacoterapéutico pactado</label>
+                      <textarea id="plt-objetivo" class="textarea" rows="2" aria-describedby="plt-objetivo-hint"></textarea>
+                      <span id="plt-objetivo-hint" class="hint">Concreto, realista y evaluable en la siguiente visita. Acordado con el paciente.</span>
+                    </div>
+
+                    <div class="grid-2">
+                      <div class="form-group">
+                        <label for="plt-teachback">Teach-back — resultado</label>
+                        <select id="plt-teachback" class="select">
+                          <option value="">Seleccionar...</option>
+                          <option value="Comprensión correcta confirmada">Comprensión correcta confirmada</option>
+                          <option value="Se han aclarado dudas y confirmado comprensión">Se han aclarado dudas y confirmado comprensión</option>
+                          <option value="Comprensión parcial: se acordó seguimiento adicional">Comprensión parcial: se acordó seguimiento adicional</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="plt-multidisc">Coordinación multidisciplinar</label>
+                        <textarea id="plt-multidisc" class="textarea" rows="2" aria-label="Coordinación multidisciplinar si precisa"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="grid-2">
+                      <div class="form-group">
+                        <label for="plt-prox">Próxima visita / contacto</label>
+                        <input type="text" id="plt-prox" class="input" aria-label="Descripción del próximo contacto planificado">
+                      </div>
+                      <div class="form-group">
+                        <label for="plt-indicador">Indicador de evaluación</label>
+                        <input type="text" id="plt-indicador" class="input" aria-describedby="plt-ind-hint">
+                        <span id="plt-ind-hint" class="hint">Ej.: PDC &gt;80 %, TAI ≥12, ACT &gt;19…</span>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="plt-notas">Notas adicionales (opcional)</label>
+                      <textarea id="plt-notas" class="textarea" rows="2"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="btn-group" style="margin-top:var(--sp-5)">
+                    <button type="submit" class="btn btn-primary">Generar registro</button>
+                    <button type="button" id="plt-copiar" class="btn btn-secondary">Copiar al portapapeles</button>
+                    <button type="button" id="plt-exportar" class="btn btn-ghost">Exportar .txt</button>
+                    <button type="button" id="plt-limpiar" class="btn btn-ghost">Limpiar</button>
+                  </div>
+                  <textarea id="plantilla-output" readonly aria-label="Texto de registro generado" aria-live="polite"></textarea>
+                </form>
+              </div>
+            </article>
+
+            <!-- ══════════════════════════════════
+                 G. HOJA-RESUMEN DE CONSULTA
+            ══════════════════════════════════ -->
+            <article class="herr-seccion" id="hoja-resumen" aria-labelledby="h-res">
+              <div class="herr-seccion-head">
+                <div>
+                  <div class="pillar-badge institucional" style="margin-bottom:var(--sp-3)">G · Anexo E</div>
+                  <h2 id="h-res">Hoja-resumen de consulta</h2>
+                  <p class="herr-seccion-desc">Tabla de referencia rápida: qué mido, cuándo, con qué, cómo interpreto, qué intervengo, cómo registro y cómo evalúo. Imprimible en una cara.</p>
+                </div>
+                <div class="btn-group no-print">
+                  <button class="btn btn-primary btn-sm" onclick="window.print()">Imprimir una cara</button>
+                </div>
+              </div>
+              <div class="herr-body" style="overflow-x:auto">
+                <div class="print-header">
+                  <strong>Hoja-resumen de consulta · MAPEX-ADHEFAR Hub</strong><br>
+                  <span style="font-size:0.778rem">Grupo ADHEFAR · SEFH · 2026</span>
+                </div>
+                <table class="resumen-tabla" aria-label="Hoja-resumen de consulta de adherencia">
+                  <thead>
+                    <tr>
+                      <th>¿Qué mido?</th>
+                      <th>¿Cuándo?</th>
+                      <th>¿Con qué?</th>
+                      <th>¿Cómo interpreto?</th>
+                      <th>¿Qué intervengo?</th>
+                      <th>¿Cómo registro?</th>
+                      <th>¿Cómo evalúo?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="dim">Adherencia objetiva</td>
+                      <td>Todas las visitas</td>
+                      <td>PDC, MPR, registros de dispensación, recuento de unidades</td>
+                      <td>PDC/MPR &gt;80-90 % = adherencia óptima (umbral configurable por patología y servicio)</td>
+                      <td>Si PDC/MPR bajo: clasificar barrera CMO e intervenir</td>
+                      <td>PDC/MPR del período en historia clínica</td>
+                      <td>Comparar con valor basal y con umbral del servicio</td>
+                    </tr>
+                    <tr>
+                      <td class="dim">Adherencia subjetiva</td>
+                      <td>Todas las visitas</td>
+                      <td>Cuestionario validado (Morisky-Green, TAI, MARS, BMQ u otros); entrevista estructurada</td>
+                      <td>Según instrumento y puntos de corte validados para la patología</td>
+                      <td>Si positivo: identificar barrera predominante C, M u O</td>
+                      <td>Resultado del cuestionario y hallazgos de entrevista</td>
+                      <td>Cambio en puntuación respecto a visita anterior</td>
+                    </tr>
+                    <tr>
+                      <td class="dim">PROMs</td>
+                      <td>Visita inicial y sucesivas; seguimiento dual</td>
+                      <td>Instrumento validado según patología (ej.: ACT en asma, HAQ en AR, EDSS en EM)</td>
+                      <td>Según puntos de corte del instrumento y OFT pactados</td>
+                      <td>Si alterados + PDC bajo + OFT no alcanzados: reestratificar</td>
+                      <td>Puntuación y comparación basal en historia clínica</td>
+                      <td>Cambio clínicamente significativo respecto al basal</td>
+                    </tr>
+                    <tr>
+                      <td class="dim">PREMs</td>
+                      <td>Visita inicial y revisiones periódicas</td>
+                      <td>Cuestionario de experiencia del paciente validado para el servicio</td>
+                      <td>Según puntuación y umbrales definidos por el servicio</td>
+                      <td>Si alterados: revisar circuito asistencial y accesibilidad</td>
+                      <td>Resultado en historia clínica; incluir en indicadores del servicio</td>
+                      <td>Cambio respecto al basal y comparación con estándar del servicio</td>
+                    </tr>
+                    <tr>
+                      <td class="dim">Barreras CMO</td>
+                      <td>Visita inicial y cuando hay alerta</td>
+                      <td>Entrevista estructurada; clasificador CMO (Capacidad / Motivación / Oportunidad)</td>
+                      <td>Identificar pilar predominante y tipo de barrera (práctica vs. percepción)</td>
+                      <td>C: educación/técnica · M: entrevista motivacional · O: telefarmacia/logística</td>
+                      <td>Barrera identificada, pilar CMO y tipo de intervención en historia clínica</td>
+                      <td>Resolución o persistencia de la barrera en la siguiente visita</td>
+                    </tr>
+                    <tr>
+                      <td class="dim">OFT</td>
+                      <td>Pactados en cada visita; revisados en la siguiente</td>
+                      <td>Parámetros clínicos relevantes para la patología (HbA1c, TA, espirometría, analítica…)</td>
+                      <td>Según objetivos pactados con el paciente y estándares clínicos de la patología</td>
+                      <td>Si no alcanzados: árbol de decisión (causa CMO → intervenir; causa clínica → multidisciplinar)</td>
+                      <td>OFT pactado, valor actual y valoración de cumplimiento</td>
+                      <td>Grado de consecución del OFT pactado en la visita anterior</td>
+                    </tr>
+                    <tr>
+                      <td class="dim">Estratificación</td>
+                      <td>Visita inicial; reestratificación cuando concurren los 3 criterios</td>
+                      <td>Criterios de la guía: OFT incumplidos + adherencia insuficiente + PROMs/PREMs alterados</td>
+                      <td>P1 = alta (los 3 criterios); P2 = intermedia; P3 = baja (adherencia óptima)</td>
+                      <td>P1: intervención intensiva · P2: refuerzo · P3: mantenimiento</td>
+                      <td>Nivel de prioridad actual y fecha de última estratificación</td>
+                      <td>Cambio de nivel en cada reestratificación; indicador de concordancia estratificación-intervención</td>
+                    </tr>
+                    <tr>
+                      <td class="dim">Plan y seguimiento</td>
+                      <td>Al cierre de cada visita</td>
+                      <td>Objetivo pactado (teach-back), modalidad de seguimiento (presencial/telemático), fecha próxima cita</td>
+                      <td>El paciente sabe qué va a hacer, cuándo es la próxima cita y cómo contactar</td>
+                      <td>Ajustar modalidad de seguimiento según nivel de prioridad y preferencias del paciente</td>
+                      <td>Plan documentado en historia clínica; copia para el paciente si procede</td>
+                      <td>Cumplimiento del plan en la siguiente visita; tasa de asistencia a citas</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="print-footer">
+                  Hoja-resumen de consulta · Guía MAPEX-ADHEFAR (SEFH, 2026) · Grupo ADHEFAR · mapex-adhefar hub
+                </div>
+              </div>
+            </article>
+
+          </div><!-- fin contenido principal -->
+        </div><!-- fin herr-layout -->
+      </div><!-- fin container -->
     </section>
+
   </main>
+
   <div id="site-footer-placeholder"></div>
   <script src="js/nav.js"></script>
+  <script src="js/herramientas.js"></script>
+  <script>
+    // Resaltar ítem activo en la barra lateral según scroll
+    (function() {
+      const secciones = document.querySelectorAll('.herr-seccion[id]');
+      const links = document.querySelectorAll('.herr-nav a');
+      if (!secciones.length || !links.length) return;
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            links.forEach(l => l.classList.remove('activo'));
+            const link = document.querySelector('.herr-nav a[href="#' + e.target.id + '"]');
+            if (link) link.classList.add('activo');
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '-80px 0px -40% 0px' });
+      secciones.forEach(s => obs.observe(s));
+    })();
+  </script>
 </body>
 </html>
