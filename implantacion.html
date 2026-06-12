@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MAPEX-ADHEFAR Hub</title>
-  <meta name="description" content="Hub operativo de la Guía MAPEX-ADHEFAR — SEFH · Grupo ADHEFAR · 2026.">
+  <title>Implantación y calidad — MAPEX-ADHEFAR Hub</title>
+  <meta name="description" content="Autoevaluación del decálogo, cuadro de mando configurable, hoja de ruta por fases, matriz de competencias, mapa de tecnologías y Q-PEX.">
+  <meta property="og:title" content="Implantación y calidad — MAPEX-ADHEFAR Hub">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
@@ -13,27 +16,606 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/print.css">
+  <style>
+    .impl-seccion { background:var(--c-superficie); border-radius:var(--radius-card); border:1.5px solid var(--c-borde-claro); box-shadow:var(--shadow-sm); overflow:hidden; margin-bottom:var(--sp-8); scroll-margin-top:90px; }
+    .impl-head { padding:var(--sp-5) var(--sp-6); border-bottom:1px solid var(--c-borde-claro); display:flex; flex-wrap:wrap; gap:var(--sp-4); align-items:flex-start; justify-content:space-between; }
+    .impl-head h2 { font-size:var(--fs-xl); margin:0 0 var(--sp-2); }
+    .impl-head p { font-size:var(--fs-sm); color:var(--c-texto-secundario); margin:0; max-width:60ch; }
+    .impl-body { padding:var(--sp-6); }
+
+    /* Autoevaluación decálogo */
+    .dec-radio-group { display:grid; gap:var(--sp-4); }
+    .dec-row { display:flex; gap:var(--sp-4); align-items:flex-start; padding:var(--sp-4); background:var(--c-fondo); border-radius:var(--radius-card); border:1.5px solid var(--c-borde-claro); flex-wrap:wrap; }
+    .dec-row-num { font-family:var(--ff-display); font-size:var(--fs-xl); font-weight:var(--fw-semi); color:var(--c-acento); min-width:2ch; flex-shrink:0; line-height:1.2; }
+    .dec-row-texto { flex:1; min-width:200px; font-size:var(--fs-sm); font-weight:var(--fw-medium); padding-top:2px; }
+    .dec-opciones { display:flex; gap:var(--sp-3); flex-wrap:wrap; }
+    .dec-opciones label { display:flex; align-items:center; gap:var(--sp-2); font-size:var(--fs-xs); cursor:pointer; padding:var(--sp-2) var(--sp-3); border-radius:var(--radius-pill); border:1.5px solid var(--c-borde); background:var(--c-superficie); transition:all var(--t-fast); white-space:nowrap; }
+    .dec-opciones label:hover { border-color:var(--c-acento); background:var(--c-acento-claro); }
+    .dec-opciones input[type="radio"] { accent-color:var(--c-acento); width:14px; height:14px; }
+    .dec-opciones label:has(input:checked) { border-color:var(--c-acento); background:var(--c-acento-claro); font-weight:var(--fw-semi); }
+
+    /* Cuadro de mando */
+    .cm-tabla-wrap { overflow-x:auto; border-radius:var(--radius-card); border:1.5px solid var(--c-borde-claro); }
+    .cm-tabla { width:100%; border-collapse:collapse; font-size:0.778rem; min-width:900px; }
+    .cm-tabla th { background:var(--c-institucional); color:#fff; padding:var(--sp-3) var(--sp-4); text-align:left; font-size:0.667rem; text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
+    .cm-tabla td { padding:var(--sp-3) var(--sp-3); border-bottom:1px solid var(--c-borde-claro); vertical-align:middle; }
+    .cm-tabla .dim-header { background:var(--c-institucional-claro); color:var(--c-institucional); font-weight:600; font-size:0.778rem; padding:var(--sp-3) var(--sp-4); border-bottom:2px solid var(--c-institucional); text-transform:uppercase; letter-spacing:.05em; }
+    .cm-tabla .ind-basico { background:var(--c-superficie); }
+    .cm-tabla .ind-recomendado { background:var(--c-fondo); }
+    .cm-tabla .input { padding:4px 8px; font-size:0.667rem; border-radius:var(--radius-sm); min-width:120px; }
+    .cm-aviso-local { display:none; background:var(--c-oportunidad-claro); border:1.5px solid var(--c-oportunidad); border-radius:var(--radius-card); padding:var(--sp-4) var(--sp-5); font-size:var(--fs-sm); gap:var(--sp-3); align-items:center; margin-top:var(--sp-4); }
+
+    /* Fases */
+    .fases-grid { display:grid; gap:var(--sp-5); }
+    @media(min-width:768px) { .fases-grid { grid-template-columns:1fr 1fr; } }
+    .fase-card { border-radius:var(--radius-card); padding:var(--sp-5); border:1.5px solid var(--c-borde-claro); }
+    .fase-num { font-family:var(--ff-display); font-size:var(--fs-3xl); font-weight:var(--fw-semi); line-height:1; margin-bottom:var(--sp-3); }
+    .fase-1 .fase-num { color:var(--c-no); } .fase-2 .fase-num { color:var(--c-parcial); }
+    .fase-3 .fase-num { color:var(--c-ok); } .fase-4 .fase-num { color:var(--c-acento); }
+    .fase-card h3 { font-size:var(--fs-base); margin-bottom:var(--sp-3); }
+    .fase-checks { list-style:none; padding:0; margin:var(--sp-4) 0 0; display:flex; flex-direction:column; gap:4px; }
+    .fase-checks label { display:flex; gap:var(--sp-3); align-items:flex-start; font-size:var(--fs-xs); cursor:pointer; padding:var(--sp-2); border-radius:var(--radius); transition:background var(--t-fast); line-height:var(--lh-snug); }
+    .fase-checks label:hover { background:var(--c-fondo); }
+    .fase-checks input { margin-top:1px; accent-color:var(--c-acento); flex-shrink:0; }
+
+    /* Competencias */
+    .comp-grid { display:grid; gap:var(--sp-4); }
+    .comp-row { display:flex; gap:var(--sp-4); align-items:center; padding:var(--sp-4); background:var(--c-fondo); border-radius:var(--radius-card); flex-wrap:wrap; }
+    .comp-nombre { flex:1; min-width:200px; font-size:var(--fs-sm); font-weight:var(--fw-medium); }
+    .comp-opciones { display:flex; gap:var(--sp-3); flex-wrap:wrap; }
+    .comp-opciones label { display:flex; align-items:center; gap:var(--sp-2); font-size:var(--fs-xs); cursor:pointer; padding:var(--sp-2) var(--sp-3); border-radius:var(--radius-pill); border:1.5px solid var(--c-borde); background:var(--c-superficie); transition:all var(--t-fast); white-space:nowrap; }
+    .comp-opciones label:hover { border-color:var(--c-capacidad); background:var(--c-capacidad-claro); }
+    .comp-opciones input[type="radio"] { accent-color:var(--c-capacidad); width:14px; height:14px; }
+    .comp-opciones label:has(input:checked) { border-color:var(--c-capacidad); background:var(--c-capacidad-claro); font-weight:var(--fw-semi); }
+
+    /* Mapa de tecnologías */
+    .tec-opciones { display:grid; gap:var(--sp-3); margin-bottom:var(--sp-5); }
+    @media(min-width:640px) { .tec-opciones { grid-template-columns:1fr 1fr; } }
+    .tec-label { display:flex; align-items:flex-start; gap:var(--sp-3); padding:var(--sp-4); background:var(--c-fondo); border-radius:var(--radius-card); border:1.5px solid var(--c-borde-claro); cursor:pointer; transition:all var(--t-fast); }
+    .tec-label:hover { border-color:var(--c-acento); background:var(--c-acento-claro); }
+    .tec-label input { margin-top:3px; accent-color:var(--c-acento); flex-shrink:0; }
+    .tec-label:has(input:checked) { border-color:var(--c-acento); background:var(--c-acento-claro); }
+    .tec-label-texto strong { display:block; font-size:var(--fs-sm); margin-bottom:var(--sp-1); }
+    .tec-label-texto span { font-size:var(--fs-xs); color:var(--c-texto-secundario); }
+
+    /* Q-PEX */
+    .qpex-dominios { display:grid; gap:var(--sp-4); }
+    @media(min-width:640px) { .qpex-dominios { grid-template-columns:1fr 1fr; } }
+    @media(min-width:960px) { .qpex-dominios { grid-template-columns:repeat(3,1fr); } }
+    .qpex-dom { background:var(--c-superficie); border-radius:var(--radius-card); padding:var(--sp-5); border:1.5px solid var(--c-borde-claro); }
+    .qpex-dom-num { font-size:var(--fs-xs); font-weight:600; text-transform:uppercase; letter-spacing:.07em; color:var(--c-acento); margin-bottom:var(--sp-3); }
+    .qpex-dom h4 { font-size:var(--fs-base); margin-bottom:var(--sp-3); }
+    .qpex-dom p { font-size:var(--fs-sm); color:var(--c-texto-secundario); margin:0; }
+    .qpex-niveles { display:grid; gap:var(--sp-4); }
+    @media(min-width:640px) { .qpex-niveles { grid-template-columns:repeat(3,1fr); } }
+    .qpex-niv { border-radius:var(--radius-card); padding:var(--sp-5); text-align:center; }
+    .qpex-niv.n1 { background:var(--c-capacidad-claro); border:1.5px solid rgba(37,99,235,.2); }
+    .qpex-niv.n2 { background:var(--c-motivacion-claro); border:1.5px solid rgba(217,119,6,.2); }
+    .qpex-niv.n3 { background:var(--c-oportunidad-claro); border:1.5px solid rgba(5,150,105,.2); }
+    .qpex-niv-num { font-family:var(--ff-display); font-size:var(--fs-2xl); font-weight:600; line-height:1; margin-bottom:var(--sp-3); }
+    .qpex-niv.n1 .qpex-niv-num { color:var(--c-capacidad-texto); }
+    .qpex-niv.n2 .qpex-niv-num { color:var(--c-motivacion-texto); }
+    .qpex-niv.n3 .qpex-niv-num { color:var(--c-oportunidad-texto); }
+    .qpex-niv h4 { font-size:var(--fs-sm); margin-bottom:var(--sp-3); }
+    .qpex-niv p { font-size:var(--fs-xs); color:var(--c-texto-secundario); margin:0; }
+  </style>
 </head>
 <body>
   <div id="site-header-placeholder"></div>
+
   <main id="contenido-principal">
+
     <div class="page-hero">
       <div class="container">
-        <span class="eyebrow">Próximamente</span>
-        <h1>Sección en construcción</h1>
-        <p class="lead">Esta sección se completará en las próximas tandas de desarrollo.</p>
+        <nav class="breadcrumb" aria-label="Ruta de navegación">
+          <a href="index.html">Inicio</a>
+          <span class="breadcrumb-sep" aria-hidden="true">›</span>
+          <span aria-current="page">Implantación y calidad</span>
+        </nav>
+        <span class="eyebrow">Para servicios y responsables</span>
+        <h1>Implantación y calidad</h1>
+        <p class="lead">Herramientas para diagnosticar el punto de partida de tu servicio, configurar el cuadro de mando, trazar la hoja de ruta y avanzar hacia la certificación Q-PEX.</p>
       </div>
     </div>
+
     <section class="section">
       <div class="container">
-        <div class="notice notice-info" style="max-width:640px">
-          <div class="notice-icon" aria-hidden="true">🔧</div>
-          <div>Contenido en desarrollo. La estructura de navegación ya está operativa; el contenido de esta sección se publicará en breve.</div>
-        </div>
+
+        <nav class="toc" aria-label="Contenido de esta página" style="margin-bottom:var(--sp-8)">
+          <h3>En esta página</h3>
+          <ol>
+            <li><a href="#autoevaluacion">A · Autoevaluación del decálogo</a></li>
+            <li><a href="#cuadro-mando">B · Cuadro de mando configurable</a></li>
+            <li><a href="#fases">C · Hoja de ruta por fases</a></li>
+            <li><a href="#competencias">D · Matriz de competencias</a></li>
+            <li><a href="#tecnologias">E · Mapa de tecnologías</a></li>
+            <li><a href="#qpex">F · Norma Q-PEX</a></li>
+          </ol>
+        </nav>
+
+        <!-- ══ A. AUTOEVALUACIÓN DECÁLOGO ══ -->
+        <article class="impl-seccion" id="autoevaluacion" aria-labelledby="h-dec">
+          <div class="impl-head">
+            <div>
+              <div class="pillar-badge acento" style="margin-bottom:var(--sp-3)">A · Autoevaluación</div>
+              <h2 id="h-dec">Autoevaluación del decálogo</h2>
+              <p>Para cada uno de los 10 puntos, indica si tu servicio lo cumple de forma sistemática y registrada. Obtendrás un semáforo y la hoja de ruta de mejora.</p>
+            </div>
+            <div class="btn-group no-print">
+              <button class="btn btn-secondary btn-sm" id="decalogo-exportar">Exportar .txt</button>
+              <button class="btn btn-ghost btn-sm" id="decalogo-limpiar">Limpiar</button>
+            </div>
+          </div>
+          <div class="impl-body">
+            <form id="form-decalogo" novalidate>
+              <div class="dec-radio-group">
+                <div class="dec-row">
+                  <div class="dec-row-num" aria-hidden="true">1</div>
+                  <div class="dec-row-texto">La adherencia se mide en todas las visitas.</div>
+                  <div class="dec-opciones" role="group" aria-label="Valoración punto 1">
+                    <label><input type="radio" name="dec-1" value="si"> Sí, sistemáticamente</label>
+                    <label><input type="radio" name="dec-1" value="parcial"> Parcialmente</label>
+                    <label><input type="radio" name="dec-1" value="no"> No aún</label>
+                  </div>
+                </div>
+                <div class="dec-row">
+                  <div class="dec-row-num" aria-hidden="true">2</div>
+                  <div class="dec-row-texto">La estratificación es obligatoria y dinámica.</div>
+                  <div class="dec-opciones" role="group" aria-label="Valoración punto 2">
+                    <label><input type="radio" name="dec-2" value="si"> Sí, sistemáticamente</label>
+                    <label><input type="radio" name="dec-2" value="parcial"> Parcialmente</label>
+                    <label><input type="radio" name="dec-2" value="no"> No aún</label>
+                  </div>
+                </div>
+                <div class="dec-row">
+                  <div class="dec-row-num" aria-hidden="true">3</div>
+                  <div class="dec-row-texto">El farmacéutico de hospital identifica la causa real del incumplimiento.</div>
+                  <div class="dec-opciones" role="group" aria-label="Valoración punto 3">
+                    <label><input type="radio" name="dec-3" value="si"> Sí, sistemáticamente</label>
+                    <label><input type="radio" name="dec-3" value="parcial"> Parcialmente</label>
+                    <label><input type="radio" name="dec-3" value="no"> No aún</label>
+                  </div>
+                </div>
+                <div class="dec-row">
+                  <div class="dec-row-num" aria-hidden="true">4</div>
+                  <div class="dec-row-texto">Las intervenciones son personalizadas y adaptadas.</div>
+                  <div class="dec-opciones" role="group" aria-label="Valoración punto 4">
+                    <label><input type="radio" name="dec-4" value="si"> Sí, sistemáticamente</label>
+                    <label><input type="radio" name="dec-4" value="parcial"> Parcialmente</label>
+                    <label><input type="radio" name="dec-4" value="no"> No aún</label>
+                  </div>
+                </div>
+                <div class="dec-row">
+                  <div class="dec-row-num" aria-hidden="true">5</div>
+                  <div class="dec-row-texto">La decisión es siempre compartida con el paciente.</div>
+                  <div class="dec-opciones" role="group" aria-label="Valoración punto 5">
+                    <label><input type="radio" name="dec-5" value="si"> Sí, sistemáticamente</label>
+                    <label><input type="radio" name="dec-5" value="parcial"> Parcialmente</label>
+                    <label><input type="radio" name="dec-5" value="no"> No aún</label>
+                  </div>
+                </div>
+                <div class="dec-row">
+                  <div class="dec-row-num" aria-hidden="true">6</div>
+                  <div class="dec-row-texto">La atención dual (presencial + telemática) es práctica habitual.</div>
+                  <div class="dec-opciones" role="group" aria-label="Valoración punto 6">
+                    <label><input type="radio" name="dec-6" value="si"> Sí, sistemáticamente</label>
+                    <label><input type="radio" name="dec-6" value="parcial"> Parcialmente</label>
+                    <label><input type="radio" name="dec-6" value="no"> No aún</label>
+                  </div>
+                </div>
+                <div class="dec-row">
+                  <div class="dec-row-num" aria-hidden="true">7</div>
+                  <div class="dec-row-texto">Los PROMs y PREMs se recogen como indicadores clínicos obligatorios.</div>
+                  <div class="dec-opciones" role="group" aria-label="Valoración punto 7">
+                    <label><input type="radio" name="dec-7" value="si"> Sí, sistemáticamente</label>
+                    <label><input type="radio" name="dec-7" value="parcial"> Parcialmente</label>
+                    <label><input type="radio" name="dec-7" value="no"> No aún</label>
+                  </div>
+                </div>
+                <div class="dec-row">
+                  <div class="dec-row-num" aria-hidden="true">8</div>
+                  <div class="dec-row-texto">El registro estructurado es parte de la actuación clínica.</div>
+                  <div class="dec-opciones" role="group" aria-label="Valoración punto 8">
+                    <label><input type="radio" name="dec-8" value="si"> Sí, sistemáticamente</label>
+                    <label><input type="radio" name="dec-8" value="parcial"> Parcialmente</label>
+                    <label><input type="radio" name="dec-8" value="no"> No aún</label>
+                  </div>
+                </div>
+                <div class="dec-row">
+                  <div class="dec-row-num" aria-hidden="true">9</div>
+                  <div class="dec-row-texto">La coordinación multidisciplinar es estándar de seguimiento.</div>
+                  <div class="dec-opciones" role="group" aria-label="Valoración punto 9">
+                    <label><input type="radio" name="dec-9" value="si"> Sí, sistemáticamente</label>
+                    <label><input type="radio" name="dec-9" value="parcial"> Parcialmente</label>
+                    <label><input type="radio" name="dec-9" value="no"> No aún</label>
+                  </div>
+                </div>
+                <div class="dec-row">
+                  <div class="dec-row-num" aria-hidden="true">10</div>
+                  <div class="dec-row-texto">El seguimiento es longitudinal y proactivo.</div>
+                  <div class="dec-opciones" role="group" aria-label="Valoración punto 10">
+                    <label><input type="radio" name="dec-10" value="si"> Sí, sistemáticamente</label>
+                    <label><input type="radio" name="dec-10" value="parcial"> Parcialmente</label>
+                    <label><input type="radio" name="dec-10" value="no"> No aún</label>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-group" style="margin-top:var(--sp-6)">
+                <button type="submit" class="btn btn-primary">Generar semáforo y hoja de ruta</button>
+              </div>
+              <div id="decalogo-resultado" class="result-box" style="margin-top:var(--sp-5)" aria-live="polite"></div>
+            </form>
+          </div>
+        </article>
+
+        <!-- ══ B. CUADRO DE MANDO ══ -->
+        <article class="impl-seccion" id="cuadro-mando" aria-labelledby="h-cm">
+          <div class="impl-head">
+            <div>
+              <div class="pillar-badge institucional" style="margin-bottom:var(--sp-3)">B · Anexo G</div>
+              <h2 id="h-cm">Cuadro de mando de indicadores</h2>
+              <p>Catálogo de 19 indicadores en 4 dimensiones. Activa los que aplican a tu servicio y configura fórmula, fuente y periodicidad. Los campos en blanco son <em>a definir por el centro</em>. La configuración se guarda en tu navegador.</p>
+            </div>
+            <div class="btn-group no-print" style="flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" id="cm-exportar">Exportar .txt</button>
+              <button class="btn btn-secondary btn-sm" id="cm-exportar-json">Exportar JSON</button>
+              <label class="btn btn-ghost btn-sm" style="cursor:pointer">
+                Importar JSON
+                <input type="file" id="cm-importar" accept=".json" style="display:none" aria-label="Importar configuración JSON">
+              </label>
+              <button class="btn btn-ghost btn-sm" id="cm-limpiar">Limpiar todo</button>
+            </div>
+          </div>
+          <div class="impl-body">
+            <div class="notice notice-privacidad" id="cm-aviso-local">
+              <div class="notice-icon" aria-hidden="true">💾</div>
+              <div style="font-size:var(--fs-sm)"><strong>Configuración guardada en tu navegador</strong> (localStorage). Los datos no se envían a ningún servidor. Se perderán si limpias el caché del navegador. Usa <strong>Exportar JSON</strong> para guardar una copia permanente e <strong>Importar JSON</strong> para restaurarla.</div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:var(--sp-5)">
+              <label for="cm-filtro-dim">Filtrar por dimensión</label>
+              <select id="cm-filtro-dim" class="select" style="max-width:400px">
+                <option value="todos">Todas las dimensiones</option>
+                <option value="Proceso">Proceso</option>
+                <option value="Resultado">Resultado</option>
+                <option value="Experiencia (PROMs/PREMs)">Experiencia (PROMs/PREMs)</option>
+                <option value="Implantación y madurez">Implantación y madurez</option>
+              </select>
+            </div>
+
+            <div class="notice notice-info" style="margin-bottom:var(--sp-5);font-size:var(--fs-sm)">
+              <div class="notice-icon" aria-hidden="true">ℹ</div>
+              <div>Las columnas <strong>Fórmula</strong>, <strong>Fuente</strong> y <strong>Periodicidad</strong> están en blanco por diseño: la guía establece que cada centro debe definirlas según sus sistemas de información y recursos. Los <strong>Estándares</strong> indicados son los que la guía sí proporciona (p. ej., evaluación inicial ≥80-90 %, concordancia &gt;80 %).</div>
+            </div>
+
+            <div class="cm-tabla-wrap">
+              <table class="cm-tabla" aria-label="Cuadro de mando de indicadores MAPEX-ADHEFAR">
+                <thead>
+                  <tr>
+                    <th style="min-width:220px">Indicador</th>
+                    <th>Tipo</th>
+                    <th style="min-width:120px">Estándar (guía)</th>
+                    <th style="min-width:160px">Fórmula</th>
+                    <th style="min-width:140px">Fuente</th>
+                    <th style="min-width:120px">Periodicidad</th>
+                  </tr>
+                </thead>
+                <tbody id="cm-tabla-body" aria-live="polite"></tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+
+        <!-- ══ C. HOJA DE RUTA POR FASES ══ -->
+        <article class="impl-seccion" id="fases" aria-labelledby="h-fases">
+          <div class="impl-head">
+            <div>
+              <div class="pillar-badge oportunidad" style="margin-bottom:var(--sp-3)">C · Hoja de ruta</div>
+              <h2 id="h-fases">Hoja de ruta por fases de implantación</h2>
+              <p>Cuatro fases de madurez MAPEX-ADHEFAR. Marca los criterios que tu servicio ya cumple y obtén el diagnóstico de fase actual y el camino hacia la siguiente.</p>
+            </div>
+            <div class="btn-group no-print">
+              <button class="btn btn-ghost btn-sm" id="fases-limpiar">Limpiar</button>
+            </div>
+          </div>
+          <div class="impl-body">
+            <form id="form-fases" novalidate>
+              <div class="fases-grid">
+                <div class="fase-card fase-1">
+                  <div class="fase-num">1</div>
+                  <h3>Fase 1 — Inicio</h3>
+                  <p style="font-size:var(--fs-sm);color:var(--c-texto-secundario)">Sin MAPEX ni CMO formal. Se mide adherencia de forma esporádica con indicadores básicos.</p>
+                  <ul class="fase-checks">
+                    <li><label><input type="checkbox" data-fase="1"> Existe una consulta de farmacia para pacientes externos</label></li>
+                    <li><label><input type="checkbox" data-fase="1"> Se registran intervenciones farmacéuticas, aunque no de forma sistemática</label></li>
+                    <li><label><input type="checkbox" data-fase="1"> Se usan registros de dispensación para seguimiento de pacientes</label></li>
+                    <li><label><input type="checkbox" data-fase="1"> El equipo tiene interés en mejorar el seguimiento de la adherencia</label></li>
+                  </ul>
+                </div>
+                <div class="fase-card fase-2">
+                  <div class="fase-num">2</div>
+                  <h3>Fase 2 — MAPEX básico</h3>
+                  <p style="font-size:var(--fs-sm);color:var(--c-texto-secundario)">Estratificación completa, medición dual, intervenciones CMO mínimas e indicadores básicos activos.</p>
+                  <ul class="fase-checks">
+                    <li><label><input type="checkbox" data-fase="2"> Se aplica medición dual (objetivo + subjetivo) de forma sistemática</label></li>
+                    <li><label><input type="checkbox" data-fase="2"> Se estratifica a los pacientes en P1/P2/P3</label></li>
+                    <li><label><input type="checkbox" data-fase="2"> Las intervenciones se clasifican según el pilar CMO identificado</label></li>
+                    <li><label><input type="checkbox" data-fase="2"> Existe al menos una modalidad de seguimiento telemático operativa</label></li>
+                    <li><label><input type="checkbox" data-fase="2"> Se miden y registran indicadores básicos del cuadro de mando</label></li>
+                  </ul>
+                </div>
+                <div class="fase-card fase-3">
+                  <div class="fase-num">3</div>
+                  <h3>Fase 3 — MAPEX+CMO avanzado</h3>
+                  <p style="font-size:var(--fs-sm);color:var(--c-texto-secundario)">Cuadro de mando completo, PROMs/PREMs, auditoría interna y preparación para Q-PEX.</p>
+                  <ul class="fase-checks">
+                    <li><label><input type="checkbox" data-fase="3"> El cuadro de mando incluye las 4 dimensiones y sus indicadores configurados</label></li>
+                    <li><label><input type="checkbox" data-fase="3"> PROMs y PREMs se recogen de forma sistemática en todas las visitas</label></li>
+                    <li><label><input type="checkbox" data-fase="3"> Se realizan ciclos de auditoría interna y mejora continua</label></li>
+                    <li><label><input type="checkbox" data-fase="3"> El decálogo se cumple de forma sistemática en más del 80 %</label></li>
+                    <li><label><input type="checkbox" data-fase="3"> El servicio ha iniciado el proceso de evaluación Q-PEX</label></li>
+                  </ul>
+                </div>
+                <div class="fase-card fase-4">
+                  <div class="fase-num">4</div>
+                  <h3>Fase 4 — Centro de excelencia</h3>
+                  <p style="font-size:var(--fs-sm);color:var(--c-texto-secundario)">Modelos predictivos, análisis poblacional, benchmarking e investigación en adherencia.</p>
+                  <ul class="fase-checks">
+                    <li><label><input type="checkbox" data-fase="4"> El servicio está certificado o en proceso de certificación Q-PEX</label></li>
+                    <li><label><input type="checkbox" data-fase="4"> Se realizan análisis poblacionales de la adherencia en el servicio</label></li>
+                    <li><label><input type="checkbox" data-fase="4"> Se contribuye a proyectos de investigación o benchmarking en adherencia</label></li>
+                    <li><label><input type="checkbox" data-fase="4"> El servicio forma a otros centros o participa en redes de conocimiento SEFH</label></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="btn-group" style="margin-top:var(--sp-6)">
+                <button type="submit" class="btn btn-primary">Diagnóstico de fase</button>
+              </div>
+              <div id="fases-resultado" class="result-box" style="margin-top:var(--sp-5)" aria-live="polite"></div>
+            </form>
+          </div>
+        </article>
+
+        <!-- ══ D. MATRIZ DE COMPETENCIAS ══ -->
+        <article class="impl-seccion" id="competencias" aria-labelledby="h-comp">
+          <div class="impl-head">
+            <div>
+              <div class="pillar-badge capacidad" style="margin-bottom:var(--sp-3)">D · Anexo H</div>
+              <h2 id="h-comp">Matriz de competencias del equipo</h2>
+              <p>Autoevaluación de las 7 competencias clave del equipo en nivel ninguno / básico / avanzado. Identifica las áreas prioritarias de formación.</p>
+            </div>
+            <div class="btn-group no-print">
+              <button class="btn btn-secondary btn-sm" id="competencias-exportar">Exportar .txt</button>
+              <button class="btn btn-ghost btn-sm" id="competencias-limpiar">Limpiar</button>
+            </div>
+          </div>
+          <div class="impl-body">
+            <form id="form-competencias" novalidate>
+              <div class="comp-grid">
+                <div class="comp-row">
+                  <div class="comp-nombre">Modelo CMO y algoritmo ADHEFAR-EM</div>
+                  <div class="comp-opciones" role="group" aria-label="Nivel en Modelo CMO y algoritmo ADHEFAR-EM">
+                    <label><input type="radio" name="comp-0" value="ninguno"> Por desarrollar</label>
+                    <label><input type="radio" name="comp-0" value="basico"> Básico</label>
+                    <label><input type="radio" name="comp-0" value="avanzado"> Avanzado</label>
+                  </div>
+                </div>
+                <div class="comp-row">
+                  <div class="comp-nombre">Entrevista motivacional (técnica y aplicación clínica)</div>
+                  <div class="comp-opciones" role="group" aria-label="Nivel en Entrevista motivacional">
+                    <label><input type="radio" name="comp-1" value="ninguno"> Por desarrollar</label>
+                    <label><input type="radio" name="comp-1" value="basico"> Básico</label>
+                    <label><input type="radio" name="comp-1" value="avanzado"> Avanzado</label>
+                  </div>
+                </div>
+                <div class="comp-row">
+                  <div class="comp-nombre">Instrumentos de medición (PDC/MPR, cuestionarios validados)</div>
+                  <div class="comp-opciones" role="group" aria-label="Nivel en instrumentos de medición">
+                    <label><input type="radio" name="comp-2" value="ninguno"> Por desarrollar</label>
+                    <label><input type="radio" name="comp-2" value="basico"> Básico</label>
+                    <label><input type="radio" name="comp-2" value="avanzado"> Avanzado</label>
+                  </div>
+                </div>
+                <div class="comp-row">
+                  <div class="comp-nombre">Telefarmacia y atención telemática</div>
+                  <div class="comp-opciones" role="group" aria-label="Nivel en telefarmacia">
+                    <label><input type="radio" name="comp-3" value="ninguno"> Por desarrollar</label>
+                    <label><input type="radio" name="comp-3" value="basico"> Básico</label>
+                    <label><input type="radio" name="comp-3" value="avanzado"> Avanzado</label>
+                  </div>
+                </div>
+                <div class="comp-row">
+                  <div class="comp-nombre">Marco ético-legal de la adherencia y protección de datos</div>
+                  <div class="comp-opciones" role="group" aria-label="Nivel en marco ético-legal">
+                    <label><input type="radio" name="comp-4" value="ninguno"> Por desarrollar</label>
+                    <label><input type="radio" name="comp-4" value="basico"> Básico</label>
+                    <label><input type="radio" name="comp-4" value="avanzado"> Avanzado</label>
+                  </div>
+                </div>
+                <div class="comp-row">
+                  <div class="comp-nombre">Indicadores MAPEX-ADHEFAR y cuadro de mando</div>
+                  <div class="comp-opciones" role="group" aria-label="Nivel en indicadores y cuadro de mando">
+                    <label><input type="radio" name="comp-5" value="ninguno"> Por desarrollar</label>
+                    <label><input type="radio" name="comp-5" value="basico"> Básico</label>
+                    <label><input type="radio" name="comp-5" value="avanzado"> Avanzado</label>
+                  </div>
+                </div>
+                <div class="comp-row">
+                  <div class="comp-nombre">Educación del paciente y técnica teach-back</div>
+                  <div class="comp-opciones" role="group" aria-label="Nivel en educación del paciente">
+                    <label><input type="radio" name="comp-6" value="ninguno"> Por desarrollar</label>
+                    <label><input type="radio" name="comp-6" value="basico"> Básico</label>
+                    <label><input type="radio" name="comp-6" value="avanzado"> Avanzado</label>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-group" style="margin-top:var(--sp-6)">
+                <button type="submit" class="btn btn-primary">Generar perfil de competencias</button>
+              </div>
+              <div id="competencias-resultado" class="result-box" style="margin-top:var(--sp-5)" aria-live="polite"></div>
+            </form>
+          </div>
+        </article>
+
+        <!-- ══ E. MAPA DE TECNOLOGÍAS ══ -->
+        <article class="impl-seccion" id="tecnologias" aria-labelledby="h-tec">
+          <div class="impl-head">
+            <div>
+              <div class="pillar-badge oportunidad" style="margin-bottom:var(--sp-3)">E · Anexo I</div>
+              <h2 id="h-tec">Mapa de tecnologías</h2>
+              <p>Selecciona el objetivo principal y obtén la tecnología recomendada por la guía con sus consideraciones prácticas de implantación.</p>
+            </div>
+          </div>
+          <div class="impl-body">
+            <form id="form-tecnologias" novalidate>
+              <div class="tec-opciones" role="group" aria-labelledby="tec-legend">
+                <div id="tec-legend" class="sr-only">Selecciona tu objetivo principal</div>
+                <label class="tec-label">
+                  <input type="radio" name="objetivo-tec" value="medir-obj">
+                  <div class="tec-label-texto">
+                    <strong>Medir la adherencia objetivamente</strong>
+                    <span>PDC/MPR, monitores electrónicos, registros de dispensación</span>
+                  </div>
+                </label>
+                <label class="tec-label">
+                  <input type="radio" name="objetivo-tec" value="promover">
+                  <div class="tec-label-texto">
+                    <strong>Promover la adherencia y el autocontrol</strong>
+                    <span>Apps de recordatorio, SMS, llamadas de seguimiento</span>
+                  </div>
+                </label>
+                <label class="tec-label">
+                  <input type="radio" name="objetivo-tec" value="organizar">
+                  <div class="tec-label-texto">
+                    <strong>Organizar la medicación en polimedicación</strong>
+                    <span>SPD, pastilleros, dispensadores automáticos</span>
+                  </div>
+                </label>
+                <label class="tec-label">
+                  <input type="radio" name="objetivo-tec" value="detectar">
+                  <div class="tec-label-texto">
+                    <strong>Detectar no adherencia oculta</strong>
+                    <span>Medición dual, biomarcadores, discordancia objetivo/subjetivo</span>
+                  </div>
+                </label>
+                <label class="tec-label">
+                  <input type="radio" name="objetivo-tec" value="sostener">
+                  <div class="tec-label-texto">
+                    <strong>Sostener la adherencia entre visitas</strong>
+                    <span>Telefarmacia, plataformas de PROMs digitales</span>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Comparativa dispensadores -->
+              <div style="background:var(--c-fondo);border-radius:var(--radius-card);padding:var(--sp-5);border:1.5px solid var(--c-borde-claro);margin-bottom:var(--sp-5)">
+                <div class="eyebrow" style="margin-bottom:var(--sp-4)">Comparativa · Organizadores de medicación</div>
+                <div style="overflow-x:auto">
+                  <table style="width:100%;border-collapse:collapse;font-size:0.778rem;min-width:600px">
+                    <thead>
+                      <tr>
+                        <th style="background:var(--c-institucional);color:#fff;padding:8px 12px;text-align:left;font-size:0.667rem;text-transform:uppercase">Característica</th>
+                        <th style="background:var(--c-institucional);color:#fff;padding:8px 12px;text-align:left;font-size:0.667rem;text-transform:uppercase">Dispensador electrónico</th>
+                        <th style="background:var(--c-institucional);color:#fff;padding:8px 12px;text-align:left;font-size:0.667rem;text-transform:uppercase">App de recordatorio</th>
+                        <th style="background:var(--c-institucional);color:#fff;padding:8px 12px;text-align:left;font-size:0.667rem;text-transform:uppercase">Robot + app</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td style="padding:8px 12px;border-bottom:1px solid var(--c-borde-claro)"><strong>Coste</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--c-borde-claro)">Elevado (hardware + mantenimiento)</td><td style="padding:8px 12px;border-bottom:1px solid var(--c-borde-claro)">Bajo o gratuito</td><td style="padding:8px 12px;border-bottom:1px solid var(--c-borde-claro)">Muy elevado</td></tr>
+                      <tr style="background:var(--c-fondo)"><td style="padding:8px 12px;border-bottom:1px solid var(--c-borde-claro)"><strong>Perfil del paciente</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--c-borde-claro)">Polimedicado, deterioro cognitivo leve/moderado</td><td style="padding:8px 12px;border-bottom:1px solid var(--c-borde-claro)">Activo digitalmente, smartphone</td><td style="padding:8px 12px;border-bottom:1px solid var(--c-borde-claro)">Alta complejidad, supervisión necesaria</td></tr>
+                      <tr><td style="padding:8px 12px;border-bottom:1px solid var(--c-borde-claro)"><strong>Barrera CMO que aborda</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--c-borde-claro)">Capacidad + Oportunidad</td><td style="padding:8px 12px;border-bottom:1px solid var(--c-borde-claro)">Oportunidad (recordatorio/rutina)</td><td style="padding:8px 12px;border-bottom:1px solid var(--c-borde-claro)">Capacidad + Oportunidad (alta dependencia)</td></tr>
+                      <tr style="background:var(--c-fondo)"><td style="padding:8px 12px"><strong>Registro de tomas</strong></td><td style="padding:8px 12px">Automático (según modelo)</td><td style="padding:8px 12px">Manual o por confirmación activa</td><td style="padding:8px 12px">Automático + verificación</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p style="font-size:0.667rem;color:var(--c-texto-secundario);margin-top:8px">Nota: MyTherapy y Medisafe se mencionan en la guía como ejemplos representativos de apps de recordatorio, sin carácter de recomendación comercial. Valorar siempre protección de datos, idioma, usabilidad y política de privacidad antes de recomendar cualquier aplicación.</p>
+              </div>
+
+              <div class="btn-group">
+                <button type="submit" class="btn btn-primary">Ver tecnología recomendada</button>
+              </div>
+              <div id="tecnologias-resultado" class="result-box" style="margin-top:var(--sp-5)" aria-live="polite"></div>
+            </form>
+          </div>
+        </article>
+
+        <!-- ══ F. Q-PEX ══ -->
+        <article class="impl-seccion" id="qpex" aria-labelledby="h-qpex">
+          <div class="impl-head">
+            <div>
+              <div class="pillar-badge acento" style="margin-bottom:var(--sp-3)">F · Certificación</div>
+              <h2 id="h-qpex">Norma Q-PEX</h2>
+              <p>Norma de calidad de la atención farmacéutica al paciente externo. 118 requisitos, 6 dominios, 3 niveles acumulativos y ciclo de 3 años.</p>
+            </div>
+            <div class="btn-group no-print">
+              <a class="btn btn-primary btn-sm" href="https://www.sefh.es/mapex/q-pex.php" target="_blank" rel="noopener">sefh.es/mapex/q-pex.php ↗</a>
+            </div>
+          </div>
+          <div class="impl-body">
+            <div class="grid-2" style="margin-bottom:var(--sp-8)">
+              <div class="prose">
+                <h3>¿Qué es la norma Q-PEX?</h3>
+                <p>La <strong>norma Q-PEX</strong> es el sistema de certificación de calidad de la Sociedad Española de Farmacia Hospitalaria (SEFH) para la atención farmacéutica al paciente externo. Evalúa la organización, los procesos y los resultados del servicio de farmacia hospitalaria en relación con los pacientes atendidos en consultas externas.</p>
+                <p>Consta de <strong>118 requisitos</strong> organizados en <strong>6 dominios</strong> y <strong>3 niveles acumulativos</strong>. El ciclo de certificación es de <strong>3 años en 2 etapas</strong>: evaluación inicial y mantenimiento. El nivel superior incluye los requisitos de todos los niveles anteriores.</p>
+              </div>
+              <div>
+                <h3 style="margin-bottom:var(--sp-5)">Cómo Q-PEX impulsa la adherencia</h3>
+                <div style="display:flex;flex-direction:column;gap:var(--sp-3)">
+                  <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content"><h4>Medición sistemática obligatoria</h4><p>Q-PEX exige que la adherencia se mida de forma estructurada como parte del seguimiento farmacoterapéutico en consultas externas.</p></div>
+                  </div>
+                  <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content"><h4>Registro y trazabilidad</h4><p>Requiere el registro estructurado de intervenciones y resultados en la historia clínica, lo que garantiza la trazabilidad del manejo de la adherencia.</p></div>
+                  </div>
+                  <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content"><h4>Indicadores de resultado</h4><p>Incorpora indicadores de resultado centrados en el paciente, incluyendo PROMs y PREMs, como parte de la evaluación de la calidad del servicio.</p></div>
+                  </div>
+                  <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content"><h4>Mejora continua</h4><p>El ciclo de 3 años impulsa la revisión periódica de los procesos y la mejora progresiva de los resultados en adherencia.</p></div>
+                  </div>
+                  <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content"><h4>Coordinación multidisciplinar</h4><p>Evalúa la existencia de circuitos de comunicación con otros profesionales sanitarios, clave en el abordaje multidimensional de la adherencia.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h3 style="margin-bottom:var(--sp-5)">Los 6 dominios de Q-PEX</h3>
+            <div class="qpex-dominios">
+              <div class="qpex-dom"><div class="qpex-dom-num">Dominio 1</div><h4>Organización y gestión del servicio</h4><p>Estructura organizativa, recursos humanos, formación continua y gestión del conocimiento del servicio de farmacia.</p></div>
+              <div class="qpex-dom"><div class="qpex-dom-num">Dominio 2</div><h4>Atención al paciente</h4><p>Proceso asistencial en consultas externas: acogida, valoración, seguimiento farmacoterapéutico y continuidad asistencial.</p></div>
+              <div class="qpex-dom"><div class="qpex-dom-num">Dominio 3</div><h4>Seguridad del paciente</h4><p>Identificación y gestión de errores, conciliación de medicación, y circuitos de seguridad en la dispensación.</p></div>
+              <div class="qpex-dom"><div class="qpex-dom-num">Dominio 4</div><h4>Resultados en salud e indicadores</h4><p>Medición de resultados clínicos, de proceso y de experiencia del paciente. Cuadro de mando y mejora continua.</p></div>
+              <div class="qpex-dom"><div class="qpex-dom-num">Dominio 5</div><h4>Comunicación y coordinación</h4><p>Circuitos de comunicación con prescriptores, otros profesionales, pacientes y cuidadores. Coordinación multidisciplinar.</p></div>
+              <div class="qpex-dom"><div class="qpex-dom-num">Dominio 6</div><h4>Innovación y desarrollo</h4><p>Incorporación de nuevas tecnologías, investigación, telefarmacia y participación en proyectos de mejora de la práctica.</p></div>
+            </div>
+
+            <h3 style="margin:var(--sp-8) 0 var(--sp-5)">Los 3 niveles acumulativos</h3>
+            <div class="qpex-niveles">
+              <div class="qpex-niv n1"><div class="qpex-niv-num">N1</div><h4>Nivel 1 — Esencial</h4><p>Requisitos básicos de organización, proceso asistencial y seguridad. Punto de partida para cualquier servicio de farmacia hospitalaria.</p></div>
+              <div class="qpex-niv n2"><div class="qpex-niv-num">N2</div><h4>Nivel 2 — Avanzado</h4><p>Incorpora requisitos de medición de resultados, indicadores de proceso y experiencia del paciente. Requiere superar el Nivel 1.</p></div>
+              <div class="qpex-niv n3"><div class="qpex-niv-num">N3</div><h4>Nivel 3 — Excelencia</h4><p>Innovación, investigación, benchmarking y liderazgo en el desarrollo de la práctica. Requiere superar los Niveles 1 y 2.</p></div>
+            </div>
+
+            <div class="notice notice-info" style="margin-top:var(--sp-6)">
+              <div class="notice-icon" aria-hidden="true">🔗</div>
+              <div>Para información actualizada sobre el proceso de certificación Q-PEX, requisitos y convocatorias, consulta la página oficial de la SEFH: <a href="https://www.sefh.es/mapex/q-pex.php" target="_blank" rel="noopener">sefh.es/mapex/q-pex.php</a></div>
+            </div>
+          </div>
+        </article>
+
       </div>
     </section>
+
   </main>
+
   <div id="site-footer-placeholder"></div>
   <script src="js/nav.js"></script>
+  <script src="js/implantacion.js"></script>
 </body>
 </html>
