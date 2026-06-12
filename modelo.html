@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MAPEX-ADHEFAR Hub</title>
-  <meta name="description" content="Hub operativo de la Guía MAPEX-ADHEFAR — SEFH · Grupo ADHEFAR · 2026.">
+  <title>El modelo CMO · ADHEFAR-EM — MAPEX-ADHEFAR Hub</title>
+  <meta name="description" content="Modelo CMO, taxonomía ABC de la adherencia, algoritmo ADHEFAR-EM de 7 pasos y Decálogo de implantación MAPEX-ADHEFAR.">
+  <meta property="og:title" content="El modelo — MAPEX-ADHEFAR Hub">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
@@ -13,26 +16,499 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/print.css">
+  <style>
+    .abc-grid { display:grid; gap:var(--sp-5); }
+    @media(min-width:860px){ .abc-grid{ grid-template-columns:repeat(4,1fr); } }
+    .abc-card { background:var(--c-superficie); border-radius:var(--radius-card); border:1.5px solid var(--c-borde-claro); padding:var(--sp-5); box-shadow:var(--shadow-xs); }
+    .abc-num { font-family:var(--ff-display); font-size:var(--fs-3xl); font-weight:var(--fw-semi); color:var(--c-borde); line-height:1; margin-bottom:var(--sp-3); }
+    .abc-card h3 { font-size:var(--fs-lg); margin-bottom:var(--sp-3); }
+    .abc-card p { font-size:var(--fs-sm); color:var(--c-texto-secundario); margin:0; }
+    .abc-dual { display:grid; gap:var(--sp-5); }
+    @media(min-width:640px){ .abc-dual{ grid-template-columns:1fr 1fr; } }
+
+    .cmo-grid { display:grid; gap:var(--sp-5); }
+    @media(min-width:860px){ .cmo-grid{ grid-template-columns:repeat(3,1fr); } }
+    .cmo-card { border-radius:var(--radius-card); padding:var(--sp-6); }
+    .cmo-card.cap { background:var(--c-capacidad-claro); border:1.5px solid rgba(37,99,235,.18); }
+    .cmo-card.mot { background:var(--c-motivacion-claro); border:1.5px solid rgba(217,119,6,.18); }
+    .cmo-card.opp { background:var(--c-oportunidad-claro); border:1.5px solid rgba(5,150,105,.18); }
+    .cmo-card-icon { width:44px;height:44px; border-radius:var(--radius-lg); display:flex;align-items:center;justify-content:center; font-size:1.3rem; margin-bottom:var(--sp-5); }
+    .cmo-card.cap .cmo-card-icon { background:var(--c-capacidad);color:#fff; }
+    .cmo-card.mot .cmo-card-icon { background:var(--c-motivacion);color:#fff; }
+    .cmo-card.opp .cmo-card-icon { background:var(--c-oportunidad);color:#fff; }
+    .cmo-card h3 { font-size:var(--fs-xl); margin-bottom:var(--sp-3); }
+    .cmo-card.cap h3 { color:var(--c-capacidad-texto); }
+    .cmo-card.mot h3 { color:var(--c-motivacion-texto); }
+    .cmo-card.opp h3 { color:var(--c-oportunidad-texto); }
+    .cmo-card p { font-size:var(--fs-sm); color:var(--c-texto-secundario); margin-bottom:var(--sp-4); }
+    .cmo-ejemplos { list-style:none;padding:0;margin:0; display:flex;flex-direction:column;gap:var(--sp-2); }
+    .cmo-ejemplos li { font-size:var(--fs-xs); display:flex;gap:var(--sp-2);align-items:flex-start; margin:0; }
+    .cmo-ejemplos li::before { content:'·'; font-weight:var(--fw-semi); flex-shrink:0; }
+    .cmo-card.cap .cmo-ejemplos li::before { color:var(--c-capacidad); }
+    .cmo-card.mot .cmo-ejemplos li::before { color:var(--c-motivacion-oscuro); }
+    .cmo-card.opp .cmo-ejemplos li::before { color:var(--c-oportunidad); }
+    .cmo-intervencion { margin-top:var(--sp-5); padding-top:var(--sp-4); border-top:1px solid rgba(0,0,0,.08); }
+    .cmo-intervencion-label { font-size:var(--fs-xs); font-weight:var(--fw-semi); text-transform:uppercase; letter-spacing:.07em; margin-bottom:var(--sp-2); }
+    .cmo-card.cap .cmo-intervencion-label { color:var(--c-capacidad-texto); }
+    .cmo-card.mot .cmo-intervencion-label { color:var(--c-motivacion-texto); }
+    .cmo-card.opp .cmo-intervencion-label { color:var(--c-oportunidad-texto); }
+    .cmo-intervencion p { font-size:var(--fs-xs); margin:0; }
+
+    .diagrama-layout { display:grid; gap:var(--sp-8); align-items:start; }
+    @media(min-width:860px){ .diagrama-layout{ grid-template-columns:1fr 1fr; } }
+    .diagrama-wrapper { background:var(--c-institucional); border-radius:var(--radius-lg); padding:var(--sp-6) var(--sp-5); }
+    .diagrama-titulo-lbl { font-family:var(--ff-body); font-size:var(--fs-xs); font-weight:var(--fw-semi); text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.45); text-align:center; margin-bottom:var(--sp-5); display:block; }
+    .pasos-secuencia { display:flex; flex-direction:column; }
+    .paso-item { display:flex; gap:var(--sp-4); align-items:flex-start; padding-bottom:var(--sp-5); }
+    .paso-item:last-child { padding-bottom:0; }
+    .paso-izq { display:flex; flex-direction:column; align-items:center; flex-shrink:0; width:40px; }
+    .paso-num { width:40px;height:40px; border-radius:var(--radius-pill); display:flex;align-items:center;justify-content:center; font-size:var(--fs-sm); font-weight:var(--fw-semi); color:#fff; flex-shrink:0; font-family:var(--ff-body); }
+    .paso-linea { width:2px; flex:1; min-height:20px; margin-top:6px; border-radius:var(--radius-pill); opacity:.35; }
+    .paso-item:last-child .paso-linea { display:none; }
+    .paso-content { flex:1; padding-bottom:var(--sp-2); }
+    .paso-tag { font-size:var(--fs-xs); font-weight:var(--fw-semi); text-transform:uppercase; letter-spacing:.07em; margin-bottom:var(--sp-2); opacity:.65; }
+    .paso-content h4 { font-size:var(--fs-base); color:#fff; margin-bottom:var(--sp-2); font-family:var(--ff-body); font-weight:var(--fw-semi); }
+    .paso-content p { font-size:var(--fs-sm); color:rgba(255,255,255,.65); margin:0; line-height:var(--lh-snug); }
+    .p1 .paso-num{background:var(--c-acento)} .p1 .paso-linea{background:var(--c-acento)} .p1 .paso-tag{color:rgba(167,139,250,.9)}
+    .p2 .paso-num{background:var(--c-capacidad)} .p2 .paso-linea{background:var(--c-capacidad)} .p2 .paso-tag{color:rgba(96,165,250,.9)}
+    .p3 .paso-num{background:var(--c-motivacion)} .p3 .paso-linea{background:var(--c-motivacion)} .p3 .paso-tag{color:rgba(251,191,36,.9)}
+    .p4 .paso-num{background:var(--c-oportunidad)} .p4 .paso-linea{background:var(--c-oportunidad)} .p4 .paso-tag{color:rgba(52,211,153,.9)}
+    .p5 .paso-num{background:#7C3AED} .p5 .paso-linea{background:#7C3AED} .p5 .paso-tag{color:rgba(196,181,253,.9)}
+    .p6 .paso-num{background:#0E7490} .p6 .paso-linea{background:#0E7490} .p6 .paso-tag{color:rgba(103,232,249,.9)}
+    .p7 .paso-num{background:#065F46} .p7 .paso-linea{background:#065F46} .p7 .paso-tag{color:rgba(110,231,183,.9)}
+
+    .diagrama-notas { display:flex; flex-direction:column; gap:var(--sp-5); }
+    .nota-card { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius-card); padding:var(--sp-5); }
+    .nota-card h4 { font-size:var(--fs-sm); color:rgba(255,255,255,.9); margin-bottom:var(--sp-3); font-family:var(--ff-body); font-weight:var(--fw-semi); }
+    .nota-card p { font-size:var(--fs-xs); color:rgba(255,255,255,.6); margin:0; line-height:var(--lh-snug); }
+    .medicion-dual { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius-card); padding:var(--sp-5); }
+    .medicion-dual h4 { font-size:var(--fs-sm);font-weight:var(--fw-semi); color:rgba(255,255,255,.9);margin-bottom:var(--sp-4);font-family:var(--ff-body); }
+    .dual-cols { display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4); }
+    .dual-col { border-radius:var(--radius);padding:var(--sp-4); }
+    .dual-col.obj{background:rgba(37,99,235,.2)} .dual-col.sub{background:rgba(217,119,6,.2)}
+    .dual-col-label { font-size:var(--fs-xs);font-weight:var(--fw-semi);text-transform:uppercase;letter-spacing:.07em;margin-bottom:var(--sp-3); }
+    .dual-col.obj .dual-col-label{color:rgba(147,197,253,.9)} .dual-col.sub .dual-col-label{color:rgba(253,211,77,.9)}
+    .dual-col ul{list-style:none;padding:0;margin:0} .dual-col li{font-size:var(--fs-xs);color:rgba(255,255,255,.65);margin-bottom:var(--sp-2)}
+    .dual-col li:last-child{margin-bottom:0}
+
+    .estrat-grid{display:grid;gap:var(--sp-5)}
+    @media(min-width:768px){.estrat-grid{grid-template-columns:repeat(3,1fr)}}
+    .estrat-card{background:var(--c-superficie);border-radius:var(--radius-card);padding:var(--sp-6);border:2px solid;box-shadow:var(--shadow-xs)}
+    .estrat-card.p1{border-color:var(--c-no)} .estrat-card.p2{border-color:var(--c-parcial)} .estrat-card.p3{border-color:var(--c-ok)}
+    .estrat-num{font-family:var(--ff-display);font-size:var(--fs-3xl);font-weight:var(--fw-semi);line-height:1;margin-bottom:var(--sp-3)}
+    .estrat-card.p1 .estrat-num{color:var(--c-no)} .estrat-card.p2 .estrat-num{color:var(--c-parcial)} .estrat-card.p3 .estrat-num{color:var(--c-ok)}
+    .estrat-card h3{font-size:var(--fs-md);margin-bottom:var(--sp-3)} .estrat-card p{font-size:var(--fs-sm);color:var(--c-texto-secundario);margin-bottom:var(--sp-4)}
+    .reestrat-box{background:var(--c-institucional-claro);border:1.5px solid var(--c-institucional);border-radius:var(--radius-card);padding:var(--sp-6);margin-top:var(--sp-6)}
+    .reestrat-box h3{font-size:var(--fs-lg);color:var(--c-institucional);margin-bottom:var(--sp-4)}
+    .reestrat-criterios{display:flex;flex-direction:column;gap:var(--sp-3)}
+    .criterio{display:flex;gap:var(--sp-3);align-items:flex-start}
+    .criterio-num{width:24px;height:24px;border-radius:var(--radius-pill);background:var(--c-institucional);color:#fff;font-size:var(--fs-xs);font-weight:var(--fw-semi);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+    .criterio p{font-size:var(--fs-sm);color:var(--c-texto);margin:0} .criterio strong{color:var(--c-institucional)}
+
+    .decalogo-grid{display:grid;gap:var(--sp-4)}
+    @media(min-width:768px){.decalogo-grid{grid-template-columns:1fr 1fr}}
+    .dec-item{background:var(--c-superficie);border-radius:var(--radius-card);padding:var(--sp-5) var(--sp-6);border:1.5px solid var(--c-borde-claro);display:flex;gap:var(--sp-5);align-items:flex-start;box-shadow:var(--shadow-xs);transition:box-shadow var(--t-base),border-color var(--t-base)}
+    .dec-item:hover{box-shadow:var(--shadow-sm);border-color:var(--c-acento)}
+    .dec-n{font-family:var(--ff-display);font-size:var(--fs-2xl);font-weight:var(--fw-semi);color:var(--c-acento);line-height:1;flex-shrink:0;min-width:2ch}
+    .dec-texto{flex:1} .dec-texto p{font-size:var(--fs-sm);color:var(--c-texto);font-weight:var(--fw-medium);margin:0;line-height:var(--lh-snug)}
+
+    .dual-strip{background:var(--c-institucional);border-radius:var(--radius-card);padding:var(--sp-6);color:#fff;display:grid;gap:var(--sp-6)}
+    @media(min-width:768px){.dual-strip{grid-template-columns:1fr 1fr;align-items:center}}
+    .dual-strip h3{color:#fff;font-size:var(--fs-xl);margin-bottom:var(--sp-3)} .dual-strip p{color:rgba(255,255,255,.75);font-size:var(--fs-sm);margin:0}
+    .dual-badges{display:flex;flex-wrap:wrap;gap:var(--sp-3)}
+    .dual-badge{padding:var(--sp-4) var(--sp-5);border-radius:var(--radius-card);text-align:center;flex:1;min-width:120px}
+    .dual-badge.pres{background:rgba(37,99,235,.25);border:1px solid rgba(96,165,250,.3)} .dual-badge.tele{background:rgba(5,150,105,.25);border:1px solid rgba(52,211,153,.3)}
+    .dual-badge span{display:block;font-size:var(--fs-sm);font-weight:var(--fw-semi);color:#fff;margin-bottom:var(--sp-2)} .dual-badge small{font-size:var(--fs-xs);color:rgba(255,255,255,.6)}
+  </style>
 </head>
 <body>
   <div id="site-header-placeholder"></div>
+
   <main id="contenido-principal">
+
     <div class="page-hero">
       <div class="container">
-        <span class="eyebrow">Próximamente</span>
-        <h1>Sección en construcción</h1>
-        <p class="lead">Esta sección se completará en las próximas tandas de desarrollo.</p>
+        <nav class="breadcrumb" aria-label="Ruta de navegación">
+          <a href="index.html">Inicio</a>
+          <span class="breadcrumb-sep" aria-hidden="true">›</span>
+          <span aria-current="page">El modelo</span>
+        </nav>
+        <span class="eyebrow">Marco conceptual de la Guía MAPEX-ADHEFAR</span>
+        <h1>El modelo CMO y el algoritmo ADHEFAR-EM</h1>
+        <p class="lead">Tres pilares, siete pasos y un decálogo. El marco que estructura la medición, el diagnóstico de barreras y la intervención en adherencia desde la consulta externa de Farmacia Hospitalaria.</p>
       </div>
     </div>
-    <section class="section">
+
+    <section class="section" style="padding-bottom:0">
       <div class="container">
-        <div class="notice notice-info" style="max-width:640px">
-          <div class="notice-icon" aria-hidden="true">🔧</div>
-          <div>Contenido en desarrollo. La estructura de navegación ya está operativa; el contenido de esta sección se publicará en breve.</div>
+        <nav class="toc" aria-label="Contenido de esta página">
+          <h3>En esta página</h3>
+          <ol>
+            <li><a href="#taxonomia-abc">Taxonomía ABC de la adherencia</a></li>
+            <li><a href="#modelo-cmo">El modelo CMO</a></li>
+            <li><a href="#medicion-dual">Medición dual obligatoria</a></li>
+            <li><a href="#algoritmo">Algoritmo ADHEFAR-EM (7 pasos)</a></li>
+            <li><a href="#estratificacion">Estratificación dinámica</a></li>
+            <li><a href="#atencion-dual">Atención dual presencial + telemática</a></li>
+            <li><a href="#decalogo">Decálogo de implantación</a></li>
+          </ol>
+        </nav>
+      </div>
+    </section>
+
+    <!-- 1. Taxonomía ABC -->
+    <section class="section" id="taxonomia-abc" aria-labelledby="abc-titulo">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Taxonomía ABC</span>
+          <h2 id="abc-titulo">Las fases de la adherencia</h2>
+          <p class="lead">La guía adopta la taxonomía ABC, que describe la adherencia como un proceso dinámico con fases diferenciadas, no como un atributo fijo del paciente.</p>
+        </div>
+        <div class="abc-grid">
+          <div class="abc-card">
+            <div class="abc-num">I</div>
+            <h3>Iniciación</h3>
+            <p>El paciente toma la primera dosis del tratamiento prescrito. La no-iniciación (adherencia primaria) es una forma de incumplimiento frecuentemente invisible.</p>
+          </div>
+          <div class="abc-card">
+            <div class="abc-num">II</div>
+            <h3>Implementación</h3>
+            <p>Grado en que la conducta de toma real se ajusta al régimen prescrito, desde la primera hasta la última dosis.</p>
+          </div>
+          <div class="abc-card">
+            <div class="abc-num">III</div>
+            <h3>Persistencia</h3>
+            <p>Tiempo transcurrido desde la iniciación hasta la última dosis. Mide la continuidad del tratamiento a largo plazo.</p>
+          </div>
+          <div class="abc-card">
+            <div class="abc-num">IV</div>
+            <h3>Discontinuación</h3>
+            <p>Interrupción del tratamiento, ya sea justificada clínicamente o no. Puede ser temporal o definitiva.</p>
+          </div>
+        </div>
+        <div class="abc-dual" style="margin-top:var(--sp-6)">
+          <div class="card card-bordered">
+            <div class="pillar-badge institucional" style="margin-bottom:var(--sp-4)">Adherencia primaria</div>
+            <p style="font-size:var(--fs-sm);color:var(--c-texto-secundario)">La prescripción no llega a dispensarse o el paciente no inicia el tratamiento. Es la forma menos visible y más difícil de detectar sin sistemas de información integrados.</p>
+          </div>
+          <div class="card card-bordered">
+            <div class="pillar-badge institucional" style="margin-bottom:var(--sp-4)">Adherencia secundaria</div>
+            <p style="font-size:var(--fs-sm);color:var(--c-texto-secundario)">El tratamiento se inicia pero no se mantiene adecuadamente: olvidos, interrupciones, dosis incorrectas o abandono. Es la forma más habitual en el seguimiento en consultas externas.</p>
+          </div>
+        </div>
+        <div class="notice notice-info" style="margin-top:var(--sp-6)">
+          <div class="notice-icon" aria-hidden="true">ℹ</div>
+          <div>
+            <strong>La adherencia no es un atributo del paciente.</strong> La guía insiste en que el incumplimiento es un fenómeno complejo y multifactorial. El <strong>manejo de la adherencia</strong> engloba todas las acciones del equipo sanitario para apoyar la toma continuada y correcta de la medicación.
+          </div>
         </div>
       </div>
     </section>
+
+    <!-- 2. Modelo CMO -->
+    <section class="section section-alt" id="modelo-cmo" aria-labelledby="cmo-titulo">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">El único marco de atención</span>
+          <h2 id="cmo-titulo">Modelo CMO: Capacidad, Motivación, Oportunidad</h2>
+          <p class="lead">El modelo CMO es el marco único para clasificar las barreras a la adherencia, orientar la exploración clínica y seleccionar el tipo de intervención. Cada barrera identificada pertenece a uno o varios de sus tres pilares.</p>
+        </div>
+        <div class="cmo-grid">
+          <div class="cmo-card cap" role="region" aria-labelledby="cmo-cap">
+            <div class="cmo-card-icon" aria-hidden="true">◈</div>
+            <h3 id="cmo-cap">Capacidad</h3>
+            <p>Habilidades físicas, cognitivas y de conocimiento necesarias para seguir el tratamiento correcta y continuadamente.</p>
+            <ul class="cmo-ejemplos" aria-label="Ejemplos de barreras de Capacidad">
+              <li>Complejidad del régimen terapéutico</li>
+              <li>Fragilidad, deterioro cognitivo o dependencia</li>
+              <li>Baja alfabetización sanitaria</li>
+              <li>Efectos adversos que dificultan la toma</li>
+              <li>Dificultades de administración o de dispositivos</li>
+            </ul>
+            <div class="cmo-intervencion">
+              <div class="cmo-intervencion-label">Tipo de intervención</div>
+              <p>Educación sanitaria adaptada, simplificación terapéutica, técnicas de administración, apoyo cognitivo, herramientas organizativas (SPD, pastillero).</p>
+            </div>
+          </div>
+          <div class="cmo-card mot" role="region" aria-labelledby="cmo-mot">
+            <div class="cmo-card-icon" aria-hidden="true">◉</div>
+            <h3 id="cmo-mot">Motivación</h3>
+            <p>Creencias, actitudes, expectativas, intención y procesos de toma de decisiones del paciente sobre su medicación.</p>
+            <ul class="cmo-ejemplos" aria-label="Ejemplos de barreras de Motivación">
+              <li>Creencias negativas sobre la medicación</li>
+              <li>Baja percepción de necesidad del tratamiento</li>
+              <li>Miedo a efectos adversos</li>
+              <li>Experiencias previas negativas</li>
+              <li>Baja activación o autoeficacia</li>
+            </ul>
+            <div class="cmo-intervencion">
+              <div class="cmo-intervencion-label">Tipo de intervención</div>
+              <p>Entrevista motivacional, exploración de creencias e ICE, objetivos farmacoterapéuticos pactados, refuerzo positivo y retroalimentación de datos.</p>
+            </div>
+          </div>
+          <div class="cmo-card opp" role="region" aria-labelledby="cmo-opp">
+            <div class="cmo-card-icon" aria-hidden="true">◎</div>
+            <h3 id="cmo-opp">Oportunidad</h3>
+            <p>Factores del entorno físico y social que facilitan o dificultan la conducta de adherencia: acceso, apoyo, logística y estructura asistencial.</p>
+            <ul class="cmo-ejemplos" aria-label="Ejemplos de barreras de Oportunidad">
+              <li>Dificultad de acceso al centro o a la medicación</li>
+              <li>Falta de apoyo familiar o social</li>
+              <li>Barreras tecnológicas o de comunicación</li>
+              <li>Problemas en el circuito de dispensación</li>
+              <li>Ausencia de recordatorios o estructura de toma</li>
+            </ul>
+            <div class="cmo-intervencion">
+              <div class="cmo-intervencion-label">Tipo de intervención</div>
+              <p>Telefarmacia, recordatorios adaptados (alarmas, apps, llamadas), coordinación con cuidadores, optimización del circuito de dispensación.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Medición dual -->
+    <section class="section" id="medicion-dual" aria-labelledby="dual-titulo">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Principio metodológico</span>
+          <h2 id="dual-titulo">Medición dual obligatoria en todas las visitas</h2>
+          <p class="lead">La guía establece como principio irrenunciable combinar siempre un método objetivo y uno subjetivo en cada visita. Ninguno de los dos, por sí solo, ofrece una imagen completa de la adherencia real.</p>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="pillar-badge capacidad" style="margin-bottom:var(--sp-5)">Método objetivo</div>
+            <p style="font-size:var(--fs-sm);color:var(--c-texto-secundario);margin-bottom:var(--sp-4)">Basado en datos de dispensación o registros objetivos, independiente de lo que refiere el paciente.</p>
+            <ul style="font-size:var(--fs-sm);display:flex;flex-direction:column;gap:var(--sp-3)">
+              <li><strong>PDC</strong> (proporción de días cubiertos): días con medicación dispensada / días de seguimiento.</li>
+              <li><strong>MPR</strong> (tasa de posesión de la medicación): total de días de medicación dispensada / días del período.</li>
+              <li>Registros de dispensación del sistema de información hospitalario.</li>
+              <li>Recuento de unidades devueltas o no retiradas.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="pillar-badge motivacion" style="margin-bottom:var(--sp-5)">Método subjetivo</div>
+            <p style="font-size:var(--fs-sm);color:var(--c-texto-secundario);margin-bottom:var(--sp-4)">Basado en la percepción, el relato o la autoevaluación del propio paciente.</p>
+            <ul style="font-size:var(--fs-sm);display:flex;flex-direction:column;gap:var(--sp-3)">
+              <li><strong>Cuestionarios validados</strong>: Morisky-Green, TAI, MARS, BMQ u otros según patología y contexto clínico.</li>
+              <li><strong>Entrevista estructurada</strong>: exploración de barreras, olvidos, actitudes y conductas de toma.</li>
+              <li><strong>PROMs</strong>: resultados de salud percibidos por el paciente.</li>
+              <li><strong>PREMs</strong>: experiencia del paciente con la atención recibida.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="notice notice-warning" style="margin-top:var(--sp-6)">
+          <div class="notice-icon" aria-hidden="true">⚠</div>
+          <div>
+            <strong>Ambos métodos son obligatorios en todas las visitas.</strong> El método objetivo cuantifica el incumplimiento; el subjetivo identifica sus causas y el impacto percibido. Solo con ambos puede establecerse un plan de intervención adecuado y personalizado.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Algoritmo ADHEFAR-EM -->
+    <section class="section section-alt" id="algoritmo" aria-labelledby="alg-titulo">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Marco operativo</span>
+          <h2 id="alg-titulo">Algoritmo ADHEFAR-EM: los 7 pasos de la consulta</h2>
+          <p class="lead">Secuencia de entrevista motivacional aplicada a la adherencia que estructura la actuación farmacéutica en consulta. Los 7 pasos guían desde la detección de la señal de alerta hasta el registro y la reevaluación.</p>
+        </div>
+        <div class="diagrama-layout">
+          <div class="diagrama-wrapper" aria-labelledby="diag-lbl">
+            <span class="diagrama-titulo-lbl" id="diag-lbl">Algoritmo ADHEFAR-EM — 7 pasos</span>
+            <ol class="pasos-secuencia" style="list-style:none;padding:0;margin:0">
+              <li class="paso-item p1">
+                <div class="paso-izq"><div class="paso-num" aria-label="Paso 1">1</div><div class="paso-linea"></div></div>
+                <div class="paso-content">
+                  <div class="paso-tag">Detección</div>
+                  <h4>Detectar la señal de alerta</h4>
+                  <p>Identificar indicadores de posible incumplimiento: PDC/MPR por debajo del umbral, cuestionario positivo, falta de respuesta al tratamiento o cambio en PROMs/PREMs.</p>
+                </div>
+              </li>
+              <li class="paso-item p2">
+                <div class="paso-izq"><div class="paso-num" aria-label="Paso 2">2</div><div class="paso-linea"></div></div>
+                <div class="paso-content">
+                  <div class="paso-tag">Clasificación CMO</div>
+                  <h4>Clasificar la barrera predominante</h4>
+                  <p>Determinar si la barrera es de Capacidad, Motivación u Oportunidad, y si el patrón es de práctica o de percepción.</p>
+                </div>
+              </li>
+              <li class="paso-item p3">
+                <div class="paso-izq"><div class="paso-num" aria-label="Paso 3">3</div><div class="paso-linea"></div></div>
+                <div class="paso-content">
+                  <div class="paso-tag">Intervención</div>
+                  <h4>Intervenir de forma personalizada</h4>
+                  <p>Aplicar la intervención alineada con el pilar CMO identificado: educación/técnica (C), entrevista motivacional/creencias (M), telefarmacia/logística (O).</p>
+                </div>
+              </li>
+              <li class="paso-item p4">
+                <div class="paso-izq"><div class="paso-num" aria-label="Paso 4">4</div><div class="paso-linea"></div></div>
+                <div class="paso-content">
+                  <div class="paso-tag">Pacto</div>
+                  <h4>Pactar el objetivo farmacoterapéutico</h4>
+                  <p>Acordar con el paciente un objetivo concreto, realista, significativo para él y evaluable en la siguiente visita. La decisión es siempre compartida.</p>
+                </div>
+              </li>
+              <li class="paso-item p5">
+                <div class="paso-izq"><div class="paso-num" aria-label="Paso 5">5</div><div class="paso-linea"></div></div>
+                <div class="paso-content">
+                  <div class="paso-tag">Comprensión · Teach-back</div>
+                  <h4>Confirmar la comprensión</h4>
+                  <p>Pedir al paciente que explique con sus propias palabras qué ha entendido y qué va a hacer. Corregir malentendidos antes de cerrar la visita.</p>
+                </div>
+              </li>
+              <li class="paso-item p6">
+                <div class="paso-izq"><div class="paso-num" aria-label="Paso 6">6</div><div class="paso-linea"></div></div>
+                <div class="paso-content">
+                  <div class="paso-tag">Coordinación</div>
+                  <h4>Valorar la coordinación multidisciplinar</h4>
+                  <p>Determinar si la situación requiere intervención de otros profesionales (medicina, enfermería, trabajo social, psicología, atención primaria) y activar el circuito correspondiente.</p>
+                </div>
+              </li>
+              <li class="paso-item p7">
+                <div class="paso-izq"><div class="paso-num" aria-label="Paso 7">7</div><div class="paso-linea"></div></div>
+                <div class="paso-content">
+                  <div class="paso-tag">Registro · Documentación</div>
+                  <h4>Registrar, documentar y planificar la reevaluación</h4>
+                  <p>Documentar en la historia clínica: señal detectada, barrera clasificada, intervención realizada, objetivo pactado y fecha de reevaluación. El registro es parte de la actuación clínica.</p>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <div class="diagrama-notas">
+            <div class="medicion-dual">
+              <h4>Medición dual en cada visita</h4>
+              <div class="dual-cols">
+                <div class="dual-col obj">
+                  <div class="dual-col-label">Objetivo</div>
+                  <ul><li>PDC / MPR</li><li>Registros dispensación</li><li>Recuento unidades</li></ul>
+                </div>
+                <div class="dual-col sub">
+                  <div class="dual-col-label">Subjetivo</div>
+                  <ul><li>Cuestionario validado</li><li>Entrevista estructurada</li><li>PROMs / PREMs</li></ul>
+                </div>
+              </div>
+            </div>
+            <div class="nota-card">
+              <h4>Barreras de práctica vs. de percepción</h4>
+              <p>La guía distingue entre barreras de práctica (el paciente quiere pero no puede: Capacidad u Oportunidad) y barreras de percepción (el paciente puede pero no quiere o no cree necesario: Motivación). Esta distinción orienta la intervención.</p>
+            </div>
+            <div class="nota-card">
+              <h4>La consulta de 10 minutos</h4>
+              <p>El algoritmo está diseñado para aplicarse en el tiempo habitual de consulta. El guion ADHEFAR-EM desglosa la secuencia en bloques de 1-3 minutos para facilitar su uso en la práctica diaria.</p>
+              <a href="herramientas.html#guion" class="btn btn-ghost btn-sm" style="margin-top:var(--sp-4);color:rgba(255,255,255,.75);border-color:rgba(255,255,255,.2)">Ver guion de 10 min &rarr;</a>
+            </div>
+            <div style="background:rgba(255,255,255,.07);border-left:4px solid var(--c-acento);border-radius:0 var(--radius) var(--radius) 0;padding:var(--sp-4) var(--sp-5)">
+              <p style="font-size:var(--fs-sm);color:rgba(255,255,255,.75);margin:0">Los <strong style="color:#fff">checklists de visita inicial y sucesiva</strong> desarrollan estos 7 pasos con el detalle operativo necesario para su aplicación directa. <a href="herramientas.html#checklists" style="color:rgba(167,139,250,.9);display:block;margin-top:var(--sp-3)">Ir a herramientas &rarr;</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Estratificación -->
+    <section class="section" id="estratificacion" aria-labelledby="estrat-titulo">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Clasificación de riesgo</span>
+          <h2 id="estrat-titulo">Estratificación dinámica: Prioridad 1, 2 y 3</h2>
+          <p class="lead">Tres niveles de prioridad para orientar la intensidad del seguimiento. Es <strong>dinámica</strong>: el nivel puede cambiar en cada visita, en función de la evolución del paciente.</p>
+        </div>
+        <div class="estrat-grid">
+          <div class="estrat-card p1">
+            <div class="estrat-num">P1</div>
+            <h3>Prioridad 1 — Alta</h3>
+            <p>Paciente con adherencia insuficiente validada, objetivos farmacoterapéuticos (OFT) no alcanzados y PROMs/PREMs alterados. Requiere intervención intensiva y seguimiento estrecho.</p>
+            <div class="badge badge-error">Intervención prioritaria</div>
+          </div>
+          <div class="estrat-card p2">
+            <div class="estrat-num">P2</div>
+            <h3>Prioridad 2 — Intermedia</h3>
+            <p>Paciente con algún criterio de alerta pero no los tres concurrentes. Seguimiento reforzado con intervención específica sobre la barrera identificada.</p>
+            <div class="badge badge-alerta">Seguimiento reforzado</div>
+          </div>
+          <div class="estrat-card p3">
+            <div class="estrat-num">P3</div>
+            <h3>Prioridad 3 — Baja</h3>
+            <p>Paciente con adherencia óptima, OFT alcanzados y PROMs/PREMs en el rango esperado. Seguimiento de mantenimiento con intervención de consolidación.</p>
+            <div class="badge badge-ok">Mantenimiento</div>
+          </div>
+        </div>
+        <div class="reestrat-box">
+          <h3>Criterios de reestratificación</h3>
+          <p style="font-size:var(--fs-sm);color:var(--c-texto-secundario);margin-bottom:var(--sp-5)">La reestratificación es obligatoria cuando concurren simultáneamente los tres criterios siguientes:</p>
+          <div class="reestrat-criterios">
+            <div class="criterio"><div class="criterio-num">1</div><p><strong>Incumplimiento sostenido de los OFT</strong> en la visita de revisión.</p></div>
+            <div class="criterio"><div class="criterio-num">2</div><p><strong>Adherencia insuficiente validada</strong> por medición dual (método objetivo + subjetivo).</p></div>
+            <div class="criterio"><div class="criterio-num">3</div><p><strong>PROMs o PREMs alterados</strong> respecto al valor basal o al umbral esperado para el perfil del paciente.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Atención dual -->
+    <section class="section section-alt" id="atencion-dual" aria-labelledby="dual-as-titulo">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Modelo asistencial</span>
+          <h2 id="dual-as-titulo">Atención dual: presencial y telemática</h2>
+          <p class="lead">La guía establece la atención farmacéutica dual como estándar estructural, no como excepción. Ambas modalidades son complementarias y deben integrarse en el plan de seguimiento de cada paciente.</p>
+        </div>
+        <div class="dual-strip">
+          <div>
+            <h3>La dualidad como estándar</h3>
+            <p>El punto 6 del Decálogo establece que "la atención dual debe incorporarse como práctica habitual y no excepcional". Esto supone diseñar los circuitos del servicio para que cada paciente tenga un plan de seguimiento que combine visitas presenciales y contacto telemático según su perfil de riesgo.</p>
+          </div>
+          <div class="dual-badges">
+            <div class="dual-badge pres"><span>Presencial</span><small>Valoración basal, inicio, reestratificación, casos complejos</small></div>
+            <div class="dual-badge tele"><span>Telemática</span><small>Seguimiento entre visitas, refuerzo, dudas, monitorización de OFT</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Decálogo -->
+    <section class="section" id="decalogo" aria-labelledby="dec-titulo">
+      <div class="container">
+        <div class="section-header centered">
+          <span class="eyebrow">Principios de implantación</span>
+          <h2 id="dec-titulo">Decálogo MAPEX-ADHEFAR</h2>
+          <p class="lead">Los diez principios que articulan la implantación del modelo en la práctica. Son los compromisos que un servicio de farmacia hospitalaria asume al adoptar la Guía MAPEX-ADHEFAR.</p>
+        </div>
+        <div class="decalogo-grid">
+          <div class="dec-item"><div class="dec-n" aria-hidden="true">1</div><div class="dec-texto"><p>La adherencia se mide en todas las visitas.</p></div></div>
+          <div class="dec-item"><div class="dec-n" aria-hidden="true">2</div><div class="dec-texto"><p>La estratificación es obligatoria y dinámica.</p></div></div>
+          <div class="dec-item"><div class="dec-n" aria-hidden="true">3</div><div class="dec-texto"><p>El farmacéutico de hospital debe identificar la causa real del incumplimiento.</p></div></div>
+          <div class="dec-item"><div class="dec-n" aria-hidden="true">4</div><div class="dec-texto"><p>Las intervenciones deben ser personalizadas y adaptadas.</p></div></div>
+          <div class="dec-item"><div class="dec-n" aria-hidden="true">5</div><div class="dec-texto"><p>La decisión es siempre compartida.</p></div></div>
+          <div class="dec-item"><div class="dec-n" aria-hidden="true">6</div><div class="dec-texto"><p>La atención dual debe incorporarse como práctica habitual y no excepcional.</p></div></div>
+          <div class="dec-item"><div class="dec-n" aria-hidden="true">7</div><div class="dec-texto"><p>Los PROMs y PREMs son indicadores clínicos obligatorios.</p></div></div>
+          <div class="dec-item"><div class="dec-n" aria-hidden="true">8</div><div class="dec-texto"><p>El registro estructurado es parte de la actuación clínica.</p></div></div>
+          <div class="dec-item"><div class="dec-n" aria-hidden="true">9</div><div class="dec-texto"><p>La coordinación multidisciplinar y el abordaje multidimensional son estándares de seguimiento.</p></div></div>
+          <div class="dec-item"><div class="dec-n" aria-hidden="true">10</div><div class="dec-texto"><p>El seguimiento debe ser siempre longitudinal y proactivo.</p></div></div>
+        </div>
+        <div class="notice notice-info" style="margin-top:var(--sp-8)">
+          <div class="notice-icon" aria-hidden="true">📊</div>
+          <div>
+            <strong>Autoevaluación del decálogo.</strong> En la sección de Implantación y calidad encontrarás una herramienta para evaluar el grado de cumplimiento de cada punto en tu servicio y generar la hoja de ruta de mejora.
+            <a href="implantacion.html#autoevaluacion" style="display:block;margin-top:var(--sp-3)">Ir a la autoevaluación &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section section-alt" style="padding-block:var(--sp-8)">
+      <div class="container" style="max-width:860px;text-align:center">
+        <blockquote class="blockquote-ref" style="font-size:var(--fs-base)">
+          "La adherencia no es un atributo del paciente, sino el resultado de una interacción compleja entre la persona, su tratamiento y su entorno."
+          <cite>Grupo ADHEFAR. Guía MAPEX-ADHEFAR. SEFH, 2026.</cite>
+        </blockquote>
+      </div>
+    </div>
+
   </main>
+
   <div id="site-footer-placeholder"></div>
   <script src="js/nav.js"></script>
 </body>
