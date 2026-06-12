@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MAPEX-ADHEFAR Hub</title>
-  <meta name="description" content="Hub operativo de la Guía MAPEX-ADHEFAR — SEFH · Grupo ADHEFAR · 2026.">
+  <title>Glosario — MAPEX-ADHEFAR Hub</title>
+  <meta name="description" content="Glosario de términos canónicos del modelo MAPEX-ADHEFAR: PDC, MPR, OFT, CMO, PROMs, PREMs, ADHEFAR-EM, taxonomía ABC, estratificación, Q-PEX.">
+  <meta property="og:title" content="Glosario — MAPEX-ADHEFAR Hub">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
@@ -13,27 +16,816 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/print.css">
+  <style>
+    .glosario-search-wrap {
+      position: sticky;
+      top: calc(var(--header-h, 64px) + var(--sp-3));
+      z-index: 10;
+      background: var(--c-fondo);
+      padding-block: var(--sp-3);
+    }
+    .glosario-search {
+      width: 100%;
+      padding: var(--sp-3) var(--sp-4);
+      font-size: var(--fs-md);
+      border: 2px solid var(--c-borde);
+      border-radius: var(--r-md);
+      background: #fff;
+      transition: border-color var(--t-fast);
+    }
+    .glosario-search:focus {
+      outline: none;
+      border-color: var(--c-institucional);
+    }
+    .filtros-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-2);
+      margin-top: var(--sp-3);
+    }
+    .filtro-btn {
+      padding: var(--sp-1) var(--sp-3);
+      font-size: var(--fs-sm);
+      font-family: var(--ff-body);
+      border: 1.5px solid var(--c-borde);
+      border-radius: 99px;
+      background: #fff;
+      cursor: pointer;
+      transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+    }
+    .filtro-btn:hover { background: var(--c-fondo-alt); }
+    .filtro-btn.active {
+      background: var(--c-institucional);
+      border-color: var(--c-institucional);
+      color: #fff;
+    }
+    .filtro-btn[data-cat="medicion"].active   { background: var(--c-capacidad);    border-color: var(--c-capacidad); }
+    .filtro-btn[data-cat="modelo"].active     { background: var(--c-acento);        border-color: var(--c-acento); }
+    .filtro-btn[data-cat="intervencion"].active { background: var(--c-oportunidad); border-color: var(--c-oportunidad); }
+    .filtro-btn[data-cat="calidad"].active    { background: var(--c-motivacion);    border-color: var(--c-motivacion); }
+    .glosario-index {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-1);
+      margin-block: var(--sp-4);
+    }
+    .glosario-index a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      border: 1.5px solid var(--c-borde);
+      border-radius: var(--r-sm);
+      text-decoration: none;
+      color: var(--c-texto-secundario);
+      transition: background var(--t-fast), color var(--t-fast);
+    }
+    .glosario-index a:hover { background: var(--c-institucional); color: #fff; border-color: var(--c-institucional); }
+    .letra-section { margin-bottom: var(--sp-8); }
+    .letra-anchor {
+      font-family: var(--ff-display);
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--c-institucional);
+      border-bottom: 3px solid var(--c-institucional);
+      padding-bottom: var(--sp-2);
+      margin-bottom: var(--sp-5);
+    }
+    .termino-card {
+      border: 1.5px solid var(--c-borde);
+      border-radius: var(--r-md);
+      padding: var(--sp-5);
+      margin-bottom: var(--sp-4);
+      background: #fff;
+      transition: box-shadow var(--t-fast);
+    }
+    .termino-card:hover { box-shadow: var(--shadow-sm); }
+    .termino-card[hidden] { display: none; }
+    .termino-header {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--sp-3);
+      flex-wrap: wrap;
+      margin-bottom: var(--sp-3);
+    }
+    .termino-abbr {
+      font-family: var(--ff-display);
+      font-size: var(--fs-xl);
+      font-weight: 600;
+      color: var(--c-texto);
+      margin: 0;
+    }
+    .termino-full {
+      font-size: var(--fs-sm);
+      color: var(--c-texto-secundario);
+      font-style: italic;
+    }
+    .termino-cat {
+      margin-left: auto;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      padding: 2px 10px;
+      border-radius: 99px;
+    }
+    .termino-cat.medicion     { background: var(--c-capacidad-claro); color: var(--c-capacidad-texto); }
+    .termino-cat.modelo       { background: var(--c-acento-claro);    color: var(--c-acento-texto); }
+    .termino-cat.intervencion { background: var(--c-oportunidad-claro); color: var(--c-oportunidad-texto); }
+    .termino-cat.calidad      { background: var(--c-motivacion-claro); color: var(--c-motivacion-texto); }
+    .termino-cat.taxonomia    { background: #f1f5f9; color: #475569; }
+    .termino-def {
+      font-size: var(--fs-base);
+      color: var(--c-texto);
+      margin-bottom: var(--sp-2);
+    }
+    .termino-nota {
+      font-size: var(--fs-sm);
+      color: var(--c-texto-secundario);
+      border-left: 3px solid var(--c-borde);
+      padding-left: var(--sp-3);
+      margin-top: var(--sp-3);
+    }
+    .sin-resultados {
+      text-align: center;
+      padding: var(--sp-12) var(--sp-4);
+      color: var(--c-texto-secundario);
+      display: none;
+    }
+    .sin-resultados.visible { display: block; }
+    .resultados-count {
+      font-size: var(--fs-sm);
+      color: var(--c-texto-secundario);
+      margin-top: var(--sp-2);
+    }
+    mark { background: #fef08a; border-radius: 2px; padding: 0 1px; }
+  </style>
 </head>
 <body>
   <div id="site-header-placeholder"></div>
+
   <main id="contenido-principal">
+
     <div class="page-hero">
       <div class="container">
-        <span class="eyebrow">Próximamente</span>
-        <h1>Sección en construcción</h1>
-        <p class="lead">Esta sección se completará en las próximas tandas de desarrollo.</p>
+        <nav class="breadcrumb" aria-label="Ruta de navegación">
+          <ol>
+            <li><a href="index.html">Inicio</a></li>
+            <li>Glosario</li>
+          </ol>
+        </nav>
+        <span class="eyebrow">Terminología canónica</span>
+        <h1>Glosario MAPEX-ADHEFAR</h1>
+        <p class="lead">Definiciones exactas de los términos del modelo, la taxonomía ABC, los indicadores, el marco CMO y el proceso ADHEFAR-EM.</p>
       </div>
     </div>
-    <section class="section">
+
+    <section class="section" aria-labelledby="glosario-titulo">
       <div class="container">
-        <div class="notice notice-info" style="max-width:640px">
-          <div class="notice-icon" aria-hidden="true">🔧</div>
-          <div>Contenido en desarrollo. La estructura de navegación ya está operativa; el contenido de esta sección se publicará en breve.</div>
+
+        <div class="glosario-search-wrap">
+          <label for="buscador-glosario" class="sr-only">Buscar término</label>
+          <input
+            type="search"
+            id="buscador-glosario"
+            class="glosario-search"
+            placeholder="Buscar término… (ej. PDC, adherencia, CMO)"
+            autocomplete="off"
+            aria-controls="lista-glosario"
+            aria-describedby="resultados-count"
+          >
+          <div class="filtros-wrap" role="group" aria-label="Filtrar por categoría">
+            <button class="filtro-btn active" data-cat="todas" type="button">Todos</button>
+            <button class="filtro-btn" data-cat="medicion" type="button">Medición</button>
+            <button class="filtro-btn" data-cat="modelo" type="button">Modelo CMO</button>
+            <button class="filtro-btn" data-cat="taxonomia" type="button">Taxonomía ABC</button>
+            <button class="filtro-btn" data-cat="intervencion" type="button">Intervención</button>
+            <button class="filtro-btn" data-cat="calidad" type="button">Calidad / MAPEX</button>
+          </div>
+          <p id="resultados-count" class="resultados-count" aria-live="polite"></p>
         </div>
+
+        <nav class="glosario-index" aria-label="Índice alfabético">
+          <a href="#letra-A">A</a><a href="#letra-C">C</a><a href="#letra-D">D</a>
+          <a href="#letra-E">E</a><a href="#letra-F">F</a><a href="#letra-G">G</a>
+          <a href="#letra-I">I</a><a href="#letra-M">M</a><a href="#letra-O">O</a>
+          <a href="#letra-P">P</a><a href="#letra-Q">Q</a><a href="#letra-R">R</a>
+          <a href="#letra-S">S</a><a href="#letra-T">T</a>
+        </nav>
+
+        <div id="lista-glosario" aria-label="Términos del glosario">
+
+          <!-- A -->
+          <div class="letra-section" id="letra-A">
+            <div class="letra-anchor" aria-hidden="true">A</div>
+
+            <div class="termino-card" data-cat="taxonomia" data-terminos="adherencia farmacoterapeutica adherencia terapeutica cumplimiento">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Adherencia farmacoterapéutica</h3>
+                  <div class="termino-full">También: adherencia terapéutica</div>
+                </div>
+                <span class="termino-cat taxonomia">Taxonomía ABC</span>
+              </div>
+              <p class="termino-def">Proceso por el que el paciente toma su medicación siguiendo las recomendaciones acordadas con el equipo sanitario. Engloba tres fases secuenciales según la taxonomía ABC: iniciación, implementación y persistencia. Va más allá del término <em>cumplimiento</em>, pues incorpora la dimensión conductual compleja y el papel activo del paciente.</p>
+              <div class="termino-nota">La guía MAPEX-ADHEFAR adopta la taxonomía ABC como único marco conceptual para clasificar y comunicar los problemas de adherencia.</div>
+            </div>
+
+            <div class="termino-card" data-cat="taxonomia" data-terminos="adherencia primaria dispensacion dispensacion inicial">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Adherencia primaria</h3>
+                </div>
+                <span class="termino-cat taxonomia">Taxonomía ABC</span>
+              </div>
+              <p class="termino-def">Recogida de la primera dispensación de un tratamiento prescrito. La no-adherencia primaria se produce cuando el paciente no retira el medicamento en la primera dispensación programada. Es el escalón previo a la fase de iniciación de la taxonomía ABC.</p>
+            </div>
+
+            <div class="termino-card" data-cat="taxonomia" data-terminos="adherencia secundaria continuacion tratamiento">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Adherencia secundaria</h3>
+                </div>
+                <span class="termino-cat taxonomia">Taxonomía ABC</span>
+              </div>
+              <p class="termino-def">Conducta de toma del tratamiento una vez iniciado, incluyendo la implementación (toma correcta día a día) y la persistencia (mantenimiento a lo largo del tiempo). La no-adherencia secundaria abarca el incumplimiento de dosis, los errores de pauta y la discontinuación prematura.</p>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="algoritmo ADHEFAR-EM entrevista motivacional 7 pasos">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">ADHEFAR-EM</h3>
+                  <div class="termino-full">Algoritmo ADHEFAR de Entrevista Motivacional</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Marco de intervención estructurado en 7 pasos para la consulta de adherencia en Farmacia Hospitalaria: (1) detectar señal de alerta, (2) clasificar barrera predominante, (3) intervenir, (4) acordar objetivo, (5) confirmar comprensión (teach-back), (6) valorar coordinación multidisciplinar, (7) registrar, documentar y reevaluar.</p>
+              <div class="termino-nota">Es el único algoritmo de intervención del marco MAPEX-ADHEFAR. Se aplica en visitas sucesivas y se completa idealmente en 10 minutos.</div>
+            </div>
+
+            <div class="termino-card" data-cat="calidad" data-terminos="ADHEFAR grupo trabajo SEFH farmacia hospitalaria">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">ADHEFAR (Grupo)</h3>
+                  <div class="termino-full">Grupo de trabajo de adherencia farmacoterapéutica — SEFH</div>
+                </div>
+                <span class="termino-cat calidad">Calidad / MAPEX</span>
+              </div>
+              <p class="termino-def">Grupo de trabajo de la Sociedad Española de Farmacia Hospitalaria especializado en adherencia farmacoterapéutica en el ámbito hospitalario. Desarrolló la Guía MAPEX-ADHEFAR (2026) y este recurso operativo.</p>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="ACT Asthma Control Test control asma cuestionario">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">ACT</h3>
+                  <div class="termino-full">Asthma Control Test</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Cuestionario validado de 5 ítems para evaluar el control del asma en las últimas 4 semanas. Puntuación de 5 a 25: ≤19 indica asma no controlada, 20–24 asma bien controlada, 25 asma completamente controlada. Utilizado como medida subjetiva de resultado en pacientes con asma.</p>
+            </div>
+
+          </div><!-- /letra A -->
+
+          <!-- C -->
+          <div class="letra-section" id="letra-C">
+            <div class="letra-anchor" aria-hidden="true">C</div>
+
+            <div class="termino-card" data-cat="modelo" data-terminos="capacidad CMO pilar conocimiento habilidad">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Capacidad (pilar CMO)</h3>
+                </div>
+                <span class="termino-cat modelo">Modelo CMO</span>
+              </div>
+              <p class="termino-def">Primer pilar del modelo CMO. Agrupa las barreras relacionadas con el conocimiento y la habilidad del paciente: comprensión de la enfermedad y del tratamiento, capacidad de manejo del régimen (polifarmacia, complejidad), habilidades motoras y cognitivas, y literacidad en salud. La intervención principal en barreras de Capacidad es la educación sanitaria estructurada y el teach-back.</p>
+              <div class="termino-nota">Color de referencia en el sistema visual: azul (Cobalt #2563EB).</div>
+            </div>
+
+            <div class="termino-card" data-cat="modelo" data-terminos="CMO modelo capacidad motivacion oportunidad marco">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">CMO</h3>
+                  <div class="termino-full">Modelo Capacidad – Motivación – Oportunidad</div>
+                </div>
+                <span class="termino-cat modelo">Modelo CMO</span>
+              </div>
+              <p class="termino-def">Marco conceptual único adoptado por la Guía MAPEX-ADHEFAR para clasificar las barreras a la adherencia. Distingue tres dominios: <strong>Capacidad</strong> (conocimiento y habilidad), <strong>Motivación</strong> (actitud, creencias y voluntad) y <strong>Oportunidad</strong> (contexto, sistema y entorno). Cada barrera identificada en la consulta se asigna al dominio predominante, determinando el tipo de intervención prioritaria.</p>
+              <div class="termino-nota">Es el único marco de clasificación de barreras del modelo MAPEX-ADHEFAR. No se usa ningún otro modelo alternativo.</div>
+            </div>
+
+            <div class="termino-card" data-cat="medicion" data-terminos="complejidad farmacoterapeutica indice medicamentos">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Complejidad farmacoterapéutica</h3>
+                </div>
+                <span class="termino-cat medicion">Medición</span>
+              </div>
+              <p class="termino-def">Medida del grado de dificultad intrínseco de un régimen de tratamiento, determinado por el número de fármacos, la frecuencia de administración, la vía de administración y los requisitos especiales de manipulación o almacenamiento. Puede cuantificarse con índices validados (p. ej., MRCI). A mayor complejidad, mayor riesgo de barreras de Capacidad.</p>
+            </div>
+
+          </div><!-- /letra C -->
+
+          <!-- D -->
+          <div class="letra-section" id="letra-D">
+            <div class="letra-anchor" aria-hidden="true">D</div>
+
+            <div class="termino-card" data-cat="taxonomia" data-terminos="discontinuacion abandono tratamiento interrupcion">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Discontinuación</h3>
+                  <div class="termino-full">Fase de la taxonomía ABC</div>
+                </div>
+                <span class="termino-cat taxonomia">Taxonomía ABC</span>
+              </div>
+              <p class="termino-def">Cuarta fase de la taxonomía ABC. Cese permanente del tratamiento antes de lo prescrito, ya sea por decisión del paciente, del médico, por efectos adversos, por coste u otras causas. Se distingue de la interrupción temporal. Su detección temprana permite intervención preventiva.</p>
+            </div>
+
+          </div><!-- /letra D -->
+
+          <!-- E -->
+          <div class="letra-section" id="letra-E">
+            <div class="letra-anchor" aria-hidden="true">E</div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="entrevista motivacional MI tecnica cambio conductual">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Entrevista Motivacional (EM)</h3>
+                  <div class="termino-full">Motivational Interviewing (MI)</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Técnica de comunicación centrada en el paciente para explorar y resolver la ambivalencia hacia el cambio de conducta. Basada en los principios de colaboración, evocación y autonomía. Se aplica especialmente en barreras de Motivación del modelo CMO. El farmacéutico actúa como facilitador, no como experto prescriptor de cambio.</p>
+              <div class="termino-nota">La entrevista motivacional es el fundamento del algoritmo ADHEFAR-EM en la fase de intervención (paso 3).</div>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="estratificacion prioridad dinamica P1 P2 P3">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Estratificación dinámica</h3>
+                  <div class="termino-full">Prioridades P1 / P2 / P3</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Sistema de clasificación de pacientes externos según su perfil de adherencia y riesgo, en tres niveles: <strong>P1</strong> (alta prioridad, intervención activa intensiva), <strong>P2</strong> (prioridad media, seguimiento reforzado), <strong>P3</strong> (prioridad baja, seguimiento estándar). La estratificación se actualiza en cada visita. La reestratificación a P1 se activa cuando concurren simultáneamente tres criterios: incumplimiento OFT sostenido + adherencia validada insuficiente + PROMs/PREMs alterados.</p>
+              <div class="termino-nota">La estratificación es dinámica: el nivel puede mejorar o empeorar en función de la evolución. No es una etiqueta estática.</div>
+            </div>
+
+          </div><!-- /letra E -->
+
+          <!-- F -->
+          <div class="letra-section" id="letra-F">
+            <div class="letra-anchor" aria-hidden="true">F</div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="farmacéutico hospitalario consulta externa seguimiento">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Farmacéutico hospitalario (en adherencia)</h3>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Profesional responsable de la consulta de adherencia en el servicio de Farmacia Hospitalaria. Sus funciones en el modelo MAPEX-ADHEFAR incluyen: detectar señales de alerta, medir la adherencia de forma objetiva y subjetiva, clasificar barreras CMO, aplicar el algoritmo ADHEFAR-EM, registrar y documentar, y coordinar con el equipo multidisciplinar cuando sea necesario.</p>
+            </div>
+
+          </div><!-- /letra F -->
+
+          <!-- G -->
+          <div class="letra-section" id="letra-G">
+            <div class="letra-anchor" aria-hidden="true">G</div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="gestión adherencia manejo conducta farmacoterapéutica">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Gestión de la adherencia</h3>
+                  <div class="termino-full">Adherence management</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Conjunto de acciones planificadas del equipo sanitario (y del paciente) orientadas a optimizar la conducta de toma del tratamiento. Incluye detección de barreras, selección e implementación de estrategias de intervención, seguimiento y evaluación del resultado. Se diferencia de la mera medición de la adherencia.</p>
+            </div>
+
+          </div><!-- /letra G -->
+
+          <!-- I -->
+          <div class="letra-section" id="letra-I">
+            <div class="letra-anchor" aria-hidden="true">I</div>
+
+            <div class="termino-card" data-cat="taxonomia" data-terminos="implementacion toma diaria correcta pauta">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Implementación</h3>
+                  <div class="termino-full">Fase de la taxonomía ABC</div>
+                </div>
+                <span class="termino-cat taxonomia">Taxonomía ABC</span>
+              </div>
+              <p class="termino-def">Segunda fase de la taxonomía ABC. Grado en que la conducta de toma real de un paciente se corresponde con el régimen prescrito, desde la iniciación hasta el final del tratamiento. Abarca la toma de dosis correctas en los momentos correctos. Su medición se realiza mediante PDC o MPR.</p>
+            </div>
+
+            <div class="termino-card" data-cat="taxonomia" data-terminos="iniciacion primera dosis inicio tratamiento">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Iniciación</h3>
+                  <div class="termino-full">Fase de la taxonomía ABC</div>
+                </div>
+                <span class="termino-cat taxonomia">Taxonomía ABC</span>
+              </div>
+              <p class="termino-def">Primera fase de la taxonomía ABC. Momento en que el paciente toma la primera dosis del tratamiento prescrito. La no-iniciación (equivalente a la no-adherencia primaria) ocurre cuando el paciente no llega a recoger o tomar el medicamento por primera vez.</p>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="ICE ideas preocupaciones expectativas modelo comunicacion">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">ICE</h3>
+                  <div class="termino-full">Ideas – Preocupaciones (Concerns) – Expectativas</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Marco de exploración centrado en el paciente para identificar su perspectiva sobre la enfermedad y el tratamiento. Explora qué cree el paciente que le ocurre (Ideas), qué le preocupa (Concerns) y qué espera de la consulta (Expectativas). Herramienta de exploración de barreras de Motivación en el modelo CMO.</p>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="indicadores indicadores adherencia resultado proceso">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Indicadores MAPEX-ADHEFAR</h3>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Sistema de medición del desempeño del servicio de adherencia en 4 dimensiones: (1) proceso (p. ej., % pacientes con medición dual adherencia), (2) resultado (p. ej., % pacientes con PDC ≥80%), (3) experiencia del paciente (PROMs/PREMs), (4) madurez de implantación y organización. Cada centro define las fórmulas y fuentes de datos según su sistema de información.</p>
+            </div>
+
+          </div><!-- /letra I -->
+
+          <!-- M -->
+          <div class="letra-section" id="letra-M">
+            <div class="letra-anchor" aria-hidden="true">M</div>
+
+            <div class="termino-card" data-cat="calidad" data-terminos="MAPEX Marco Atencion Paciente Externo SEFH calidad">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">MAPEX</h3>
+                  <div class="termino-full">Marco de Atención al Paciente Externo</div>
+                </div>
+                <span class="termino-cat calidad">Calidad / MAPEX</span>
+              </div>
+              <p class="termino-def">Iniciativa de la SEFH que establece el marco de calidad para la atención farmacéutica a pacientes externos en hospitales españoles. Integra estándares asistenciales, indicadores de calidad, la norma de certificación Q-PEX y los proyectos de mejora continua. La Guía MAPEX-ADHEFAR es uno de los documentos clínicos que desarrollan este marco en el ámbito de la adherencia.</p>
+            </div>
+
+            <div class="termino-card" data-cat="modelo" data-terminos="motivacion CMO actitud creencias voluntad ambivalencia">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Motivación (pilar CMO)</h3>
+                </div>
+                <span class="termino-cat modelo">Modelo CMO</span>
+              </div>
+              <p class="termino-def">Segundo pilar del modelo CMO. Agrupa las barreras relacionadas con actitudes, creencias, emociones y voluntad del paciente: percepción del riesgo de la enfermedad, creencias sobre la necesidad del tratamiento y sus efectos adversos, autoeficacia, ambivalencia hacia el cambio. La intervención principal en barreras de Motivación es la entrevista motivacional y la exploración ICE.</p>
+              <div class="termino-nota">Color de referencia en el sistema visual: ámbar (Amber #D97706).</div>
+            </div>
+
+            <div class="termino-card" data-cat="medicion" data-terminos="MPR medication possession ratio proporcion posesion">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">MPR</h3>
+                  <div class="termino-full">Medication Possession Ratio — Ratio de Posesión de Medicación</div>
+                </div>
+                <span class="termino-cat medicion">Medición</span>
+              </div>
+              <p class="termino-def">Indicador de adherencia objetiva calculado como la proporción entre los días de medicación dispensados y los días del período de observación. A diferencia del PDC, el MPR puede superar el 100% si hay solapamiento de dispensaciones (el exceso se acumula, no se limita al período). Fórmula simplificada: MPR = (días de medicación dispensados) / (días del período de seguimiento).</p>
+              <div class="termino-nota">Tanto PDC como MPR se extraen de los registros de dispensación de la farmacia hospitalaria. La guía exige siempre la medición dual: un indicador objetivo (PDC o MPR) + una medida subjetiva validada.</div>
+            </div>
+
+          </div><!-- /letra M -->
+
+          <!-- O -->
+          <div class="letra-section" id="letra-O">
+            <div class="letra-anchor" aria-hidden="true">O</div>
+
+            <div class="termino-card" data-cat="modelo" data-terminos="oportunidad CMO contexto sistema entorno barreras externas">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Oportunidad (pilar CMO)</h3>
+                </div>
+                <span class="termino-cat modelo">Modelo CMO</span>
+              </div>
+              <p class="termino-def">Tercer pilar del modelo CMO. Agrupa las barreras externas al individuo: accesibilidad al sistema sanitario, acceso al medicamento (coste, disponibilidad), apoyo social y familiar, barreras logísticas (transporte, horarios), disfunciones en la coordinación asistencial, y contexto cultural o socioeconómico. La intervención principal en barreras de Oportunidad es la coordinación multidisciplinar, la telefarmacia y la simplificación del sistema.</p>
+              <div class="termino-nota">Color de referencia en el sistema visual: verde esmeralda (Emerald #059669).</div>
+            </div>
+
+            <div class="termino-card" data-cat="medicion" data-terminos="OFT objetivo farmacoterapeutico diana terapeutica resultado">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">OFT</h3>
+                  <div class="termino-full">Objetivo Farmacoterapéutico</div>
+                </div>
+                <span class="termino-cat medicion">Medición</span>
+              </div>
+              <p class="termino-def">Diana de resultado clínico acordada para un paciente en un período determinado. Puede ser un valor biológico (p. ej., HbA1c, LDL, FEVI), una puntuación en escala validada (p. ej., DAS28, ACT) o un resultado funcional. Su incumplimiento sostenido es uno de los tres criterios de reestratificación a P1 en el modelo MAPEX-ADHEFAR.</p>
+            </div>
+
+          </div><!-- /letra O -->
+
+          <!-- P -->
+          <div class="letra-section" id="letra-P">
+            <div class="letra-anchor" aria-hidden="true">P</div>
+
+            <div class="termino-card" data-cat="medicion" data-terminos="PDC proportion days covered proporcion dias cubiertos dispensacion">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">PDC</h3>
+                  <div class="termino-full">Proportion of Days Covered — Proporción de Días Cubiertos</div>
+                </div>
+                <span class="termino-cat medicion">Medición</span>
+              </div>
+              <p class="termino-def">Indicador de adherencia objetiva calculado a partir de los registros de dispensación. Mide qué proporción de días dentro del período de seguimiento el paciente tiene medicación disponible. A diferencia del MPR, no permite solapamientos: si una dispensación se superpone con otra, los días solapados se cuentan una sola vez. Resultado entre 0 y 1 (o 0–100%). Umbral habitual de adherencia adecuada: PDC ≥80%.</p>
+              <div class="termino-nota">El PDC es el indicador objetivo estándar recomendado por la guía MAPEX-ADHEFAR. Siempre debe complementarse con una medida subjetiva validada (cuestionario o entrevista).</div>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="persistencia mantenimiento continuacion tratamiento largo plazo">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Persistencia</h3>
+                  <div class="termino-full">Fase de la taxonomía ABC</div>
+                </div>
+                <span class="termino-cat taxonomia">Taxonomía ABC</span>
+              </div>
+              <p class="termino-def">Tercera fase de la taxonomía ABC. Duración del tiempo desde la iniciación hasta la discontinuación del tratamiento. Un paciente puede implementar correctamente (tomar bien las dosis cuando tiene medicación) pero no persistir (abandonar el tratamiento antes de lo indicado). La persistencia se evalúa como el tiempo hasta el primer gap de medicación relevante o hasta la discontinuación.</p>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="PROMs patient reported outcome measures medidas resultado paciente">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">PROMs</h3>
+                  <div class="termino-full">Patient-Reported Outcome Measures</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Medidas de resultado notificadas por el propio paciente, relativas a su estado de salud, síntomas o calidad de vida relacionada con la salud. Incluyen cuestionarios validados como escalas de actividad de la enfermedad, control de síntomas o calidad de vida. En el modelo MAPEX-ADHEFAR son una de las cuatro dimensiones de indicadores y uno de los tres criterios de reestratificación a P1.</p>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="PREMs patient reported experience measures experiencia paciente">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">PREMs</h3>
+                  <div class="termino-full">Patient-Reported Experience Measures</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Medidas de experiencia notificadas por el propio paciente, relativas a su percepción de la atención recibida (satisfacción, comunicación, coordinación, accesibilidad). Se diferencian de los PROMs en que miden la experiencia del proceso asistencial, no el resultado de salud. En el modelo MAPEX-ADHEFAR forman parte de la dimensión de experiencia del paciente en el sistema de indicadores.</p>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="polimedicado polifarmacia multimedicado plurimedicacion">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Polifarmacia</h3>
+                  <div class="termino-full">Polimedicación</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Uso concomitante de múltiples fármacos por un mismo paciente. Definición habitual: ≥5 medicamentos de forma crónica (polifarmacia menor); ≥10 medicamentos (polifarmacia mayor). Es un factor de riesgo de barreras de Capacidad (complejidad del régimen) y de no-adherencia. En el modelo MAPEX-ADHEFAR se considera en la estratificación inicial del paciente.</p>
+            </div>
+
+          </div><!-- /letra P -->
+
+          <!-- Q -->
+          <div class="letra-section" id="letra-Q">
+            <div class="letra-anchor" aria-hidden="true">Q</div>
+
+            <div class="termino-card" data-cat="calidad" data-terminos="Q-PEX norma certificacion calidad SEFH 118 requisitos">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Q-PEX</h3>
+                  <div class="termino-full">Norma de certificación de calidad de atención farmacéutica al paciente externo — SEFH</div>
+                </div>
+                <span class="termino-cat calidad">Calidad / MAPEX</span>
+              </div>
+              <p class="termino-def">Norma de certificación de calidad de la SEFH para servicios de Farmacia Hospitalaria que atienden a pacientes externos. Estructura: 118 requisitos organizados en 6 dominios, con 3 niveles acumulativos de certificación y ciclo de renovación de 3 años. La adherencia al modelo MAPEX-ADHEFAR contribuye al cumplimiento de requisitos Q-PEX en los dominios de seguimiento farmacoterapéutico y resultados en salud.</p>
+            </div>
+
+          </div><!-- /letra Q -->
+
+          <!-- R -->
+          <div class="letra-section" id="letra-R">
+            <div class="letra-anchor" aria-hidden="true">R</div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="reestratificacion cambio nivel prioridad criterios P1">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Reestratificación</h3>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Revisión del nivel de prioridad asignado a un paciente en función de su evolución. La reestratificación obligatoria a P1 se activa cuando concurren simultáneamente los tres criterios: (1) incumplimiento OFT sostenido, (2) adherencia validada insuficiente (medición objetiva + subjetiva), (3) PROMs/PREMs alterados. La mejora también puede motivar una reestratificación a P2 o P3.</p>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="resultado salud outcomes farmacoterapeutico clinico">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Resultados en salud</h3>
+                  <div class="termino-full">Health outcomes</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Cambios en el estado de salud del paciente atribuibles (directa o indirectamente) a la intervención sanitaria. En el contexto de la adherencia, incluyen resultados clínicos (valores biológicos, escalas de actividad de enfermedad), funcionales y de calidad de vida. El modelo MAPEX-ADHEFAR orienta la intervención farmacéutica a la mejora de resultados en salud medibles y acordados (OFT).</p>
+            </div>
+
+          </div><!-- /letra R -->
+
+          <!-- S -->
+          <div class="letra-section" id="letra-S">
+            <div class="letra-anchor" aria-hidden="true">S</div>
+
+            <div class="termino-card" data-cat="calidad" data-terminos="SEFH Sociedad Española Farmacia Hospitalaria">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">SEFH</h3>
+                  <div class="termino-full">Sociedad Española de Farmacia Hospitalaria</div>
+                </div>
+                <span class="termino-cat calidad">Calidad / MAPEX</span>
+              </div>
+              <p class="termino-def">Sociedad científica que representa a los farmacéuticos de hospital en España. Agrupa a más de 3.000 profesionales y promueve la investigación, la formación y el desarrollo de estándares de calidad en la práctica de la farmacia hospitalaria. Es la entidad promotora de la iniciativa MAPEX, la norma Q-PEX y la publicación de la Guía MAPEX-ADHEFAR.</p>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="SPD sistema personalizado dosificacion pastillero organizador blister">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">SPD</h3>
+                  <div class="termino-full">Sistema Personalizado de Dosificación</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Dispositivo (blíster, pastillero, bolsa multipunto) en el que se prepara la medicación de un paciente ordenada por toma y día de la semana. Facilita la implementación del tratamiento en pacientes con polifarmacia, deterioro cognitivo leve o barreras de Capacidad. Reduce los errores de omisión y los errores de pauta. Su dispensación puede gestionarse desde la farmacia hospitalaria o coordinarse con la farmacia comunitaria.</p>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="señal alerta deteccion problema adherencia trigger">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Señal de alerta</h3>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Indicador clínico, analítico, de dispensación o referido por el paciente que sugiere un posible problema de adherencia. Ejemplos: PDC inferior al umbral, retraso en la dispensación, empeoramiento de parámetros clínicos, incumplimiento del OFT, reporte espontáneo del paciente. La detección de la señal de alerta es el paso 1 del algoritmo ADHEFAR-EM.</p>
+            </div>
+
+          </div><!-- /letra S -->
+
+          <!-- T -->
+          <div class="letra-section" id="letra-T">
+            <div class="letra-anchor" aria-hidden="true">T</div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="TAI Test Adherencia Inhaladores adherencia cuestionario inhalacion">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">TAI</h3>
+                  <div class="termino-full">Test de Adherencia a Inhaladores</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Cuestionario validado de 12 ítems para la evaluación de la adherencia al tratamiento inhalado en pacientes con asma o EPOC. Evalúa tres dimensiones: adherencia errática (olvidos, mala técnica), deliberada (decisión consciente de no tomar) y involuntaria (descuidos). Puntuación total de 12 a 60: &lt;45 no adherente, 45–49 adherencia parcial, 50 adherencia buena. Utilizado como medida subjetiva de adherencia en pacientes con enfermedades respiratorias.</p>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="teach-back tecnica educacion devolucion informacion verificar comprension">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Teach-back</h3>
+                  <div class="termino-full">Técnica de devolución de la información</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Técnica de comunicación en la que el profesional sanitario solicita al paciente que explique con sus propias palabras la información recibida, para verificar la comprensión real. No es un test de memoria sino una herramienta para identificar lagunas de comprensión y reorientar la explicación. Es el paso 5 del algoritmo ADHEFAR-EM ("confirmar comprensión").</p>
+              <div class="termino-nota">Ejemplo de uso: "Para asegurarme de que me he explicado bien, ¿me puede decir usted cómo va a tomar el medicamento cuando llegue a casa?"</div>
+            </div>
+
+            <div class="termino-card" data-cat="intervencion" data-terminos="telefarmacia telemedicina atencion remota telematica videoconferencia">
+              <div class="termino-header">
+                <div>
+                  <h3 class="termino-abbr">Telefarmacia</h3>
+                  <div class="termino-full">Atención farmacéutica telemática</div>
+                </div>
+                <span class="termino-cat intervencion">Intervención</span>
+              </div>
+              <p class="termino-def">Modalidad de atención farmacéutica a distancia mediante tecnologías de comunicación (videollamada, mensajería, plataformas digitales). En el modelo MAPEX-ADHEFAR, la atención dual presencial + telemática (telefarmacia) es un estándar estructural, no un complemento ocasional. Permite ampliar la accesibilidad, aumentar la frecuencia de contacto con pacientes P1/P2 y facilitar la monitorización entre visitas presenciales.</p>
+            </div>
+
+          </div><!-- /letra T -->
+
+        </div><!-- /lista-glosario -->
+
+        <div class="sin-resultados" id="sin-resultados" role="status" aria-live="polite">
+          <p style="font-size:var(--fs-lg);margin-bottom:var(--sp-2)">No se han encontrado términos</p>
+          <p>Pruebe con otra búsqueda o limpie los filtros activos.</p>
+        </div>
+
       </div>
     </section>
+
   </main>
+
   <div id="site-footer-placeholder"></div>
   <script src="js/nav.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    const buscador = document.getElementById('buscador-glosario');
+    const cards = Array.from(document.querySelectorAll('.termino-card'));
+    const sinResultados = document.getElementById('sin-resultados');
+    const count = document.getElementById('resultados-count');
+    const filtros = document.querySelectorAll('.filtro-btn');
+    let catActiva = 'todas';
+    let queryActual = '';
+
+    function normalize(str) {
+      return str.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    }
+
+    function highlight(text, query) {
+      if (!query) return text;
+      const safe = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return text.replace(new RegExp(`(${safe})`, 'gi'), '<mark>$1</mark>');
+    }
+
+    function actualizarCount(visible) {
+      count.textContent = visible === cards.length
+        ? ''
+        : `${visible} término${visible !== 1 ? 's' : ''} encontrado${visible !== 1 ? 's' : ''}`;
+    }
+
+    function filtrar() {
+      const q = normalize(queryActual);
+      let visible = 0;
+
+      cards.forEach(card => {
+        const cat = card.dataset.cat;
+        const terminos = normalize(card.dataset.terminos || '');
+        const textoCard = normalize(card.textContent);
+
+        const coincideCat = catActiva === 'todas' || cat === catActiva;
+        const coincideQuery = !q || terminos.includes(q) || textoCard.includes(q);
+
+        if (coincideCat && coincideQuery) {
+          card.hidden = false;
+          visible++;
+          if (q) {
+            const h3 = card.querySelector('.termino-abbr');
+            const def = card.querySelector('.termino-def');
+            if (h3) h3.innerHTML = highlight(h3.textContent, queryActual);
+            if (def) def.innerHTML = highlight(def.textContent, queryActual);
+          } else {
+            const h3 = card.querySelector('.termino-abbr');
+            const def = card.querySelector('.termino-def');
+            if (h3) h3.textContent = h3.textContent;
+            if (def) def.textContent = def.textContent;
+          }
+        } else {
+          card.hidden = true;
+        }
+      });
+
+      // Ocultar secciones de letra vacías
+      document.querySelectorAll('.letra-section').forEach(sec => {
+        const hayVisible = Array.from(sec.querySelectorAll('.termino-card')).some(c => !c.hidden);
+        sec.style.display = hayVisible ? '' : 'none';
+      });
+
+      sinResultados.classList.toggle('visible', visible === 0);
+      actualizarCount(visible);
+    }
+
+    buscador.addEventListener('input', function () {
+      // Restaurar texto antes de volver a highlight
+      cards.forEach(card => {
+        const h3 = card.querySelector('.termino-abbr');
+        const def = card.querySelector('.termino-def');
+        if (h3 && h3._orig === undefined) h3._orig = h3.textContent;
+        if (def && def._orig === undefined) def._orig = def.textContent;
+        if (h3) h3.innerHTML = h3._orig;
+        if (def) def.innerHTML = def._orig;
+      });
+      queryActual = this.value.trim();
+      filtrar();
+    });
+
+    filtros.forEach(btn => {
+      btn.addEventListener('click', function () {
+        filtros.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        catActiva = this.dataset.cat;
+        filtrar();
+      });
+    });
+
+    // Guardar textos originales antes de cualquier highlight
+    cards.forEach(card => {
+      const h3 = card.querySelector('.termino-abbr');
+      const def = card.querySelector('.termino-def');
+      if (h3) h3._orig = h3.textContent;
+      if (def) def._orig = def.textContent;
+    });
+
+    filtrar();
+  })();
+  </script>
 </body>
 </html>

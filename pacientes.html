@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MAPEX-ADHEFAR Hub</title>
-  <meta name="description" content="Hub operativo de la Guía MAPEX-ADHEFAR — SEFH · Grupo ADHEFAR · 2026.">
+  <title>Para pacientes — MAPEX-ADHEFAR Hub</title>
+  <meta name="description" content="Información en lenguaje claro para pacientes y cuidadores sobre adherencia al tratamiento, consulta de farmacia hospitalaria y consejos prácticos.">
+  <meta property="og:title" content="Para pacientes — MAPEX-ADHEFAR Hub">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
@@ -13,27 +16,647 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/print.css">
+  <style>
+    .pac-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-2);
+      border-bottom: 2px solid var(--c-borde);
+      margin-bottom: var(--sp-8);
+    }
+    .pac-tab {
+      padding: var(--sp-3) var(--sp-5);
+      font-size: var(--fs-md);
+      font-family: var(--ff-body);
+      font-weight: 500;
+      border: none;
+      border-bottom: 3px solid transparent;
+      background: none;
+      cursor: pointer;
+      color: var(--c-texto-secundario);
+      margin-bottom: -2px;
+      transition: color var(--t-fast), border-color var(--t-fast);
+      border-radius: var(--r-sm) var(--r-sm) 0 0;
+    }
+    .pac-tab:hover { color: var(--c-institucional); }
+    .pac-tab[aria-selected="true"] {
+      color: var(--c-institucional);
+      border-bottom-color: var(--c-institucional);
+      background: var(--c-fondo);
+    }
+    .pac-panel { display: none; }
+    .pac-panel.visible { display: block; }
+
+    .tip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--sp-5);
+      margin-top: var(--sp-6);
+    }
+    .tip-card {
+      border: 1.5px solid var(--c-borde);
+      border-radius: var(--r-md);
+      padding: var(--sp-5);
+      background: #fff;
+    }
+    .tip-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background: var(--c-institucional);
+      color: #fff;
+      font-weight: 700;
+      font-size: var(--fs-md);
+      margin-bottom: var(--sp-3);
+    }
+    .tip-card h3 {
+      font-size: var(--fs-md);
+      margin-bottom: var(--sp-2);
+    }
+    .tip-card p {
+      font-size: var(--fs-sm);
+      color: var(--c-texto-secundario);
+      margin: 0;
+    }
+
+    .pregunta-lista {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-4);
+      margin-top: var(--sp-5);
+    }
+    .pregunta-item {
+      border: 1.5px solid var(--c-borde);
+      border-radius: var(--r-md);
+      overflow: hidden;
+    }
+    .pregunta-btn {
+      width: 100%;
+      text-align: left;
+      padding: var(--sp-4) var(--sp-5);
+      background: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: var(--fs-base);
+      font-family: var(--ff-body);
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--sp-4);
+      color: var(--c-texto);
+      transition: background var(--t-fast);
+    }
+    .pregunta-btn:hover { background: var(--c-fondo); }
+    .pregunta-btn[aria-expanded="true"] { background: var(--c-fondo-alt); }
+    .pregunta-btn .chevron {
+      flex-shrink: 0;
+      width: 1.25rem;
+      height: 1.25rem;
+      transition: transform var(--t-base);
+    }
+    .pregunta-btn[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+    .pregunta-contenido {
+      display: none;
+      padding: 0 var(--sp-5) var(--sp-5);
+      background: var(--c-fondo-alt);
+      font-size: var(--fs-base);
+      color: var(--c-texto);
+      line-height: var(--lh-body);
+    }
+    .pregunta-contenido.visible { display: block; }
+
+    .derecho-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: var(--sp-5);
+      margin-top: var(--sp-6);
+    }
+    .derecho-card {
+      border-left: 4px solid var(--c-institucional);
+      padding: var(--sp-4) var(--sp-5);
+      background: var(--c-fondo);
+      border-radius: 0 var(--r-md) var(--r-md) 0;
+    }
+    .derecho-card h3 { font-size: var(--fs-md); margin-bottom: var(--sp-2); }
+    .derecho-card p { font-size: var(--fs-sm); color: var(--c-texto-secundario); margin: 0; }
+
+    .habito-steps {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-4);
+      margin-top: var(--sp-5);
+    }
+    .habito-step {
+      display: flex;
+      gap: var(--sp-4);
+      align-items: flex-start;
+    }
+    .habito-icon {
+      flex-shrink: 0;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background: var(--c-institucional);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+    .habito-step-body h3 { font-size: var(--fs-md); margin-bottom: var(--sp-1); }
+    .habito-step-body p  { font-size: var(--fs-sm); color: var(--c-texto-secundario); margin: 0; }
+
+    .disclaimer-box {
+      background: #FEF9C3;
+      border: 1.5px solid #EAB308;
+      border-radius: var(--r-md);
+      padding: var(--sp-5);
+      margin-bottom: var(--sp-8);
+      font-size: var(--fs-sm);
+      color: #713F12;
+    }
+    .disclaimer-box strong { display: block; margin-bottom: var(--sp-2); font-size: var(--fs-md); }
+  </style>
 </head>
 <body>
   <div id="site-header-placeholder"></div>
+
   <main id="contenido-principal">
-    <div class="page-hero">
+
+    <div class="page-hero" style="background: linear-gradient(135deg, var(--c-oportunidad) 0%, var(--c-institucional) 100%)">
       <div class="container">
-        <span class="eyebrow">Próximamente</span>
-        <h1>Sección en construcción</h1>
-        <p class="lead">Esta sección se completará en las próximas tandas de desarrollo.</p>
+        <nav class="breadcrumb" aria-label="Ruta de navegación">
+          <ol>
+            <li><a href="index.html" style="color:rgba(255,255,255,.7)">Inicio</a></li>
+            <li style="color:#fff">Para pacientes</li>
+          </ol>
+        </nav>
+        <span class="eyebrow" style="color:rgba(255,255,255,.8)">Información para usted y sus familiares</span>
+        <h1 style="color:#fff">Tomar bien su tratamiento</h1>
+        <p class="lead" style="color:rgba(255,255,255,.85)">Información en lenguaje claro sobre la adherencia al tratamiento, la consulta de farmacia hospitalaria y consejos para organizar su medicación.</p>
       </div>
     </div>
+
     <section class="section">
       <div class="container">
-        <div class="notice notice-info" style="max-width:640px">
-          <div class="notice-icon" aria-hidden="true">🔧</div>
-          <div>Contenido en desarrollo. La estructura de navegación ya está operativa; el contenido de esta sección se publicará en breve.</div>
+
+        <div class="disclaimer-box" role="note" aria-label="Aviso importante">
+          <strong>⚠ Información educativa — no es consejo médico individualizado</strong>
+          El contenido de esta sección tiene finalidad exclusivamente educativa y de apoyo. No sustituye la consulta con su farmacéutico hospitalario, su médico u otro profesional de su equipo sanitario. Ante cualquier duda relacionada con su tratamiento o su salud, consulte siempre con su equipo sanitario.
         </div>
+
+        <div class="pac-tabs" role="tablist" aria-label="Secciones para pacientes">
+          <button class="pac-tab" role="tab" aria-selected="true"  aria-controls="panel-adherencia" id="tab-adherencia">¿Qué es la adherencia?</button>
+          <button class="pac-tab" role="tab" aria-selected="false" aria-controls="panel-consulta"   id="tab-consulta">La consulta de farmacia</button>
+          <button class="pac-tab" role="tab" aria-selected="false" aria-controls="panel-consejos"   id="tab-consejos">Consejos prácticos</button>
+          <button class="pac-tab" role="tab" aria-selected="false" aria-controls="panel-habitos"    id="tab-habitos">Crear el hábito</button>
+          <button class="pac-tab" role="tab" aria-selected="false" aria-controls="panel-preguntas"  id="tab-preguntas">Preguntas frecuentes</button>
+          <button class="pac-tab" role="tab" aria-selected="false" aria-controls="panel-derechos"   id="tab-derechos">Sus derechos</button>
+        </div>
+
+        <!-- PANEL 1: ¿Qué es la adherencia? -->
+        <div class="pac-panel visible" id="panel-adherencia" role="tabpanel" aria-labelledby="tab-adherencia">
+          <div class="grid-2" style="gap:var(--sp-10)">
+            <div class="prose">
+              <h2>¿Qué significa "tomar bien el tratamiento"?</h2>
+              <p>Los profesionales de la salud hablan de <strong>adherencia terapéutica</strong> para describir en qué medida usted sigue las indicaciones acordadas con su equipo sanitario sobre cómo, cuándo y cuánto tomar su medicación.</p>
+              <p>Tomar bien el tratamiento significa tres cosas:</p>
+              <ol>
+                <li><strong>Empezar:</strong> recoger el medicamento y tomarlo por primera vez cuando le han dicho que lo haga.</li>
+                <li><strong>Mantenerlo:</strong> tomar las dosis correctas en los momentos indicados, día a día.</li>
+                <li><strong>No abandonarlo:</strong> seguir tomando el tratamiento durante el tiempo que le han indicado.</li>
+              </ol>
+
+              <h2>¿Por qué importa?</h2>
+              <p>Los medicamentos para enfermedades crónicas solo funcionan bien si se toman de forma continuada y correcta. Cuando no se toman así, pueden pasar varias cosas:</p>
+              <ul>
+                <li>La enfermedad puede empeorar o no mejorar.</li>
+                <li>Pueden aparecer complicaciones que se podrían haber evitado.</li>
+                <li>El médico puede pensar que el medicamento no funciona y cambiar el tratamiento de forma innecesaria.</li>
+              </ul>
+              <p>Muchas personas tienen dificultades con su medicación en algún momento. <strong>No es un fracaso personal:</strong> hay motivos muy variados (olvidos, efectos secundarios, dudas, dificultades para organizar la medicación) y todos ellos tienen solución o al menos se pueden mejorar.</p>
+
+              <h2>¿Por qué a veces cuesta tomar el tratamiento?</h2>
+              <p>Los especialistas en adherencia identifican tres tipos principales de dificultades:</p>
+              <div style="display:flex;flex-direction:column;gap:var(--sp-4);margin-top:var(--sp-4)">
+                <div style="border-left:4px solid var(--c-capacidad);padding:var(--sp-3) var(--sp-4);background:var(--c-capacidad-claro);border-radius:0 var(--r-sm) var(--r-sm) 0">
+                  <strong style="color:var(--c-capacidad-texto)">No sé bien cómo tomarlo</strong>
+                  <p style="margin:var(--sp-1) 0 0;font-size:var(--fs-sm);color:var(--c-capacidad-texto)">Falta de información clara, muchos medicamentos distintos, dificultad para entender las instrucciones o para manipular el envase.</p>
+                </div>
+                <div style="border-left:4px solid var(--c-motivacion);padding:var(--sp-3) var(--sp-4);background:var(--c-motivacion-claro);border-radius:0 var(--r-sm) var(--r-sm) 0">
+                  <strong style="color:var(--c-motivacion-texto)">No estoy seguro de si quiero tomarlo</strong>
+                  <p style="margin:var(--sp-1) 0 0;font-size:var(--fs-sm);color:var(--c-motivacion-texto)">Dudas sobre si realmente necesita el medicamento, miedo a los efectos secundarios, sensación de que no le hace nada o preocupación por el largo plazo.</p>
+                </div>
+                <div style="border-left:4px solid var(--c-oportunidad);padding:var(--sp-3) var(--sp-4);background:var(--c-oportunidad-claro);border-radius:0 var(--r-sm) var(--r-sm) 0">
+                  <strong style="color:var(--c-oportunidad-texto)">Algo del entorno lo dificulta</strong>
+                  <p style="margin:var(--sp-1) 0 0;font-size:var(--fs-sm);color:var(--c-oportunidad-texto)">Dificultad para desplazarse, horarios incompatibles, coste del tratamiento, falta de apoyo familiar o un sistema sanitario complicado de manejar.</p>
+                </div>
+              </div>
+              <p style="margin-top:var(--sp-4)">El farmacéutico hospitalario está formado para ayudarle con cualquiera de estas dificultades.</p>
+            </div>
+            <div>
+              <div class="card" style="position:sticky;top:calc(var(--header-h,64px) + var(--sp-4))">
+                <div class="pillar-badge institucional" style="margin-bottom:var(--sp-4)">Para recordar</div>
+                <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:var(--sp-4)">
+                  <li style="display:flex;gap:var(--sp-3);align-items:flex-start">
+                    <span style="color:var(--c-ok);font-size:1.2rem;flex-shrink:0">✓</span>
+                    <span style="font-size:var(--fs-sm)">Tomar bien el tratamiento es <strong>tan importante como el tratamiento en sí mismo</strong>.</span>
+                  </li>
+                  <li style="display:flex;gap:var(--sp-3);align-items:flex-start">
+                    <span style="color:var(--c-ok);font-size:1.2rem;flex-shrink:0">✓</span>
+                    <span style="font-size:var(--fs-sm)">Las dificultades con la medicación son <strong>muy frecuentes</strong>. Hablar de ellas con el farmacéutico no es un problema, es parte de la consulta.</span>
+                  </li>
+                  <li style="display:flex;gap:var(--sp-3);align-items:flex-start">
+                    <span style="color:var(--c-ok);font-size:1.2rem;flex-shrink:0">✓</span>
+                    <span style="font-size:var(--fs-sm)">No hay que esperar a tener un problema serio. Puede comentar cualquier duda en cualquier momento.</span>
+                  </li>
+                  <li style="display:flex;gap:var(--sp-3);align-items:flex-start">
+                    <span style="color:var(--c-ok);font-size:1.2rem;flex-shrink:0">✓</span>
+                    <span style="font-size:var(--fs-sm)">Cuanto más honesto sea con su farmacéutico sobre cómo toma el tratamiento, <strong>más le podrá ayudar</strong>.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 2: La consulta de farmacia -->
+        <div class="pac-panel" id="panel-consulta" role="tabpanel" aria-labelledby="tab-consulta">
+          <div class="prose" style="max-width:800px;margin-inline:auto">
+            <h2>¿Qué es la consulta de farmacia hospitalaria?</h2>
+            <p>La <strong>consulta de farmacia hospitalaria para pacientes externos</strong> es una visita programada con un farmacéutico especialista, diferente de la farmacia de su barrio. En ella, el farmacéutico revisa su tratamiento, le explica cómo tomarlo correctamente y le ayuda a resolver cualquier problema relacionado con su medicación.</p>
+            <p>Esta consulta puede ser presencial (en el hospital) o por teléfono o videollamada (telefarmacia), según lo que sea más cómodo para usted y lo que acuerde con su farmacéutico.</p>
+
+            <h2>¿Qué pasa en la consulta?</h2>
+            <div class="habito-steps" style="margin-bottom:var(--sp-6)">
+              <div class="habito-step">
+                <div class="habito-icon">1</div>
+                <div class="habito-step-body">
+                  <h3>Le preguntan cómo lleva el tratamiento</h3>
+                  <p>El farmacéutico le pregunta sobre cómo toma sus medicamentos: si ha tenido dificultades, si ha olvidado alguna dosis, si ha notado algún efecto secundario o si tiene alguna duda. No es un examen: cuanto más honesto sea, mejor le podrán ayudar.</p>
+                </div>
+              </div>
+              <div class="habito-step">
+                <div class="habito-icon">2</div>
+                <div class="habito-step-body">
+                  <h3>Revisan los registros de su medicación</h3>
+                  <p>El farmacéutico también puede consultar el historial de dispensaciones de su farmacia y sus análisis o resultados clínicos para tener una imagen completa de cómo está respondiendo al tratamiento.</p>
+                </div>
+              </div>
+              <div class="habito-step">
+                <div class="habito-icon">3</div>
+                <div class="habito-step-body">
+                  <h3>Identifican juntos las dificultades</h3>
+                  <p>Si hay algún problema, el farmacéutico le ayuda a entender por qué está ocurriendo y a encontrar soluciones adaptadas a su situación. No se trata de juzgar, sino de entender.</p>
+                </div>
+              </div>
+              <div class="habito-step">
+                <div class="habito-icon">4</div>
+                <div class="habito-step-body">
+                  <h3>Acuerdan un objetivo para la próxima visita</h3>
+                  <p>Al final de la consulta, usted y el farmacéutico acuerdan juntos un objetivo concreto y realizable hasta la próxima visita. Este objetivo es suyo, no impuesto desde fuera.</p>
+                </div>
+              </div>
+              <div class="habito-step">
+                <div class="habito-icon">5</div>
+                <div class="habito-step-body">
+                  <h3>Comprueban que ha entendido todo</h3>
+                  <p>Antes de irse, el farmacéutico puede pedirle que explique con sus propias palabras lo que han hablado. Esto se llama <em>teach-back</em> y sirve para asegurarse de que la información ha quedado clara, no para evaluarle.</p>
+                </div>
+              </div>
+            </div>
+
+            <h2>¿Con qué frecuencia se hacen las visitas?</h2>
+            <p>La frecuencia depende de su situación. Los pacientes con más dificultades para tomar el tratamiento suelen tener visitas más frecuentes. A medida que mejoran, las visitas se van espaciando. Su farmacéutico le explicará cuál es el plan previsto para usted.</p>
+
+            <h2>¿Puedo hacer la consulta por teléfono o videollamada?</h2>
+            <p>Sí. La atención por vía telemática (telefarmacia) es una opción disponible en muchos servicios de farmacia hospitalaria. Es especialmente útil si tiene dificultades para desplazarse, si vive lejos del hospital o si simplemente le resulta más cómodo. Pregunte a su farmacéutico si esta opción está disponible para usted.</p>
+          </div>
+        </div>
+
+        <!-- PANEL 3: Consejos prácticos -->
+        <div class="pac-panel" id="panel-consejos" role="tabpanel" aria-labelledby="tab-consejos">
+          <h2>Consejos para organizar su medicación</h2>
+          <p style="color:var(--c-texto-secundario);margin-bottom:var(--sp-2)">Pequeñas acciones que pueden marcar una gran diferencia.</p>
+          <div class="tip-grid">
+            <div class="tip-card">
+              <div class="tip-num">1</div>
+              <h3>Tome siempre a la misma hora</h3>
+              <p>Asocie la toma del medicamento a una actividad fija del día (despertarse, comer, acostarse). Cuanto más automático sea, menos dependerá de la memoria.</p>
+            </div>
+            <div class="tip-card">
+              <div class="tip-num">2</div>
+              <h3>Use un pastillero semanal</h3>
+              <p>Un pastillero organizado por días de la semana le permite ver de un vistazo si ha tomado la medicación y evita confusiones cuando hay varios medicamentos.</p>
+            </div>
+            <div class="tip-card">
+              <div class="tip-num">3</div>
+              <h3>Ponga el medicamento a la vista</h3>
+              <p>Guarde los medicamentos en un lugar visible y seguro (no en el baño por la humedad) donde los vea todos los días. El ojo se acostumbra a lo que ve siempre en el mismo sitio.</p>
+            </div>
+            <div class="tip-card">
+              <div class="tip-num">4</div>
+              <h3>Use alarmas en el móvil</h3>
+              <p>Configure una alarma diaria en el teléfono para la hora de la toma. Muchos teléfonos también permiten crear alarmas recurrentes diferenciadas por medicamento.</p>
+            </div>
+            <div class="tip-card">
+              <div class="tip-num">5</div>
+              <h3>No espere a quedarse sin medicación</h3>
+              <p>Pida cita para recoger el medicamento antes de que se le acabe. Si espera hasta el último momento, un retraso administrativo puede dejarle sin tratamiento unos días.</p>
+            </div>
+            <div class="tip-card">
+              <div class="tip-num">6</div>
+              <h3>Si olvida una dosis, no doble la siguiente</h3>
+              <p>Salvo que su médico o farmacéutico le hayan indicado otra cosa, si olvida una dosis no la recupere tomando el doble la siguiente vez. Siga con la pauta normal.</p>
+            </div>
+            <div class="tip-card">
+              <div class="tip-num">7</div>
+              <h3>Lleve siempre una lista de sus medicamentos</h3>
+              <p>Tenga a mano (en el móvil o en papel) una lista actualizada de todos los medicamentos que toma, con las dosis y la frecuencia. Le será útil en urgencias o en cualquier otra consulta médica.</p>
+            </div>
+            <div class="tip-card">
+              <div class="tip-num">8</div>
+              <h3>Hable con su farmacéutico si algo le preocupa</h3>
+              <p>Si tiene miedo a un efecto secundario, duda de si el medicamento le está haciendo efecto o simplemente no entiende para qué sirve, coméntelo en la próxima visita. No tome decisiones solo sobre su tratamiento.</p>
+            </div>
+            <div class="tip-card">
+              <div class="tip-num">9</div>
+              <h3>Involucre a alguien de confianza</h3>
+              <p>Si lo necesita, pida a un familiar o persona de confianza que le ayude a organizar la medicación o a recordarle las tomas. Cuidar la adherencia también es cosa de dos.</p>
+            </div>
+            <div class="tip-card">
+              <div class="tip-num">10</div>
+              <h3>Registre sus dudas para la consulta</h3>
+              <p>Anote en un papel o en el móvil las dudas o dificultades que vayan surgiendo entre visitas. Así no se le olvidará ninguna pregunta importante cuando esté en la consulta.</p>
+            </div>
+          </div>
+
+          <div class="notice notice-info" style="margin-top:var(--sp-8)">
+            <div class="notice-icon" aria-hidden="true">💊</div>
+            <div>
+              <strong>¿Pastillero especial?</strong> Si tiene muchos medicamentos distintos o le cuesta organizarlos, pregunte a su farmacéutico por los <strong>sistemas personalizados de dosificación (SPD)</strong>: blísteres o pastilleros preparados por la farmacia con su medicación ordenada por días y tomas. Son especialmente útiles para personas con muchos fármacos o con dificultad para recordar la pauta.
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 4: Crear el hábito -->
+        <div class="pac-panel" id="panel-habitos" role="tabpanel" aria-labelledby="tab-habitos">
+          <div class="grid-2" style="gap:var(--sp-10)">
+            <div class="prose">
+              <h2>¿Cómo se convierte la medicación en un hábito?</h2>
+              <p>Los hábitos se forman cuando repetimos una conducta en el mismo contexto, hasta que se vuelve automática. La medicación no es diferente: cuanto más la asocie a una rutina fija, menos esfuerzo mental le costará tomarla.</p>
+              <p>Los especialistas en conducta de salud identifican tres elementos clave en un hábito:</p>
+
+              <div class="habito-steps">
+                <div class="habito-step">
+                  <div class="habito-icon" style="background:var(--c-capacidad)">🔔</div>
+                  <div class="habito-step-body">
+                    <h3>La señal (lo que lo desencadena)</h3>
+                    <p>Un momento del día, una acción que ya hace siempre (desayunar, lavarse los dientes) o una alarma. La señal "activa" el hábito de tomar la medicación.</p>
+                  </div>
+                </div>
+                <div class="habito-step">
+                  <div class="habito-icon" style="background:var(--c-motivacion)">💊</div>
+                  <div class="habito-step-body">
+                    <h3>La rutina (la acción en sí)</h3>
+                    <p>Tomar el medicamento. Cuanto más simple y fácil sea el acto (medicación a mano, pastillero ya preparado), más fácil es convertirlo en hábito.</p>
+                  </div>
+                </div>
+                <div class="habito-step">
+                  <div class="habito-icon" style="background:var(--c-oportunidad)">✓</div>
+                  <div class="habito-step-body">
+                    <h3>La recompensa (lo que lo refuerza)</h3>
+                    <p>No tiene que ser grande. Puede ser simplemente tachar el día en un calendario, mover una ficha de un bote a otro, o la satisfacción de ver el pastillero vacío al final de la semana.</p>
+                  </div>
+                </div>
+              </div>
+
+              <h2 style="margin-top:var(--sp-6)">Estrategias que funcionan</h2>
+              <p><strong>Empiece por un cambio pequeño:</strong> Si tiene que tomar varios medicamentos, céntrese primero en el más importante y en crear un hábito sólido con ese. Luego añada los demás.</p>
+              <p><strong>El "si... entonces":</strong> Formule el plan como "Si desayuno, entonces tomo el medicamento antes de levantarme de la mesa". Esta técnica de intención de implementación ha demostrado ser muy efectiva.</p>
+              <p><strong>El entorno importa:</strong> Ponga el pastillero junto a la taza del desayuno. Cuelgue un recordatorio en la nevera. El entorno visual ayuda a recordar.</p>
+              <p><strong>No busque la perfección:</strong> Si falla un día, no lo interprete como un fracaso. Los hábitos se construyen con consistencia a lo largo del tiempo, no con perfección diaria.</p>
+            </div>
+            <div>
+              <div class="card">
+                <div class="pillar-badge acento" style="margin-bottom:var(--sp-4)">Plan personal de toma</div>
+                <p style="font-size:var(--fs-sm);color:var(--c-texto-secundario);margin-bottom:var(--sp-5)">Rellene este esquema mentalmente o en papel y compártalo con su farmacéutico:</p>
+                <div style="display:flex;flex-direction:column;gap:var(--sp-4)">
+                  <div style="background:var(--c-fondo);border-radius:var(--r-sm);padding:var(--sp-4)">
+                    <div style="font-size:var(--fs-xs);font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--c-texto-secundario);margin-bottom:var(--sp-2)">Mi señal</div>
+                    <p style="font-size:var(--fs-sm);margin:0">¿A qué momento del día o a qué actividad voy a asociar la toma?</p>
+                    <div style="border-bottom:1.5px dashed var(--c-borde);margin-top:var(--sp-3);min-height:2rem"></div>
+                  </div>
+                  <div style="background:var(--c-fondo);border-radius:var(--r-sm);padding:var(--sp-4)">
+                    <div style="font-size:var(--fs-xs);font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--c-texto-secundario);margin-bottom:var(--sp-2)">Mi rutina</div>
+                    <p style="font-size:var(--fs-sm);margin:0">¿Dónde estará el medicamento? ¿Cómo lo tomaré exactamente?</p>
+                    <div style="border-bottom:1.5px dashed var(--c-borde);margin-top:var(--sp-3);min-height:2rem"></div>
+                  </div>
+                  <div style="background:var(--c-fondo);border-radius:var(--r-sm);padding:var(--sp-4)">
+                    <div style="font-size:var(--fs-xs);font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--c-texto-secundario);margin-bottom:var(--sp-2)">Mi recompensa</div>
+                    <p style="font-size:var(--fs-sm);margin:0">¿Cómo me recompensaré (aunque sea de forma simbólica) cuando lo haga?</p>
+                    <div style="border-bottom:1.5px dashed var(--c-borde);margin-top:var(--sp-3);min-height:2rem"></div>
+                  </div>
+                  <div style="background:var(--c-fondo);border-radius:var(--r-sm);padding:var(--sp-4)">
+                    <div style="font-size:var(--fs-xs);font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--c-texto-secundario);margin-bottom:var(--sp-2)">Mi plan B</div>
+                    <p style="font-size:var(--fs-sm);margin:0">¿Qué haré si ese día cambia mi rutina habitual?</p>
+                    <div style="border-bottom:1.5px dashed var(--c-borde);margin-top:var(--sp-3);min-height:2rem"></div>
+                  </div>
+                </div>
+                <p class="print-only" style="font-size:var(--fs-xs);color:var(--c-texto-secundario);margin-top:var(--sp-4)">Recurso educativo — MAPEX-ADHEFAR Hub · adhefarmapexhub</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 5: Preguntas frecuentes -->
+        <div class="pac-panel" id="panel-preguntas" role="tabpanel" aria-labelledby="tab-preguntas">
+          <div style="max-width:800px;margin-inline:auto">
+            <h2>Preguntas frecuentes</h2>
+            <p style="color:var(--c-texto-secundario);margin-bottom:var(--sp-6)">Respuestas a las dudas más comunes sobre la medicación y la consulta de farmacia.</p>
+
+            <div class="pregunta-lista">
+
+              <div class="pregunta-item">
+                <button class="pregunta-btn" aria-expanded="false" aria-controls="resp-1" id="preg-1" type="button">
+                  ¿Qué pasa si me olvido de tomar una pastilla?
+                  <svg class="chevron" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
+                </button>
+                <div class="pregunta-contenido" id="resp-1" role="region" aria-labelledby="preg-1">
+                  <p>En la mayoría de los casos, si se da cuenta pronto, tome la dosis olvidada. Si ya es casi la hora de la siguiente dosis, salte la olvidada y continúe con la pauta normal. <strong>Nunca tome el doble de dosis para compensar</strong>, salvo que su médico o farmacéutico le hayan indicado lo contrario específicamente para su medicamento.</p>
+                  <p>Si los olvidos son frecuentes, coméntelo con su farmacéutico: hay estrategias que pueden ayudarle.</p>
+                </div>
+              </div>
+
+              <div class="pregunta-item">
+                <button class="pregunta-btn" aria-expanded="false" aria-controls="resp-2" id="preg-2" type="button">
+                  Siento que el medicamento no me hace nada. ¿Para qué tomarlo?
+                  <svg class="chevron" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
+                </button>
+                <div class="pregunta-contenido" id="resp-2" role="region" aria-labelledby="preg-2">
+                  <p>Esta es una duda muy frecuente, especialmente en enfermedades crónicas donde el medicamento actúa de forma preventiva o controlando algo que no se nota directamente. Muchos tratamientos funcionan "por dentro" sin que usted note nada: por ejemplo, controlando la inflamación, evitando que la enfermedad avance o previniendo complicaciones futuras.</p>
+                  <p>Si tiene esta duda, es importante que se la cuente a su farmacéutico o médico. Ellos le pueden explicar exactamente para qué sirve su medicamento y cómo sabrán si está funcionando, aunque usted no lo note.</p>
+                </div>
+              </div>
+
+              <div class="pregunta-item">
+                <button class="pregunta-btn" aria-expanded="false" aria-controls="resp-3" id="preg-3" type="button">
+                  Me preocupan los efectos secundarios. ¿Qué hago?
+                  <svg class="chevron" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
+                </button>
+                <div class="pregunta-contenido" id="resp-3" role="region" aria-labelledby="preg-3">
+                  <p>Es completamente normal preocuparse por los efectos secundarios. Pero <strong>nunca deje de tomar un medicamento por su cuenta por miedo a efectos secundarios sin hablarlo antes con su médico o farmacéutico</strong>: interrumpir un tratamiento de forma brusca puede tener consecuencias para su salud.</p>
+                  <p>Si nota un efecto secundario, anótelo (cuándo aparece, cuánto dura, cómo de intenso es) y coméntelo en su próxima consulta o, si es grave, contacte con su equipo sanitario antes. Muchos efectos secundarios desaparecen con el tiempo o se pueden manejar ajustando la hora de toma, tomando el medicamento con comida, etc.</p>
+                </div>
+              </div>
+
+              <div class="pregunta-item">
+                <button class="pregunta-btn" aria-expanded="false" aria-controls="resp-4" id="preg-4" type="button">
+                  Me encuentro mejor. ¿Puedo dejar el tratamiento?
+                  <svg class="chevron" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
+                </button>
+                <div class="pregunta-contenido" id="resp-4" role="region" aria-labelledby="preg-4">
+                  <p>Que se encuentre mejor es una buena señal y puede significar que el tratamiento está funcionando. Sin embargo, <strong>en la mayoría de las enfermedades crónicas, encontrarse mejor no significa que el tratamiento ya no sea necesario</strong>. Muchos medicamentos crónicos actúan de forma preventiva o controlando la enfermedad de fondo.</p>
+                  <p>Si cree que podría dejar el tratamiento, coméntelo con su médico o farmacéutico. Ellos le evaluarán y tomarán esa decisión de forma segura. Nunca lo decida solo.</p>
+                </div>
+              </div>
+
+              <div class="pregunta-item">
+                <button class="pregunta-btn" aria-expanded="false" aria-controls="resp-5" id="preg-5" type="button">
+                  Tengo muchos medicamentos distintos y me lío. ¿Qué puedo hacer?
+                  <svg class="chevron" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
+                </button>
+                <div class="pregunta-contenido" id="resp-5" role="region" aria-labelledby="preg-5">
+                  <p>Es una situación muy frecuente. Su farmacéutico puede ayudarle de varias formas:</p>
+                  <ul>
+                    <li><strong>Simplificar la pauta</strong> siempre que sea posible (hablar con el médico para reducir el número de tomas o cambiar a presentaciones más cómodas).</li>
+                    <li><strong>Preparar un sistema de pastillero</strong> (SPD) con toda su medicación ordenada por días y tomas, para que no tenga que pensar cuántas pastillas tomar en cada momento.</li>
+                    <li><strong>Hacer una lista clara</strong> de todos sus medicamentos con la dosis y el horario de cada uno.</li>
+                  </ul>
+                  <p>Pídalo en su próxima consulta de farmacia.</p>
+                </div>
+              </div>
+
+              <div class="pregunta-item">
+                <button class="pregunta-btn" aria-expanded="false" aria-controls="resp-6" id="preg-6" type="button">
+                  ¿Qué es la consulta de telefarmacia y cómo funciona?
+                  <svg class="chevron" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
+                </button>
+                <div class="pregunta-contenido" id="resp-6" role="region" aria-labelledby="preg-6">
+                  <p>La <strong>telefarmacia</strong> es una consulta con su farmacéutico hospitalario a distancia, por teléfono o videollamada, sin necesidad de desplazarse al hospital. Tiene el mismo contenido que una consulta presencial: revisión del tratamiento, resolución de dudas, seguimiento de cómo le va con la medicación.</p>
+                  <p>Es especialmente útil si tiene dificultades para moverse, si vive lejos del hospital, si está en un período estable de su enfermedad o si simplemente le resulta más cómodo. No todos los hospitales ofrecen esta modalidad para todos los pacientes, así que pregunte a su farmacéutico si está disponible en su caso.</p>
+                </div>
+              </div>
+
+              <div class="pregunta-item">
+                <button class="pregunta-btn" aria-expanded="false" aria-controls="resp-7" id="preg-7" type="button">
+                  ¿Mis datos en estas herramientas son seguros?
+                  <svg class="chevron" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
+                </button>
+                <div class="pregunta-contenido" id="resp-7" role="region" aria-labelledby="preg-7">
+                  <p>Este sitio web <strong>no recoge, almacena ni envía ningún dato personal</strong>. Todas las herramientas interactivas funcionan íntegramente en su navegador: nada sale de su dispositivo. Este sitio tampoco utiliza herramientas de seguimiento ni analítica web.</p>
+                  <p>Además, las herramientas de este sitio están diseñadas para el uso de profesionales sanitarios con datos anónimos o de configuración del servicio, no para que los pacientes introduzcan sus datos personales o clínicos.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 6: Sus derechos -->
+        <div class="pac-panel" id="panel-derechos" role="tabpanel" aria-labelledby="tab-derechos">
+          <div style="max-width:900px;margin-inline:auto">
+            <h2>Sus derechos como paciente en la consulta de farmacia</h2>
+            <p style="color:var(--c-texto-secundario);margin-bottom:var(--sp-6)">Como paciente que recibe atención farmacéutica especializada, tiene una serie de derechos que es importante que conozca.</p>
+
+            <div class="derecho-grid">
+              <div class="derecho-card">
+                <h3>Información comprensible</h3>
+                <p>Tiene derecho a recibir información sobre su tratamiento en un lenguaje que pueda entender, sin tecnicismos innecesarios. Puede pedir que le expliquen algo tantas veces como necesite.</p>
+              </div>
+              <div class="derecho-card">
+                <h3>Participar en las decisiones</h3>
+                <p>Tiene derecho a participar en las decisiones sobre su tratamiento. Los objetivos terapéuticos y el plan de seguimiento se deben acordar con usted, no imponerse.</p>
+              </div>
+              <div class="derecho-card">
+                <h3>Confidencialidad</h3>
+                <p>Toda la información que comparta en la consulta es confidencial y está protegida por la legislación sobre protección de datos y el secreto profesional.</p>
+              </div>
+              <div class="derecho-card">
+                <h3>Negarse a recibir un tratamiento</h3>
+                <p>Tiene derecho a negarse a tomar un tratamiento o a interrumpirlo. En ese caso, el equipo sanitario debe informarle de las consecuencias y documentar su decisión.</p>
+              </div>
+              <div class="derecho-card">
+                <h3>Segunda opinión</h3>
+                <p>Tiene derecho a solicitar una segunda opinión sobre su tratamiento o su diagnóstico.</p>
+              </div>
+              <div class="derecho-card">
+                <h3>Acceso a su historial</h3>
+                <p>Tiene derecho a acceder a su historial clínico y a los registros de dispensación de su medicación.</p>
+              </div>
+              <div class="derecho-card">
+                <h3>Atención sin discriminación</h3>
+                <p>Tiene derecho a recibir atención farmacéutica de calidad independientemente de su edad, género, origen, situación económica o cualquier otra condición personal.</p>
+              </div>
+              <div class="derecho-card">
+                <h3>Presentar reclamaciones</h3>
+                <p>Si no está satisfecho con la atención recibida, tiene derecho a presentar una reclamación a través del servicio de atención al paciente de su hospital.</p>
+              </div>
+            </div>
+
+            <div class="notice notice-info" style="margin-top:var(--sp-8)">
+              <div class="notice-icon" aria-hidden="true">ℹ</div>
+              <div>
+                <strong>Recuerde:</strong> Sus derechos como paciente están recogidos en la Ley 41/2002, de 14 de noviembre, básica reguladora de la autonomía del paciente y de derechos y obligaciones en materia de información y documentación clínica. Para más información, puede consultar a su equipo sanitario o al servicio de atención al paciente de su hospital.
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
+
   </main>
+
   <div id="site-footer-placeholder"></div>
   <script src="js/nav.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    // Tabs
+    const tabs = document.querySelectorAll('.pac-tab');
+    const panels = document.querySelectorAll('.pac-panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function () {
+        tabs.forEach(t => { t.setAttribute('aria-selected', 'false'); });
+        panels.forEach(p => p.classList.remove('visible'));
+        this.setAttribute('aria-selected', 'true');
+        document.getElementById(this.getAttribute('aria-controls')).classList.add('visible');
+      });
+      tab.addEventListener('keydown', function (e) {
+        const arr = Array.from(tabs);
+        const idx = arr.indexOf(this);
+        if (e.key === 'ArrowRight') { arr[(idx + 1) % arr.length].focus(); arr[(idx + 1) % arr.length].click(); }
+        if (e.key === 'ArrowLeft')  { arr[(idx - 1 + arr.length) % arr.length].focus(); arr[(idx - 1 + arr.length) % arr.length].click(); }
+      });
+    });
+
+    // Accordion preguntas
+    document.querySelectorAll('.pregunta-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const expanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', String(!expanded));
+        document.getElementById(this.getAttribute('aria-controls')).classList.toggle('visible', !expanded);
+      });
+    });
+
+  })();
+  </script>
 </body>
 </html>

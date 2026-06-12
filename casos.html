@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MAPEX-ADHEFAR Hub</title>
-  <meta name="description" content="Hub operativo de la Guía MAPEX-ADHEFAR — SEFH · Grupo ADHEFAR · 2026.">
+  <title>Casos prácticos — MAPEX-ADHEFAR Hub</title>
+  <meta name="description" content="Cuatro casos prácticos de la Guía MAPEX-ADHEFAR: insuficiencia cardíaca, artritis reumatoide, esclerosis múltiple y asma grave con reestratificación.">
+  <meta property="og:title" content="Casos prácticos — MAPEX-ADHEFAR Hub">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
@@ -13,27 +16,458 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/print.css">
+  <style>
+    .caso-selector { display:grid; gap:var(--sp-4); margin-bottom:var(--sp-8); }
+    @media(min-width:640px) { .caso-selector { grid-template-columns:repeat(2,1fr); } }
+    @media(min-width:960px) { .caso-selector { grid-template-columns:repeat(4,1fr); } }
+
+    .caso-btn {
+      background:var(--c-superficie); border-radius:var(--radius-card);
+      border:2px solid var(--c-borde-claro); padding:var(--sp-5);
+      cursor:pointer; text-align:left; transition:all var(--t-base);
+      font-family:inherit; color:var(--c-texto);
+    }
+    .caso-btn:hover { border-color:var(--c-acento); box-shadow:var(--shadow-md); transform:translateY(-2px); }
+    .caso-btn[aria-selected="true"] { border-color:var(--c-acento); background:var(--c-acento-claro); }
+    .caso-btn-num { font-family:var(--ff-display); font-size:var(--fs-2xl); font-weight:600; line-height:1; color:var(--c-borde); margin-bottom:var(--sp-3); }
+    .caso-btn[aria-selected="true"] .caso-btn-num { color:var(--c-acento); }
+    .caso-btn h3 { font-size:var(--fs-base); margin-bottom:var(--sp-2); }
+    .caso-btn p { font-size:var(--fs-xs); color:var(--c-texto-secundario); margin:0; line-height:var(--lh-snug); }
+
+    .caso-panel { display:none; }
+    .caso-panel.activo { display:block; }
+
+    .caso-tabs { border-bottom:2px solid var(--c-borde-claro); display:flex; flex-wrap:wrap; gap:0; margin-bottom:var(--sp-6); overflow-x:auto; }
+    .caso-tab {
+      background:none; border:none; padding:var(--sp-4) var(--sp-5);
+      font-size:var(--fs-sm); font-weight:var(--fw-medium); color:var(--c-texto-secundario);
+      cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px;
+      transition:color var(--t-fast), border-color var(--t-fast);
+      white-space:nowrap; font-family:inherit;
+    }
+    .caso-tab:hover { color:var(--c-texto); }
+    .caso-tab[aria-selected="true"] { color:var(--c-acento); border-bottom-color:var(--c-acento); font-weight:var(--fw-semi); }
+
+    .caso-subtab { display:none; }
+    .caso-subtab.activo { display:block; }
+
+    .ficha-grid { display:grid; gap:var(--sp-5); }
+    @media(min-width:768px) { .ficha-grid { grid-template-columns:1fr 1fr; } }
+
+    .ficha-dato { background:var(--c-fondo); border-radius:var(--radius-card); padding:var(--sp-4) var(--sp-5); border:1.5px solid var(--c-borde-claro); }
+    .ficha-dato-label { font-size:var(--fs-xs); font-weight:600; text-transform:uppercase; letter-spacing:.07em; color:var(--c-texto-secundario); margin-bottom:var(--sp-2); }
+    .ficha-dato-val { font-size:var(--fs-sm); color:var(--c-texto); line-height:var(--lh-snug); }
+
+    .metrica-box { display:grid; gap:var(--sp-4); }
+    @media(min-width:640px) { .metrica-box { grid-template-columns:repeat(3,1fr); } }
+    .metrica { background:var(--c-superficie); border-radius:var(--radius-card); padding:var(--sp-5); border:1.5px solid var(--c-borde-claro); text-align:center; }
+    .metrica-val { font-family:var(--ff-display); font-size:var(--fs-2xl); font-weight:600; line-height:1; margin-bottom:var(--sp-2); }
+    .metrica-label { font-size:var(--fs-xs); color:var(--c-texto-secundario); text-transform:uppercase; letter-spacing:.06em; }
+    .metrica-cambio { font-size:var(--fs-xs); color:var(--c-oportunidad-texto); font-weight:600; margin-top:var(--sp-2); }
+    .metrica-cambio.mal { color:var(--c-no); }
+
+    .aprendizaje-item { display:flex; gap:var(--sp-4); align-items:flex-start; padding:var(--sp-4); background:var(--c-acento-claro); border-radius:var(--radius-card); border-left:4px solid var(--c-acento); }
+    .aprendizaje-icon { font-size:1.2rem; flex-shrink:0; line-height:1; margin-top:2px; }
+
+    .caso-header { background:var(--c-institucional); color:#fff; border-radius:var(--radius-card); padding:var(--sp-6); margin-bottom:var(--sp-6); display:flex; gap:var(--sp-5); align-items:flex-start; flex-wrap:wrap; }
+    .caso-header-num { font-family:var(--ff-display); font-size:var(--fs-4xl); font-weight:600; line-height:1; color:rgba(255,255,255,.2); flex-shrink:0; }
+    .caso-header h2 { color:#fff; font-size:var(--fs-2xl); margin-bottom:var(--sp-3); }
+    .caso-header p { color:rgba(255,255,255,.75); font-size:var(--fs-sm); margin:0; }
+    .caso-badges { display:flex; flex-wrap:wrap; gap:var(--sp-3); margin-top:var(--sp-4); }
+    .caso-badge { background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.2); border-radius:var(--radius-pill); padding:var(--sp-1) var(--sp-4); font-size:var(--fs-xs); color:rgba(255,255,255,.85); font-weight:600; }
+
+    .aviso-casos { font-size:var(--fs-xs); color:var(--c-texto-secundario); background:var(--c-fondo); border-radius:var(--radius); padding:var(--sp-4); border:1px solid var(--c-borde-claro); margin-top:var(--sp-6); line-height:var(--lh-snug); }
+  </style>
 </head>
 <body>
   <div id="site-header-placeholder"></div>
   <main id="contenido-principal">
+
     <div class="page-hero">
       <div class="container">
-        <span class="eyebrow">Próximamente</span>
-        <h1>Sección en construcción</h1>
-        <p class="lead">Esta sección se completará en las próximas tandas de desarrollo.</p>
+        <nav class="breadcrumb" aria-label="Ruta de navegación">
+          <a href="index.html">Inicio</a>
+          <span class="breadcrumb-sep" aria-hidden="true">›</span>
+          <span aria-current="page">Casos prácticos</span>
+        </nav>
+        <span class="eyebrow">Aplicación clínica del modelo</span>
+        <h1>Casos prácticos</h1>
+        <p class="lead">Cuatro casos de la Guía MAPEX-ADHEFAR resumidos y reelaborados. Ilustran la aplicación del modelo CMO, el algoritmo ADHEFAR-EM y la reestratificación en patologías representativas de la consulta externa.</p>
       </div>
     </div>
+
     <section class="section">
       <div class="container">
-        <div class="notice notice-info" style="max-width:640px">
-          <div class="notice-icon" aria-hidden="true">🔧</div>
-          <div>Contenido en desarrollo. La estructura de navegación ya está operativa; el contenido de esta sección se publicará en breve.</div>
+
+        <div class="notice notice-info" style="margin-bottom:var(--sp-8)">
+          <div class="notice-icon" aria-hidden="true">📋</div>
+          <div>Los casos son resúmenes propios basados en los casos de la guía. Las cifras clínicas (PDC, TAI, ACT, etc.) son las que figuran en la publicación original. Para el detalle completo, consulta la Guía MAPEX-ADHEFAR (SEFH, 2026).</div>
         </div>
+
+        <!-- Selector de caso -->
+        <div class="caso-selector" role="tablist" aria-label="Seleccionar caso práctico">
+          <button class="caso-btn" role="tab" aria-selected="true" aria-controls="caso-1" id="btn-caso-1" onclick="seleccionarCaso(1)">
+            <div class="caso-btn-num" aria-hidden="true">1</div>
+            <h3>Insuficiencia cardíaca</h3>
+            <p>Polimedicación y barreras de Capacidad. Teach-back y simplificación terapéutica.</p>
+          </button>
+          <button class="caso-btn" role="tab" aria-selected="false" aria-controls="caso-2" id="btn-caso-2" onclick="seleccionarCaso(2)">
+            <div class="caso-btn-num" aria-hidden="true">2</div>
+            <h3>Artritis reumatoide</h3>
+            <p>Barrera de Motivación. Creencias y miedo a efectos adversos. Entrevista motivacional.</p>
+          </button>
+          <button class="caso-btn" role="tab" aria-selected="false" aria-controls="caso-3" id="btn-caso-3" onclick="seleccionarCaso(3)">
+            <div class="caso-btn-num" aria-hidden="true">3</div>
+            <h3>Esclerosis múltiple</h3>
+            <p>Barrera mixta C+O. Telefarmacia y coordinación multidisciplinar.</p>
+          </button>
+          <button class="caso-btn" role="tab" aria-selected="false" aria-controls="caso-4" id="btn-caso-4" onclick="seleccionarCaso(4)">
+            <div class="caso-btn-num" aria-hidden="true">4</div>
+            <h3>Asma grave</h3>
+            <p>Reestratificación P1→P3. Los tres criterios concurrentes y su resolución.</p>
+          </button>
+        </div>
+
+        <!-- ══ CASO 1 — IC ══ -->
+        <div class="caso-panel activo" id="caso-1" role="tabpanel" aria-labelledby="btn-caso-1">
+          <div class="caso-header">
+            <div class="caso-header-num" aria-hidden="true">1</div>
+            <div>
+              <h2>Insuficiencia cardíaca con polimedicación</h2>
+              <p>Paciente con régimen complejo que no recuerda las tomas ni el propósito de cada medicamento. Barrera predominante: Capacidad.</p>
+              <div class="caso-badges">
+                <span class="caso-badge">Pilar C — Capacidad</span>
+                <span class="caso-badge">Polimedicación</span>
+                <span class="caso-badge">Teach-back</span>
+                <span class="caso-badge">SPD</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabs caso-tabs" role="tablist" aria-label="Secciones del caso 1">
+            <button class="caso-tab" role="tab" aria-selected="true" onclick="seleccionarSubtab(this,'c1-perfil')">Perfil y estratificación</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c1-adherencia')">Adherencia y barreras CMO</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c1-plan')">Plan</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c1-evolucion')">Evolución</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c1-aprendizaje')">Aprendizaje</button>
+          </div>
+
+          <div class="caso-subtab activo" id="c1-perfil">
+            <div class="ficha-grid">
+              <div class="ficha-dato"><div class="ficha-dato-label">Situación clínica</div><div class="ficha-dato-val">Insuficiencia cardíaca crónica estabilizada. Fracción de eyección reducida. 7 medicamentos activos.</div></div>
+              <div class="ficha-dato"><div class="ficha-dato-label">Contexto</div><div class="ficha-dato-val">Paciente mayor, vive solo, con dificultad para recordar la pauta y el propósito de cada fármaco.</div></div>
+              <div class="ficha-dato"><div class="ficha-dato-label">OFT</div><div class="ficha-dato-val">Control sintomático (NYHA ≤II), evitar reingresos, toma correcta del régimen complejo.</div></div>
+              <div class="ficha-dato"><div class="ficha-dato-label">Estratificación inicial</div><div class="ficha-dato-val"><span class="badge badge-error">Prioridad 1</span> — PDC bajo, cuestionario positivo, síntomas no controlados.</div></div>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c1-adherencia">
+            <div class="metrica-box" style="margin-bottom:var(--sp-6)">
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-no)">65 %</div><div class="metrica-label">PDC inicial</div><div class="metrica-cambio mal">Por debajo del umbral</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-parcial)">Positivo</div><div class="metrica-label">Morisky-Green</div><div class="metrica-cambio mal">Adherencia insuficiente</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-no)">P1</div><div class="metrica-label">Estratificación</div><div class="metrica-cambio mal">Intervención prioritaria</div></div>
+            </div>
+            <div class="pillar-card cap">
+              <div class="pillar-badge capacidad">Pilar C — Capacidad</div>
+              <h3 style="margin:var(--sp-4) 0 var(--sp-3)">Barrera predominante: Capacidad</h3>
+              <p style="font-size:var(--fs-sm)">El paciente quiere tomar la medicación pero no puede gestionarla de forma autónoma: no recuerda la pauta, no sabe para qué sirve cada fármaco y no dispone de una rutina establecida de toma. No hay ambivalencia ni creencias negativas (Motivación intacta). El acceso a la medicación es correcto (Oportunidad sin barreras).</p>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c1-plan">
+            <div style="display:flex;flex-direction:column;gap:var(--sp-4)">
+              <div class="step"><div class="step-number">1</div><div class="step-content"><h4>Simplificación del régimen</h4><p>Revisión de la complejidad farmacoterapéutica con el prescriptor. Propuesta de agrupación de tomas en el menor número de momentos posible.</p></div></div>
+              <div class="step"><div class="step-number">2</div><div class="step-content"><h4>SPD y tarjeta de medicación</h4><p>Implantación de sistema personalizado de dosificación (pastillero semanal). Elaboración de tarjeta visual con nombre, función y horario de cada fármaco.</p></div></div>
+              <div class="step"><div class="step-number">3</div><div class="step-content"><h4>Educación adaptada con teach-back</h4><p>Sesión educativa adaptada al nivel de comprensión del paciente. Al cierre, teach-back: el paciente explica con sus palabras para qué sirve cada medicamento y cuándo tomarlo.</p></div></div>
+              <div class="step"><div class="step-number">4</div><div class="step-content"><h4>OFT pactado</h4><p>Tomar correctamente todos los medicamentos durante las próximas 4 semanas usando el pastillero. Revisión en visita presencial en 4 semanas.</p></div></div>
+              <div class="step"><div class="step-number">5</div><div class="step-content"><h4>Coordinación con trabajo social</h4><p>Valoración de necesidad de apoyo domiciliario para la supervisión de la toma dado que el paciente vive solo.</p></div></div>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c1-evolucion">
+            <div class="metrica-box" style="margin-bottom:var(--sp-6)">
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-ok)">95 %</div><div class="metrica-label">PDC a los 3 meses</div><div class="metrica-cambio">↑ desde 65 %</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-ok)">Negativo</div><div class="metrica-label">Morisky-Green</div><div class="metrica-cambio">Adherencia óptima</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-ok)">P3</div><div class="metrica-label">Reestratificación</div><div class="metrica-cambio">Mantenimiento</div></div>
+            </div>
+            <div class="notice notice-privacidad">
+              <div class="notice-icon" aria-hidden="true">✓</div>
+              <div>Reestratificación a <strong>Prioridad 3</strong> a los 3 meses. OFT alcanzados, PDC 95 %, Morisky-Green negativo. Se mantiene el pastillero y se programa seguimiento dual trimestral.</div>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c1-aprendizaje">
+            <div style="display:flex;flex-direction:column;gap:var(--sp-4)">
+              <div class="aprendizaje-item"><div class="aprendizaje-icon" aria-hidden="true">💡</div><div><strong>La barrera de Capacidad no es falta de voluntad.</strong> El paciente quería tomar la medicación: la intervención correcta era organizativa, no motivacional. Identificar el pilar correcto es clave para no intervenir sobre la barrera equivocada.</div></div>
+              <div class="aprendizaje-item"><div class="aprendizaje-icon" aria-hidden="true">💡</div><div><strong>El teach-back detectó lagunas que la educación clásica no habría revelado.</strong> Al pedir al paciente que explicara con sus palabras, se identificaron malentendidos sobre la digoxina que se corrigieron antes del alta de la visita.</div></div>
+              <div class="aprendizaje-item"><div class="aprendizaje-icon" aria-hidden="true">💡</div><div><strong>La coordinación con trabajo social fue determinante.</strong> El aislamiento social era una barrera de Oportunidad secundaria que, sin apoyo domiciliario, habría dificultado el mantenimiento del SPD.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ CASO 2 — AR ══ -->
+        <div class="caso-panel" id="caso-2" role="tabpanel" aria-labelledby="btn-caso-2">
+          <div class="caso-header">
+            <div class="caso-header-num" aria-hidden="true">2</div>
+            <div>
+              <h2>Artritis reumatoide</h2>
+              <p>Paciente con creencias negativas sobre el metotrexato y miedo a efectos adversos. Barrera predominante: Motivación.</p>
+              <div class="caso-badges">
+                <span class="caso-badge">Pilar M — Motivación</span>
+                <span class="caso-badge">Creencias negativas</span>
+                <span class="caso-badge">Entrevista motivacional</span>
+                <span class="caso-badge">ICE</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabs caso-tabs" role="tablist" aria-label="Secciones del caso 2">
+            <button class="caso-tab" role="tab" aria-selected="true" onclick="seleccionarSubtab(this,'c2-perfil')">Perfil y estratificación</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c2-adherencia')">Adherencia y barreras CMO</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c2-plan')">Plan</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c2-evolucion')">Evolución</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c2-aprendizaje')">Aprendizaje</button>
+          </div>
+
+          <div class="caso-subtab activo" id="c2-perfil">
+            <div class="ficha-grid">
+              <div class="ficha-dato"><div class="ficha-dato-label">Situación clínica</div><div class="ficha-dato-val">Artritis reumatoide moderada-grave. Tratamiento con metotrexato + ácido fólico. DAS28 elevado.</div></div>
+              <div class="ficha-dato"><div class="ficha-dato-label">Contexto</div><div class="ficha-dato-val">La paciente ha leído en internet sobre hepatotoxicidad del metotrexato y ha reducido la dosis por su cuenta sin comunicarlo al equipo.</div></div>
+              <div class="ficha-dato"><div class="ficha-dato-label">OFT</div><div class="ficha-dato-val">DAS28 &lt;3,2 (remisión o baja actividad), toma semanal correcta del metotrexato.</div></div>
+              <div class="ficha-dato"><div class="ficha-dato-label">Estratificación inicial</div><div class="ficha-dato-val"><span class="badge badge-error">Prioridad 1</span> — TAI bajo, OFT no alcanzados, PROMs alterados.</div></div>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c2-adherencia">
+            <div class="metrica-box" style="margin-bottom:var(--sp-6)">
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-no)">38</div><div class="metrica-label">TAI inicial</div><div class="metrica-cambio mal">Adherencia insuficiente</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-no)">↑</div><div class="metrica-label">DAS28 elevado</div><div class="metrica-cambio mal">OFT no alcanzados</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-no)">P1</div><div class="metrica-label">Estratificación</div><div class="metrica-cambio mal">Intervención prioritaria</div></div>
+            </div>
+            <div class="pillar-card mot">
+              <div class="pillar-badge motivacion">Pilar M — Motivación</div>
+              <h3 style="margin:var(--sp-4) 0 var(--sp-3)">Barrera predominante: Motivación (percepción)</h3>
+              <p style="font-size:var(--fs-sm)">Barrera de percepción: la paciente puede tomar la medicación (Capacidad intacta, acceso correcto), pero ha decidido reducirla por miedo a efectos adversos basado en información de fuentes no contrastadas. Hay ambivalencia activa: quiere controlar la enfermedad pero teme el fármaco. No hay problemas de organización ni de acceso.</p>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c2-plan">
+            <div style="display:flex;flex-direction:column;gap:var(--sp-4)">
+              <div class="step"><div class="step-number">1</div><div class="step-content"><h4>Exploración ICE</h4><p>Explorar ideas («¿qué ha leído exactamente sobre el metotrexato?»), preocupaciones («¿qué le preocupa más?») y expectativas («¿qué esperaría que cambiara con un tratamiento diferente?»).</p></div></div>
+              <div class="step"><div class="step-number">2</div><div class="step-content"><h4>Entrevista motivacional — explorar ambivalencia</h4><p>Reconocer la ambivalencia sin confrontar. Explorar los dos lados: el miedo al fármaco y el deseo de controlar la enfermedad. Reflejar el discurso de cambio.</p></div></div>
+              <div class="step"><div class="step-number">3</div><div class="step-content"><h4>Información adaptada y desmitificación</h4><p>Ofrecer información fiable sobre el perfil de seguridad real del metotrexato a las dosis terapéuticas y sobre la monitorización analítica como red de seguridad.</p></div></div>
+              <div class="step"><div class="step-number">4</div><div class="step-content"><h4>OFT pactado y comunicación con reumatología</h4><p>Pactar retomar la dosis prescrita durante 8 semanas y revisar analítica. Comunicar a reumatología la situación para coordinación.</p></div></div>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c2-evolucion">
+            <div class="metrica-box" style="margin-bottom:var(--sp-6)">
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-ok)">48</div><div class="metrica-label">TAI a los 3 meses</div><div class="metrica-cambio">↑ desde 38</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-ok)">↓</div><div class="metrica-label">DAS28</div><div class="metrica-cambio">OFT alcanzados</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-ok)">P2</div><div class="metrica-label">Reestratificación</div><div class="metrica-cambio">Seguimiento reforzado</div></div>
+            </div>
+            <div class="notice notice-privacidad">
+              <div class="notice-icon" aria-hidden="true">✓</div>
+              <div>TAI mejora de 38 a 48. DAS28 desciende dentro del objetivo. Reestratificación a <strong>Prioridad 2</strong>: la adherencia ha mejorado pero se mantiene seguimiento reforzado para consolidar el cambio de creencias y prevenir recaídas.</div>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c2-aprendizaje">
+            <div style="display:flex;flex-direction:column;gap:var(--sp-4)">
+              <div class="aprendizaje-item"><div class="aprendizaje-icon" aria-hidden="true">💡</div><div><strong>Confrontar las creencias directamente genera resistencia.</strong> La entrevista motivacional con exploración ICE fue más eficaz que la educación directiva: la paciente llegó sola a sus propias conclusiones sobre el balance riesgo-beneficio.</div></div>
+              <div class="aprendizaje-item"><div class="aprendizaje-icon" aria-hidden="true">💡</div><div><strong>La discordancia objetivo/subjetivo fue la señal de alerta.</strong> El PDC era moderado (la dispensación era regular) pero el TAI revelaba la reducción de dosis autoadministrada. La medición dual detectó lo que la dispensación sola no habría visto.</div></div>
+              <div class="aprendizaje-item"><div class="aprendizaje-icon" aria-hidden="true">💡</div><div><strong>La reestratificación a P2 (no a P3) fue deliberada.</strong> La adherencia mejoró, pero el cambio de creencias necesita tiempo para consolidarse. El seguimiento reforzado protege contra la recaída.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ CASO 3 — EM ══ -->
+        <div class="caso-panel" id="caso-3" role="tabpanel" aria-labelledby="btn-caso-3">
+          <div class="caso-header">
+            <div class="caso-header-num" aria-hidden="true">3</div>
+            <div>
+              <h2>Esclerosis múltiple</h2>
+              <p>Paciente joven con trabajo a turnos y barreras mixtas C+O. Adaptación del seguimiento a su contexto vital mediante telefarmacia.</p>
+              <div class="caso-badges">
+                <span class="caso-badge">Pilares C + O</span>
+                <span class="caso-badge">Trabajo a turnos</span>
+                <span class="caso-badge">Telefarmacia</span>
+                <span class="caso-badge">Coordinación neurología</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabs caso-tabs" role="tablist" aria-label="Secciones del caso 3">
+            <button class="caso-tab" role="tab" aria-selected="true" onclick="seleccionarSubtab(this,'c3-perfil')">Perfil y estratificación</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c3-adherencia')">Adherencia y barreras CMO</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c3-plan')">Plan</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c3-evolucion')">Evolución</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c3-aprendizaje')">Aprendizaje</button>
+          </div>
+
+          <div class="caso-subtab activo" id="c3-perfil">
+            <div class="ficha-grid">
+              <div class="ficha-dato"><div class="ficha-dato-label">Situación clínica</div><div class="ficha-dato-val">Esclerosis múltiple remitente-recurrente. Tratamiento con fármaco modificador de la enfermedad de administración diaria.</div></div>
+              <div class="ficha-dato"><div class="ficha-dato-label">Contexto</div><div class="ficha-dato-val">Paciente de 34 años con trabajo a turnos rotativos. Dificultad para mantener un horario regular de toma y para acudir a las visitas presenciales programadas.</div></div>
+              <div class="ficha-dato"><div class="ficha-dato-label">OFT</div><div class="ficha-dato-val">Ausencia de brotes, estabilidad radiológica, toma diaria correcta.</div></div>
+              <div class="ficha-dato"><div class="ficha-dato-label">Estratificación inicial</div><div class="ficha-dato-val"><span class="badge badge-alerta">Prioridad 2</span> — PDC moderado, cuestionario positivo por olvidos, OFT en riesgo.</div></div>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c3-adherencia">
+            <div class="metrica-box" style="margin-bottom:var(--sp-6)">
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-parcial)">74 %</div><div class="metrica-label">PDC inicial</div><div class="metrica-cambio mal">Por debajo del umbral</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-parcial)">Positivo</div><div class="metrica-label">MARS-5</div><div class="metrica-cambio mal">Olvidos frecuentes</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-parcial)">P2</div><div class="metrica-label">Estratificación</div><div class="metrica-cambio">Seguimiento reforzado</div></div>
+            </div>
+            <div style="display:grid;gap:var(--sp-4)">
+              <div class="pillar-card cap">
+                <div class="pillar-badge capacidad">Pilar C — Capacidad</div>
+                <p style="font-size:var(--fs-sm);margin-top:var(--sp-3)">Los turnos rotativos alteran el ritmo circadiano e impiden establecer una rutina de toma estable. No es olvido por deterioro cognitivo, sino por falta de estructura en el entorno.</p>
+              </div>
+              <div class="pillar-card opp">
+                <div class="pillar-badge oportunidad">Pilar O — Oportunidad</div>
+                <p style="font-size:var(--fs-sm);margin-top:var(--sp-3)">El horario de trabajo hace difícil acudir a las visitas presenciales en el horario habitual de consulta. La falta de flexibilidad del circuito es una barrera de Oportunidad estructural.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c3-plan">
+            <div style="display:flex;flex-direction:column;gap:var(--sp-4)">
+              <div class="step"><div class="step-number">1</div><div class="step-content"><h4>Anclaje de la toma a una rutina flexible</h4><p>Identificar junto con el paciente qué momento del día es más estable en todos sus turnos. Anclar la toma a ese momento + alarma en el móvil.</p></div></div>
+              <div class="step"><div class="step-number">2</div><div class="step-content"><h4>Implantación de seguimiento telemático</h4><p>Sustituir las visitas presenciales de seguimiento rutinario por videollamadas o contacto telefónico. Reservar las visitas presenciales para evaluaciones clínicas con exploración neurológica.</p></div></div>
+              <div class="step"><div class="step-number">3</div><div class="step-content"><h4>OFT pactado</h4><p>PDC ≥85 % en el siguiente trimestre. El paciente registra los olvidos en una nota del móvil para revisarlos en la siguiente videollamada.</p></div></div>
+              <div class="step"><div class="step-number">4</div><div class="step-content"><h4>Coordinación con neurología</h4><p>Comunicar la situación al neurólogo de referencia. Valorar conjuntamente si el perfil de olvidos genera riesgo de brote y ajustar la frecuencia de seguimiento en consecuencia.</p></div></div>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c3-evolucion">
+            <div class="metrica-box" style="margin-bottom:var(--sp-6)">
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-ok)">91 %</div><div class="metrica-label">PDC a los 6 meses</div><div class="metrica-cambio">↑ desde 74 %</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-ok)">0</div><div class="metrica-label">Brotes en 6 meses</div><div class="metrica-cambio">OFT alcanzados</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-ok)">P3</div><div class="metrica-label">Reestratificación</div><div class="metrica-cambio">Mantenimiento dual</div></div>
+            </div>
+            <div class="notice notice-privacidad">
+              <div class="notice-icon" aria-hidden="true">✓</div>
+              <div>PDC sube a 91 %, sin brotes en 6 meses. Reestratificación a <strong>Prioridad 3</strong>. Se mantiene el seguimiento telemático trimestral como modalidad preferente del paciente, con visita presencial anual para evaluación neurológica.</div>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c3-aprendizaje">
+            <div style="display:flex;flex-direction:column;gap:var(--sp-4)">
+              <div class="aprendizaje-item"><div class="aprendizaje-icon" aria-hidden="true">💡</div><div><strong>La barrera no era falta de motivación sino falta de oportunidad estructural.</strong> El circuito asistencial estándar era incompatible con el estilo de vida del paciente. Adaptar el servicio a la vida del paciente, no al revés.</div></div>
+              <div class="aprendizaje-item"><div class="aprendizaje-icon" aria-hidden="true">💡</div><div><strong>La telefarmacia no es una solución de emergencia.</strong> En este caso fue la modalidad óptima de seguimiento para este perfil de paciente. La atención dual como estándar estructural (no excepcional) lo hace posible.</div></div>
+              <div class="aprendizaje-item"><div class="aprendizaje-icon" aria-hidden="true">💡</div><div><strong>El anclaje a rutina fue clave.</strong> No importa el turno: hay un momento estable cada día. Identificarlo con el paciente y anclar la toma a él resolvió la barrera de Capacidad sin necesidad de cambiar el tratamiento.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ CASO 4 — ASMA ══ -->
+        <div class="caso-panel" id="caso-4" role="tabpanel" aria-labelledby="btn-caso-4">
+          <div class="caso-header">
+            <div class="caso-header-num" aria-hidden="true">4</div>
+            <div>
+              <h2>Asma grave — Reestratificación completa</h2>
+              <p>Caso que ilustra el circuito completo: los tres criterios de reestratificación concurrentes y la progresión P1→P3 tras intervención.</p>
+              <div class="caso-badges">
+                <span class="caso-badge">Pilar M — Motivación</span>
+                <span class="caso-badge">Reestratificación</span>
+                <span class="caso-badge">3 criterios concurrentes</span>
+                <span class="caso-badge">P1 → P3</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabs caso-tabs" role="tablist" aria-label="Secciones del caso 4">
+            <button class="caso-tab" role="tab" aria-selected="true" onclick="seleccionarSubtab(this,'c4-perfil')">Perfil y estratificación</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c4-adherencia')">Adherencia y barreras CMO</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c4-plan')">Plan</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c4-evolucion')">Evolución</button>
+            <button class="caso-tab" role="tab" aria-selected="false" onclick="seleccionarSubtab(this,'c4-aprendizaje')">Aprendizaje</button>
+          </div>
+
+          <div class="caso-subtab activo" id="c4-perfil">
+            <div class="ficha-grid">
+              <div class="ficha-dato"><div class="ficha-dato-label">Situación clínica</div><div class="ficha-dato-val">Asma grave no controlada. Tratamiento con corticoide inhalado de alta dosis + LABA + biológico. Múltiples visitas a urgencias en el último año.</div></div>
+              <div class="ficha-dato"><div class="ficha-dato-label">Contexto</div><div class="ficha-dato-val">El paciente cree que el corticoide inhalado le hace daño a largo plazo y lo usa solo cuando tiene síntomas, no de forma mantenida como se ha prescrito.</div></div>
+              <div class="ficha-dato"><div class="ficha-dato-label">OFT</div><div class="ficha-dato-val">ACT ≥20 (asma controlada), cero visitas a urgencias, uso correcto del inhalador de mantenimiento.</div></div>
+              <div class="ficha-dato"><div class="ficha-dato-label">Estratificación inicial</div><div class="ficha-dato-val"><span class="badge badge-error">Prioridad 1</span> — Los tres criterios de reestratificación concurren simultáneamente.</div></div>
+            </div>
+            <div class="reestrat-box" style="margin-top:var(--sp-5)">
+              <h3>Los tres criterios concurren</h3>
+              <div class="reestrat-criterios" style="margin-top:var(--sp-4)">
+                <div class="criterio"><div class="criterio-num">1</div><p><strong>OFT incumplidos:</strong> ACT 12 (asma no controlada, umbral &lt;20). Múltiples visitas a urgencias.</p></div>
+                <div class="criterio"><div class="criterio-num">2</div><p><strong>Adherencia insuficiente validada:</strong> PDC bajo por uso a demanda + cuestionario de adherencia positivo.</p></div>
+                <div class="criterio"><div class="criterio-num">3</div><p><strong>PROMs alterados:</strong> ACT 12, impacto significativo en la calidad de vida y en la actividad diaria.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c4-adherencia">
+            <div class="metrica-box" style="margin-bottom:var(--sp-6)">
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-no)">12</div><div class="metrica-label">ACT inicial</div><div class="metrica-cambio mal">Asma no controlada</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-no)">Bajo</div><div class="metrica-label">PDC</div><div class="metrica-cambio mal">Uso a demanda</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-no)">P1</div><div class="metrica-label">Estratificación</div><div class="metrica-cambio mal">3 criterios concurrentes</div></div>
+            </div>
+            <div class="pillar-card mot">
+              <div class="pillar-badge motivacion">Pilar M — Motivación (percepción)</div>
+              <h3 style="margin:var(--sp-4) 0 var(--sp-3)">Barrera predominante: Motivación</h3>
+              <p style="font-size:var(--fs-sm)">El paciente tiene capacidad para usar el inhalador (técnica correcta verificada) y acceso a la medicación sin problemas (Oportunidad sin barreras). La barrera es de percepción: cree que el corticoide inhalado produce daño acumulativo y solo lo usa cuando tiene síntomas graves, interpretando su ausencia como señal de que no lo necesita.</p>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c4-plan">
+            <div style="display:flex;flex-direction:column;gap:var(--sp-4)">
+              <div class="step"><div class="step-number">1</div><div class="step-content"><h4>Entrevista motivacional intensiva</h4><p>Explorar la creencia sobre el corticoide inhalado (ICE), el impacto de los episodios de urgencias en su vida, y el motivo propio para el cambio. Usar escala de importancia y confianza.</p></div></div>
+              <div class="step"><div class="step-number">2</div><div class="step-content"><h4>Información clínica adaptada</h4><p>Ofrecer información sobre la diferencia entre corticoides sistémicos y corticoides inhalados a dosis terapéuticas, y sobre el riesgo real de no usar el tratamiento de mantenimiento.</p></div></div>
+              <div class="step"><div class="step-number">3</div><div class="step-content"><h4>OFT pactado</h4><p>Uso diario del inhalador de mantenimiento durante 8 semanas. Pactar señales de alarma para contacto urgente. Revisión en 4 semanas (visita presencial dada la estratificación P1).</p></div></div>
+              <div class="step"><div class="step-number">4</div><div class="step-content"><h4>Coordinación con neumología / alergología</h4><p>Comunicar la situación y la barrera identificada al equipo médico. Valorar si la pauta prescrita es la óptima dado el perfil de creencias del paciente.</p></div></div>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c4-evolucion">
+            <div class="metrica-box" style="margin-bottom:var(--sp-6)">
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-ok)">19</div><div class="metrica-label">ACT a los 3 meses</div><div class="metrica-cambio">↑ desde 12</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-ok)">0</div><div class="metrica-label">Urgencias en 3 meses</div><div class="metrica-cambio">OFT alcanzados</div></div>
+              <div class="metrica"><div class="metrica-val" style="color:var(--c-ok)">P3</div><div class="metrica-label">Reestratificación</div><div class="metrica-cambio">P1 → P3</div></div>
+            </div>
+            <div class="notice notice-privacidad">
+              <div class="notice-icon" aria-hidden="true">✓</div>
+              <div>ACT mejora de 12 a 19. Cero visitas a urgencias en 3 meses. Reestratificación a <strong>Prioridad 3</strong>. La creencia sobre el corticoide no ha desaparecido completamente: se programa seguimiento reforzado para consolidar el cambio y prevenir recaídas.</div>
+            </div>
+          </div>
+
+          <div class="caso-subtab" id="c4-aprendizaje">
+            <div style="display:flex;flex-direction:column;gap:var(--sp-4)">
+              <div class="aprendizaje-item"><div class="aprendizaje-icon" aria-hidden="true">💡</div><div><strong>La reestratificación P1→P3 en 3 meses es posible con intervención correcta.</strong> Cuando los tres criterios concurren por una barrera de Motivación tratable con entrevista motivacional, la mejora puede ser rápida si el farmacéutico identifica correctamente el pilar.</div></div>
+              <div class="aprendizaje-item"><div class="aprendizaje-icon" aria-hidden="true">💡</div><div><strong>ACT 19 (no 20) es clínicamente relevante.</strong> No alcanza el umbral estricto de asma controlada, pero el cambio desde 12 es significativo y los OFT pactados se han cumplido. La evaluación de la adherencia es clínica, no solo numérica.</div></div>
+              <div class="aprendizaje-item"><div class="aprendizaje-icon" aria-hidden="true">💡</div><div><strong>La barrera de Motivación requiere tiempo para consolidarse.</strong> Aunque la reestratificación es a P3, el seguimiento no se abandona: la creencia subyacente sigue presente. La proactividad del seguimiento es el punto 10 del decálogo.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="aviso-casos">
+          <strong>Nota metodológica.</strong> Estos casos son resúmenes propios reelaborados a partir de los casos de la Guía MAPEX-ADHEFAR (SEFH, 2026). Las cifras clínicas (PDC, TAI, ACT) son las que figuran en la publicación original. Para el desarrollo completo de cada caso, consulta la guía oficial en <a href="https://www.sefh.es/mapex" target="_blank" rel="noopener">sefh.es/mapex</a>.
+        </div>
+
       </div>
     </section>
   </main>
+
   <div id="site-footer-placeholder"></div>
   <script src="js/nav.js"></script>
+  <script>
+    function seleccionarCaso(n) {
+      document.querySelectorAll('.caso-btn').forEach((b,i) => b.setAttribute('aria-selected', i+1===n ? 'true':'false'));
+      document.querySelectorAll('.caso-panel').forEach((p,i) => p.classList.toggle('activo', i+1===n));
+    }
+    function seleccionarSubtab(btn, id) {
+      const panel = btn.closest('.caso-panel');
+      panel.querySelectorAll('.caso-tab').forEach(t => t.setAttribute('aria-selected','false'));
+      btn.setAttribute('aria-selected','true');
+      panel.querySelectorAll('.caso-subtab').forEach(s => s.classList.remove('activo'));
+      panel.querySelector('#'+id)?.classList.add('activo');
+    }
+  </script>
 </body>
 </html>
