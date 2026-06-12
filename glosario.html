@@ -740,10 +740,11 @@
       return str.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
     }
 
-    function highlight(text, query) {
-      if (!query) return text;
+    function highlight(html, query) {
+      if (!query) return html;
       const safe = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      return text.replace(new RegExp(`(${safe})`, 'gi'), '<mark>$1</mark>');
+      // Highlight solo en nodos de texto, no dentro de atributos ni etiquetas
+      return html.replace(new RegExp(`(?![^<]*>)(${safe})`, 'gi'), '<mark>$1</mark>');
     }
 
     function actualizarCount(visible) {
@@ -767,16 +768,14 @@
         if (coincideCat && coincideQuery) {
           card.hidden = false;
           visible++;
+          const h3 = card.querySelector('.termino-abbr');
+          const def = card.querySelector('.termino-def');
           if (q) {
-            const h3 = card.querySelector('.termino-abbr');
-            const def = card.querySelector('.termino-def');
-            if (h3) h3.innerHTML = highlight(h3.textContent, queryActual);
-            if (def) def.innerHTML = highlight(def.textContent, queryActual);
+            if (h3) h3.innerHTML = highlight(h3._orig, queryActual);
+            if (def) def.innerHTML = highlight(def._orig, queryActual);
           } else {
-            const h3 = card.querySelector('.termino-abbr');
-            const def = card.querySelector('.termino-def');
-            if (h3) h3.textContent = h3.textContent;
-            if (def) def.textContent = def.textContent;
+            if (h3) h3.innerHTML = h3._orig;
+            if (def) def.innerHTML = def._orig;
           }
         } else {
           card.hidden = true;
@@ -794,15 +793,6 @@
     }
 
     buscador.addEventListener('input', function () {
-      // Restaurar texto antes de volver a highlight
-      cards.forEach(card => {
-        const h3 = card.querySelector('.termino-abbr');
-        const def = card.querySelector('.termino-def');
-        if (h3 && h3._orig === undefined) h3._orig = h3.textContent;
-        if (def && def._orig === undefined) def._orig = def.textContent;
-        if (h3) h3.innerHTML = h3._orig;
-        if (def) def.innerHTML = def._orig;
-      });
       queryActual = this.value.trim();
       filtrar();
     });
@@ -816,12 +806,12 @@
       });
     });
 
-    // Guardar textos originales antes de cualquier highlight
+    // Guardar HTML original (preserva <em>/<strong>) antes de cualquier highlight
     cards.forEach(card => {
       const h3 = card.querySelector('.termino-abbr');
       const def = card.querySelector('.termino-def');
-      if (h3) h3._orig = h3.textContent;
-      if (def) def._orig = def.textContent;
+      if (h3) h3._orig = h3.innerHTML;
+      if (def) def._orig = def.innerHTML;
     });
 
     filtrar();
