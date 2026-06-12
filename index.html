@@ -3,325 +3,506 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ADHEFAR360: plataforma inteligente para medir, monitorizar y mejorar la adherencia en consultas externas de Farmacia Hospitalaria.">
-  <title>ADHEFAR360 | Adherencia en Farmacia Hospitalaria</title>
-  <link rel="stylesheet" href="./styles.css">
+  <title>MAPEX-ADHEFAR Hub — Adherencia en Farmacia Hospitalaria</title>
+  <meta name="description" content="Recurso operativo oficial de la Guía MAPEX-ADHEFAR para la medición, monitorización y mejora de la adherencia en consultas externas de Farmacia Hospitalaria. SEFH · Grupo ADHEFAR · 2026.">
+  <meta property="og:title" content="MAPEX-ADHEFAR Hub">
+  <meta property="og:description" content="Herramientas operativas, casos prácticos y recursos de implantación de la Guía MAPEX-ADHEFAR (SEFH, 2026).">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/print.css">
+  <style>
+    /* Estilos específicos de portada */
+    .hero {
+      background: var(--c-institucional);
+      color: #fff;
+      padding-block: var(--sp-14) var(--sp-12);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 70% at 80% 50%, rgba(109,40,217,.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(5,150,105,.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative;
+      display: grid;
+      gap: var(--sp-10);
+      align-items: center;
+    }
+    @media (min-width: 860px) {
+      .hero-inner { grid-template-columns: 1fr 1fr; }
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-3);
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-semi);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: rgba(255,255,255,.6);
+      margin-bottom: var(--sp-4);
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 2px;
+      background: var(--c-acento);
+      border-radius: var(--radius-pill);
+    }
+    .hero h1 {
+      color: #fff;
+      font-size: clamp(var(--fs-2xl), 5vw, var(--fs-4xl));
+      margin-bottom: var(--sp-5);
+      line-height: 1.1;
+    }
+    .hero-subtitle {
+      font-size: var(--fs-md);
+      color: rgba(255,255,255,.8);
+      line-height: var(--lh-snug);
+      margin-bottom: var(--sp-6);
+      max-width: 52ch;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-3);
+      margin-bottom: var(--sp-8);
+    }
+    .btn-hero-primary {
+      background: var(--c-acento);
+      color: #fff;
+      border: 2px solid var(--c-acento);
+      padding: 0.75em 1.6em;
+      font-size: var(--fs-base);
+    }
+    .btn-hero-primary:hover {
+      background: var(--c-acento-texto);
+      border-color: var(--c-acento-texto);
+      color: #fff;
+    }
+    .btn-hero-secondary {
+      background: rgba(255,255,255,.1);
+      color: #fff;
+      border: 2px solid rgba(255,255,255,.3);
+      padding: 0.75em 1.6em;
+      font-size: var(--fs-base);
+    }
+    .btn-hero-secondary:hover {
+      background: rgba(255,255,255,.18);
+      border-color: rgba(255,255,255,.5);
+      color: #fff;
+    }
+    .hero-citation {
+      font-size: var(--fs-xs);
+      color: rgba(255,255,255,.45);
+      line-height: var(--lh-snug);
+      border-top: 1px solid rgba(255,255,255,.12);
+      padding-top: var(--sp-5);
+    }
+    .hero-citation cite { font-style: italic; }
+
+    /* Panel CMO lateral */
+    .cmo-panel {
+      display: grid;
+      gap: var(--sp-4);
+    }
+    .cmo-item {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius-card);
+      padding: var(--sp-5);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--sp-4);
+    }
+    .cmo-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: var(--radius-pill);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+    .cmo-item.cap .cmo-dot { background: var(--c-capacidad); }
+    .cmo-item.mot .cmo-dot { background: var(--c-motivacion); }
+    .cmo-item.opp .cmo-dot { background: var(--c-oportunidad); }
+    .cmo-label {
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-semi);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: rgba(255,255,255,.5);
+      margin-bottom: var(--sp-2);
+    }
+    .cmo-item.cap .cmo-label { color: rgba(96,165,250,.9); }
+    .cmo-item.mot .cmo-label { color: rgba(251,191,36,.9); }
+    .cmo-item.opp .cmo-label { color: rgba(52,211,153,.9); }
+    .cmo-desc {
+      color: rgba(255,255,255,.75);
+      font-size: var(--fs-sm);
+      line-height: var(--lh-snug);
+    }
+    .cmo-panel-title {
+      font-size: var(--fs-xs);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: rgba(255,255,255,.4);
+      margin-bottom: var(--sp-4);
+      font-weight: var(--fw-semi);
+    }
+
+    /* Tres puertas de entrada */
+    .puertas {
+      padding-block: var(--sp-12);
+    }
+    .puertas-grid {
+      display: grid;
+      gap: var(--sp-5);
+    }
+    @media (min-width: 768px) {
+      .puertas-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .puerta {
+      background: var(--c-superficie);
+      border-radius: var(--radius-card);
+      padding: var(--sp-7);
+      border: 1.5px solid var(--c-borde-claro);
+      box-shadow: var(--shadow-sm);
+      text-decoration: none;
+      color: var(--c-texto);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-4);
+      transition: box-shadow var(--t-base), transform var(--t-base), border-color var(--t-base);
+    }
+    .puerta:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+      color: var(--c-texto);
+    }
+    .puerta.farmaceutico:hover { border-color: var(--c-acento); }
+    .puerta.profesional:hover { border-color: var(--c-capacidad); }
+    .puerta.paciente:hover { border-color: var(--c-oportunidad); }
+    .puerta-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+    }
+    .puerta.farmaceutico .puerta-icon { background: var(--c-acento-claro); }
+    .puerta.profesional .puerta-icon { background: var(--c-capacidad-claro); }
+    .puerta.paciente .puerta-icon { background: var(--c-oportunidad-claro); }
+    .puerta h3 {
+      font-size: var(--fs-lg);
+      margin: 0;
+    }
+    .puerta p {
+      color: var(--c-texto-secundario);
+      font-size: var(--fs-sm);
+      line-height: var(--lh-snug);
+      margin: 0;
+      flex: 1;
+    }
+    .puerta-cta {
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-semi);
+      color: var(--c-acento);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+    }
+    .puerta.farmaceutico .puerta-cta { color: var(--c-acento); }
+    .puerta.profesional .puerta-cta { color: var(--c-capacidad); }
+    .puerta.paciente .puerta-cta { color: var(--c-oportunidad-oscuro); }
+
+    /* Qué es */
+    .que-es {
+      background: var(--c-institucional);
+      color: #fff;
+      padding-block: var(--sp-12);
+    }
+    .que-es .section-header { color: #fff; }
+    .que-es .section-header h2 { color: #fff; }
+    .que-es .eyebrow { color: rgba(255,255,255,.55); }
+    .que-es .lead { color: rgba(255,255,255,.75); }
+    .decalogo-preview {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius-card);
+      padding: var(--sp-6);
+    }
+    .decalogo-preview h3 {
+      color: rgba(255,255,255,.9);
+      font-size: var(--fs-md);
+      margin-bottom: var(--sp-5);
+    }
+    .decalogo-preview ol {
+      padding-left: var(--sp-5);
+      margin: 0;
+    }
+    .decalogo-preview li {
+      color: rgba(255,255,255,.7);
+      font-size: var(--fs-sm);
+      margin-bottom: var(--sp-3);
+    }
+    .decalogo-preview li strong { color: rgba(255,255,255,.9); }
+
+    /* Qué ofrece la web */
+    .que-ofrece {
+      padding-block: var(--sp-12);
+    }
+
+    /* Sello SEFH */
+    .sello-strip {
+      background: var(--c-fondo);
+      border-top: 1px solid var(--c-borde-claro);
+      border-bottom: 1px solid var(--c-borde-claro);
+      padding-block: var(--sp-5);
+    }
+    .sello-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--sp-6);
+      justify-content: center;
+    }
+    .sello-item {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      font-size: var(--fs-sm);
+      color: var(--c-texto-secundario);
+    }
+    .sello-badge {
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-semi);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      padding: var(--sp-1) var(--sp-4);
+      border-radius: var(--radius-pill);
+      background: var(--c-institucional);
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
-  <header class="site-header" id="top">
-    <nav class="navbar" aria-label="Navegación principal">
-      <a class="brand" href="#inicio" aria-label="ADHEFAR360 inicio">
-        <span class="brand-mark">360</span>
-        <span><strong>ADHEFAR</strong>360</span>
-      </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-menu">
-        <span></span><span></span><span></span>
-        <span class="sr-only">Abrir menú</span>
-      </button>
-      <ul class="nav-menu" id="main-menu">
-        <li><a href="#que-es">Qué es</a></li>
-        <li><a href="#modelo">Modelo</a></li>
-        <li><a href="#motor-cmo">Motor CMO</a></li>
-        <li><a href="#herramientas">Herramientas</a></li>
-        <li><a href="#madurez">Madurez</a></li>
-        <li><a href="#paciente">Paciente</a></li>
-        <li><a class="nav-cta" href="#informe">Informe</a></li>
-      </ul>
-    </nav>
-  </header>
+  <div id="site-header-placeholder"></div>
 
-  <main>
-    <section class="hero section" id="inicio">
-      <div class="hero-bg"></div>
-      <div class="container hero-grid">
-        <div class="hero-copy reveal">
-          <span class="eyebrow">Guía ADHEFAR-MAPEX · Implementación práctica</span>
-          <h1>ADHEFAR360</h1>
-          <p class="hero-subtitle">Plataforma inteligente para medir, monitorizar y mejorar la adherencia en Farmacia Hospitalaria</p>
-          <p class="hero-text">De la guía a la práctica. Del dato a la intervención. De la intervención a la mejora continua.</p>
+  <main id="contenido-principal">
+
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-titulo">
+      <div class="container hero-inner">
+        <div>
+          <div class="hero-eyebrow">Recurso operativo oficial · SEFH · MAPEX · 2026</div>
+          <h1 id="hero-titulo">Guía MAPEX-ADHEFAR<br>en la práctica</h1>
+          <p class="hero-subtitle">
+            El hub operativo de la Guía para la medición, monitorización y mejora de la adherencia en consultas externas de Farmacia Hospitalaria. Herramientas, algoritmos, indicadores y casos prácticos listos para usar.
+          </p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#que-es">Explorar plataforma</a>
-            <a class="btn btn-secondary" href="#madurez">Evaluar mi servicio</a>
-            <a class="btn btn-ghost" href="#motor-cmo">Valorar un caso</a>
+            <a class="btn btn-hero-primary" href="herramientas.html">Herramientas de consulta</a>
+            <a class="btn btn-hero-secondary" href="modelo.html">El modelo CMO</a>
+          </div>
+          <div class="hero-citation">
+            <cite>Grupo ADHEFAR. Guía MAPEX-ADHEFAR para la medición, monitorización y mejora de la adherencia en consultas externas de Farmacia Hospitalaria. Madrid: Sociedad Española de Farmacia Hospitalaria; 2026.</cite>
           </div>
         </div>
-        <div class="hero-panel reveal" aria-label="Resumen visual ADHEFAR360">
-          <div class="orbital-card main-card">
-            <span class="badge">CMO</span>
-            <h2>Medir, intervenir, evaluar y mejorar.</h2>
-            <p>Capacidad, Motivación y Oportunidad como motor de adherencia.</p>
+        <div class="cmo-panel" aria-label="Los tres pilares del modelo CMO">
+          <p class="cmo-panel-title">Modelo CMO — tres pilares</p>
+          <div class="cmo-item cap">
+            <div class="cmo-dot"></div>
+            <div>
+              <div class="cmo-label">Capacidad</div>
+              <div class="cmo-desc">Habilidades, conocimientos y recursos físicos y cognitivos para seguir el tratamiento.</div>
+            </div>
           </div>
-          <div class="mini-card card-a">Indicadores</div>
-          <div class="mini-card card-b">Telefarmacia</div>
-          <div class="mini-card card-c">PROMs/PREMs</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="que-es">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">Qué es ADHEFAR360</span>
-          <h2>No es una web informativa: es una plataforma de implementación.</h2>
-          <p>ADHEFAR360 convierte la adherencia en un proceso medible, intervenible y evaluable. Aterriza la Guía ADHEFAR-MAPEX en decisiones, circuitos, indicadores y materiales aplicables desde la consulta externa.</p>
-        </div>
-        <div class="card-grid three">
-          <article class="feature-card reveal">
-            <span class="icon">FH</span>
-            <h3>Para farmacéuticos de hospital</h3>
-            <p>Facilita la valoración estructurada, la identificación de barreras CMO, la selección de herramientas y la planificación del seguimiento.</p>
-          </article>
-          <article class="feature-card reveal">
-            <span class="icon">SF</span>
-            <h3>Para servicios de farmacia</h3>
-            <p>Ayuda a diagnosticar madurez, definir una hoja de ruta, medir indicadores y desplegar mejora continua con criterios compartidos.</p>
-          </article>
-          <article class="feature-card reveal">
-            <span class="icon">PC</span>
-            <h3>Para pacientes y cuidadores</h3>
-            <p>Ofrece materiales claros para preparar la consulta, organizar la medicación, comunicar dudas y participar en objetivos terapéuticos.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section alt" id="modelo">
-      <div class="container">
-        <div class="split">
-          <div class="section-heading compact reveal">
-            <span class="eyebrow">Modelo ADHEFAR-MAPEX</span>
-            <h2>De la guía a la práctica clínica real.</h2>
-            <p>El modelo integra adherencia, MAPEX, CMO, atención farmacéutica dual, indicadores y mejora continua en un ciclo operativo único.</p>
+          <div class="cmo-item mot">
+            <div class="cmo-dot"></div>
+            <div>
+              <div class="cmo-label">Motivación</div>
+              <div class="cmo-desc">Creencias, actitudes, intención y procesos de toma de decisiones sobre la medicación.</div>
+            </div>
           </div>
-          <div class="model-cycle reveal" aria-label="Ciclo ADHEFAR-MAPEX">
-            <div>Adherencia</div><div>MAPEX</div><div>CMO</div><div>Atención dual</div><div>Indicadores</div><div>Mejora continua</div>
+          <div class="cmo-item opp">
+            <div class="cmo-dot"></div>
+            <div>
+              <div class="cmo-label">Oportunidad</div>
+              <div class="cmo-desc">Factores del entorno: acceso, apoyo social, logística y estructura de seguimiento.</div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="motor-cmo">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">Motor CMO de barreras</span>
-          <h2>Identifica barreras y prioriza la intervención inicial.</h2>
-          <p>Selecciona las barreras observadas. No introduzcas datos identificativos de pacientes.</p>
+    <!-- Sello institucional -->
+    <div class="sello-strip">
+      <div class="container sello-inner">
+        <div class="sello-item">
+          <span class="sello-badge">SEFH</span>
+          <span>Sociedad Española de Farmacia Hospitalaria</span>
         </div>
-        <form class="interactive-card reveal" id="cmo-form">
-          <div class="barrier-grid">
-            <fieldset>
-              <legend>Capacidad</legend>
-              <label><input type="checkbox" name="capacidad" value="Complejidad terapéutica"> Complejidad terapéutica</label>
-              <label><input type="checkbox" name="capacidad" value="Fragilidad"> Fragilidad</label>
-              <label><input type="checkbox" name="capacidad" value="Eventos adversos"> Eventos adversos</label>
-              <label><input type="checkbox" name="capacidad" value="Deterioro cognitivo"> Deterioro cognitivo</label>
-              <label><input type="checkbox" name="capacidad" value="Baja alfabetización sanitaria"> Baja alfabetización sanitaria</label>
-            </fieldset>
-            <fieldset>
-              <legend>Motivación</legend>
-              <label><input type="checkbox" name="motivacion" value="Creencias negativas"> Creencias negativas</label>
-              <label><input type="checkbox" name="motivacion" value="Baja percepción de necesidad"> Baja percepción de necesidad</label>
-              <label><input type="checkbox" name="motivacion" value="Miedo a efectos adversos"> Miedo a efectos adversos</label>
-              <label><input type="checkbox" name="motivacion" value="Experiencias previas negativas"> Experiencias previas negativas</label>
-              <label><input type="checkbox" name="motivacion" value="Baja activación"> Baja activación</label>
-            </fieldset>
-            <fieldset>
-              <legend>Oportunidad</legend>
-              <label><input type="checkbox" name="oportunidad" value="Dificultad de acceso"> Dificultad de acceso</label>
-              <label><input type="checkbox" name="oportunidad" value="Falta de apoyo"> Falta de apoyo</label>
-              <label><input type="checkbox" name="oportunidad" value="Barreras tecnológicas"> Barreras tecnológicas</label>
-              <label><input type="checkbox" name="oportunidad" value="Problemas de dispensación"> Problemas de dispensación</label>
-              <label><input type="checkbox" name="oportunidad" value="Necesidad de telefarmacia"> Necesidad de telefarmacia</label>
-            </fieldset>
+        <div class="sello-item">
+          <span class="sello-badge">MAPEX</span>
+          <span>Marco de calidad de atención al paciente externo</span>
+        </div>
+        <div class="sello-item">
+          <span class="sello-badge">ADHEFAR</span>
+          <span>Grupo de trabajo de adherencia farmacéutica</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tres puertas de entrada -->
+    <section class="puertas section" aria-labelledby="puertas-titulo">
+      <div class="container">
+        <div class="section-header centered">
+          <span class="eyebrow">¿Para quién es este recurso?</span>
+          <h2 id="puertas-titulo">Selecciona tu perfil</h2>
+          <p class="lead">Cada sección está adaptada a las necesidades de su audiencia. Elige por dónde empezar.</p>
+        </div>
+        <div class="puertas-grid">
+          <a class="puerta farmaceutico" href="herramientas.html">
+            <div class="puerta-icon" aria-hidden="true">⚕</div>
+            <h3>Soy farmacéutico/a de hospital</h3>
+            <p>Accede a las herramientas de consulta: calculadora PDC/MPR, checklists de visita, guion ADHEFAR-EM, clasificador de barreras CMO y plantillas de registro.</p>
+            <span class="puerta-cta">Ir a Herramientas →</span>
+          </a>
+          <a class="puerta profesional" href="modelo.html">
+            <div class="puerta-icon" aria-hidden="true">🏥</div>
+            <h3>Soy otro profesional sanitario</h3>
+            <p>Entiende el circuito asistencial, el modelo CMO y el algoritmo ADHEFAR-EM de 7 pasos. Plantillas de comunicación multidisciplinar y decálogo de implantación.</p>
+            <span class="puerta-cta">Ir a El modelo →</span>
+          </a>
+          <a class="puerta paciente" href="pacientes.html">
+            <div class="puerta-icon" aria-hidden="true">🌿</div>
+            <h3>Soy paciente o cuidador/a</h3>
+            <p>Información en lenguaje claro sobre qué es la adherencia, qué esperar de la consulta de farmacia hospitalaria y cómo organizar mejor la medicación.</p>
+            <span class="puerta-cta">Ir a Pacientes →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Qué es -->
+    <section class="que-es section" aria-labelledby="que-es-titulo">
+      <div class="container">
+        <div class="grid-2">
+          <div class="section-header">
+            <span class="eyebrow">Qué es este hub</span>
+            <h2 id="que-es-titulo">De la guía a la práctica clínica real</h2>
+            <p class="lead">La Guía MAPEX-ADHEFAR (SEFH, 2026) remite a este recurso como complemento operativo para "operativizar su puesta en marcha". Aquí encontrarás las herramientas, algoritmos y materiales que la guía describe, listos para usar desde la consulta.</p>
+            <p class="lead" style="color:rgba(255,255,255,.65)">Este sitio no reproduce la guía: ofrece resúmenes propios y herramientas prácticas. Para el texto íntegro, acude a la publicación oficial en <a href="https://www.sefh.es/mapex" target="_blank" rel="noopener" style="color:rgba(255,255,255,.85)">sefh.es/mapex</a>.</p>
+            <div class="btn-group" style="margin-top:var(--sp-6)">
+              <a class="btn btn-hero-primary" href="modelo.html">Conocer el modelo</a>
+              <a class="btn btn-hero-secondary" href="implantacion.html">Implantación y calidad</a>
+            </div>
           </div>
-          <button class="btn btn-primary" type="submit">Calcular perfil CMO</button>
-          <div class="result-box" id="cmo-result" aria-live="polite"></div>
-        </form>
-      </div>
-    </section>
-
-    <section class="section alt" id="herramientas">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">Selector de herramientas</span>
-          <h2>Combina medición pragmática y rigor metodológico.</h2>
-        </div>
-        <form class="interactive-card form-grid reveal" id="tools-form">
-          <label>Tipo de tratamiento
-            <select name="tratamiento" required>
-              <option value="">Seleccionar</option><option value="oral">Oral</option><option value="inyectable">Inyectable</option><option value="mixto">Mixto</option>
-            </select>
-          </label>
-          <label>Recursos disponibles
-            <select name="recursos" required>
-              <option value="">Seleccionar</option><option value="basicos">Básicos</option><option value="intermedios">Intermedios</option><option value="avanzados">Avanzados</option>
-            </select>
-          </label>
-          <label>Contexto
-            <select name="contexto" required>
-              <option value="">Seleccionar</option><option value="presencial">Presencial</option><option value="telematico">Telemático</option><option value="dual">Dual</option>
-            </select>
-          </label>
-          <label>Necesidad
-            <select name="necesidad" required>
-              <option value="">Seleccionar</option><option value="cribado">Cribado</option><option value="seguimiento">Seguimiento</option><option value="evaluacion">Evaluación de intervención</option>
-            </select>
-          </label>
-          <button class="btn btn-primary span-all" type="submit">Calcular herramientas</button>
-          <div class="result-box span-all" id="tools-result" aria-live="polite"></div>
-        </form>
-      </div>
-    </section>
-
-    <section class="section" id="madurez">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">Diagnóstico de madurez del servicio</span>
-          <h2>Evalúa tu punto de partida y activa una hoja de ruta 30-60-90 días.</h2>
-        </div>
-        <form class="interactive-card reveal" id="maturity-form">
-          <div class="check-grid">
-            <label><input type="checkbox" value="1"> Medimos adherencia de forma sistemática</label>
-            <label><input type="checkbox" value="1"> Registramos intervenciones</label>
-            <label><input type="checkbox" value="1"> Usamos herramientas validadas</label>
-            <label><input type="checkbox" value="1"> Aplicamos CMO</label>
-            <label><input type="checkbox" value="1"> Tenemos telefarmacia</label>
-            <label><input type="checkbox" value="1"> Usamos indicadores</label>
-            <label><input type="checkbox" value="1"> Evaluamos experiencia del paciente</label>
-            <label><input type="checkbox" value="1"> Tenemos ciclos de mejora continua</label>
+          <div class="decalogo-preview" aria-labelledby="decalogo-preview-titulo">
+            <h3 id="decalogo-preview-titulo">Decálogo MAPEX-ADHEFAR</h3>
+            <ol>
+              <li><strong>La adherencia se mide en todas las visitas.</strong></li>
+              <li><strong>La estratificación es obligatoria y dinámica.</strong></li>
+              <li><strong>El farmacéutico de hospital debe identificar la causa real del incumplimiento.</strong></li>
+              <li><strong>Las intervenciones deben ser personalizadas y adaptadas.</strong></li>
+              <li><strong>La decisión es siempre compartida.</strong></li>
+              <li><strong>La atención dual debe incorporarse como práctica habitual.</strong></li>
+              <li><strong>Los PROMs y PREMs son indicadores clínicos obligatorios.</strong></li>
+              <li><strong>El registro estructurado es parte de la actuación clínica.</strong></li>
+              <li><strong>La coordinación multidisciplinar es estándar de seguimiento.</strong></li>
+              <li><strong>El seguimiento debe ser siempre longitudinal y proactivo.</strong></li>
+            </ol>
+            <div style="margin-top:var(--sp-5)">
+              <a class="btn btn-hero-secondary btn-sm" href="modelo.html#decalogo">Ver decálogo completo →</a>
+            </div>
           </div>
-          <button class="btn btn-primary" type="submit">Calcular madurez</button>
-          <div class="result-box" id="maturity-result" aria-live="polite"></div>
-        </form>
-      </div>
-    </section>
-
-    <section class="section alt" id="intervenciones">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">Biblioteca de intervenciones</span>
-          <h2>Intervenciones accionables alineadas con CMO.</h2>
-        </div>
-        <div class="filter-bar reveal" role="group" aria-label="Filtros de intervención">
-          <button class="filter-btn active" type="button" data-filter="all">Todas</button>
-          <button class="filter-btn" type="button" data-filter="capacidad">Capacidad</button>
-          <button class="filter-btn" type="button" data-filter="motivacion">Motivación</button>
-          <button class="filter-btn" type="button" data-filter="oportunidad">Oportunidad</button>
-        </div>
-        <div class="card-grid interventions" id="intervention-grid">
-          <article class="intervention-card" data-category="capacidad"><span>Capacidad</span><h3>Simplificación terapéutica</h3><p>Revisar régimen, tomas y coordinación prescriptora cuando proceda.</p></article>
-          <article class="intervention-card" data-category="capacidad"><span>Capacidad</span><h3>Revisión de complejidad</h3><p>Detectar puntos críticos del tratamiento y adaptar instrucciones.</p></article>
-          <article class="intervention-card" data-category="capacidad"><span>Capacidad</span><h3>Manejo de eventos adversos</h3><p>Anticipar, monitorizar y pactar actuación ante toxicidad o molestias.</p></article>
-          <article class="intervention-card" data-category="capacidad"><span>Capacidad</span><h3>Educación sanitaria adaptada</h3><p>Material comprensible, teach-back y apoyo visual según alfabetización.</p></article>
-          <article class="intervention-card" data-category="motivacion"><span>Motivación</span><h3>Entrevista motivacional breve</h3><p>Explorar ambivalencia y reforzar autonomía del paciente.</p></article>
-          <article class="intervention-card" data-category="motivacion"><span>Motivación</span><h3>Objetivos farmacoterapéuticos</h3><p>Pactar metas significativas, realistas y evaluables.</p></article>
-          <article class="intervention-card" data-category="motivacion"><span>Motivación</span><h3>Refuerzo positivo</h3><p>Reconocer logros y transformar datos en feedback útil.</p></article>
-          <article class="intervention-card" data-category="motivacion"><span>Motivación</span><h3>Exploración de creencias</h3><p>Identificar ideas, preocupaciones y expectativas sobre el tratamiento.</p></article>
-          <article class="intervention-card" data-category="oportunidad"><span>Oportunidad</span><h3>Telefarmacia</h3><p>Combinar seguimiento remoto con criterios de presencialidad.</p></article>
-          <article class="intervention-card" data-category="oportunidad"><span>Oportunidad</span><h3>Recordatorios</h3><p>Usar alarmas, apps o apoyos simples adaptados al paciente.</p></article>
-          <article class="intervention-card" data-category="oportunidad"><span>Oportunidad</span><h3>Coordinación con cuidadores</h3><p>Definir roles, señales de alarma y comunicación segura.</p></article>
-          <article class="intervention-card" data-category="oportunidad"><span>Oportunidad</span><h3>Seguimiento remoto</h3><p>Monitorizar hitos, incidencias y respuesta a intervenciones.</p></article>
-          <article class="intervention-card" data-category="oportunidad"><span>Oportunidad</span><h3>Accesibilidad al tratamiento</h3><p>Optimizar circuitos de dispensación y acceso cuando sea posible.</p></article>
         </div>
       </div>
     </section>
 
-    <section class="section" id="dashboard">
+    <!-- Qué ofrece -->
+    <section class="que-ofrece section" aria-labelledby="ofrece-titulo">
       <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">Cuadro de mando conceptual</span>
-          <h2>Indicadores demostrativos para transformar actividad en mejora.</h2>
+        <div class="section-header centered">
+          <span class="eyebrow">Contenido del hub</span>
+          <h2 id="ofrece-titulo">Ocho secciones, un objetivo</h2>
+          <p class="lead">Todo el contenido está organizado para ser consultado en el momento y lugar en que se necesita: en consulta, en sesión clínica o en la planificación del servicio.</p>
         </div>
-        <div class="dashboard-grid reveal">
-          <div class="metric-card"><span>128</span><p>Pacientes evaluados</p></div>
-          <div class="metric-card warning"><span>34%</span><p>Adherencia subóptima</p></div>
-          <div class="metric-card"><span>217</span><p>Barreras detectadas</p></div>
-          <div class="metric-card"><span>91</span><p>Intervenciones realizadas</p></div>
-          <div class="metric-card accent"><span>46%</span><p>Seguimiento dual</p></div>
-          <div class="metric-card"><span>72%</span><p>Objetivos alcanzados</p></div>
-          <div class="metric-card"><span>8,6</span><p>PROMs/PREMs</p></div>
-          <div class="metric-card success"><span>+22%</span><p>Mejora tras intervención</p></div>
+        <div class="grid-4">
+          <a class="feature-card" href="modelo.html" style="text-decoration:none">
+            <div class="feature-icon violeta" aria-hidden="true">◈</div>
+            <h3>El modelo</h3>
+            <p>CMO, taxonomía ABC, algoritmo ADHEFAR-EM de 7 pasos y decálogo de implantación.</p>
+          </a>
+          <a class="feature-card" href="herramientas.html" style="text-decoration:none">
+            <div class="feature-icon azul" aria-hidden="true">⚙</div>
+            <h3>Herramientas</h3>
+            <p>Calculadora PDC/MPR, checklists de visita, guion de 10 min, clasificador CMO y plantillas.</p>
+          </a>
+          <a class="feature-card" href="implantacion.html" style="text-decoration:none">
+            <div class="feature-icon verde" aria-hidden="true">📊</div>
+            <h3>Implantación</h3>
+            <p>Autoevaluación, cuadro de mando configurable, hoja de ruta por fases y Q-PEX.</p>
+          </a>
+          <a class="feature-card" href="casos.html" style="text-decoration:none">
+            <div class="feature-icon ambar" aria-hidden="true">📋</div>
+            <h3>Casos prácticos</h3>
+            <p>Cuatro casos reales de la guía: IC, artritis reumatoide, esclerosis múltiple, asma grave.</p>
+          </a>
+          <a class="feature-card" href="glosario.html" style="text-decoration:none">
+            <div class="feature-icon azul" aria-hidden="true">📖</div>
+            <h3>Glosario</h3>
+            <p>Términos canónicos: PDC, MPR, OFT, PROMs, PREMs, MAPEX, Q-PEX y más, con buscador.</p>
+          </a>
+          <a class="feature-card" href="pacientes.html" style="text-decoration:none">
+            <div class="feature-icon verde" aria-hidden="true">🌿</div>
+            <h3>Para pacientes</h3>
+            <p>Contenido en lenguaje llano sobre adherencia, consulta de farmacia y organización del tratamiento.</p>
+          </a>
+          <a class="feature-card" href="acerca.html" style="text-decoration:none">
+            <div class="feature-icon violeta" aria-hidden="true">ℹ</div>
+            <h3>Acerca de</h3>
+            <p>Créditos, cita oficial de la guía, grupo ADHEFAR, MAPEX, SEFH y aviso legal.</p>
+          </a>
+          <div class="feature-card" style="background:var(--c-fondo);border-style:dashed">
+            <div class="feature-icon" style="background:var(--c-fondo);font-size:1.6rem" aria-hidden="true">🔒</div>
+            <h3>Sin datos personales</h3>
+            <p>Ninguna herramienta recoge ni envía datos identificativos. Todo se procesa en tu navegador.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section alt" id="paciente">
+    <!-- Aviso de privacidad -->
+    <section class="section section-alt" aria-label="Aviso de privacidad y uso">
       <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">Área paciente</span>
-          <h2>Información clara para participar mejor en tu tratamiento.</h2>
-          <p>Estos contenidos ayudan a preparar conversaciones con profesionales sanitarios.</p>
-        </div>
-        <div class="card-grid patient-grid reveal">
-          <article><h3>Entiende tu tratamiento</h3><p>Pregunta para qué sirve, cómo tomarlo y qué señales debes vigilar.</p></article>
-          <article><h3>Prepara tu consulta</h3><p>Anota dudas, olvidos, efectos adversos y cambios de rutina.</p></article>
-          <article><h3>Si olvidas una dosis</h3><p>No improvises: consulta las instrucciones recibidas o contacta con tu equipo.</p></article>
-          <article><h3>Organiza tu medicación</h3><p>Usa horarios, pastilleros, alarmas o ayuda de cuidadores si lo necesitas.</p></article>
-          <article><h3>Comunica dudas</h3><p>Explica qué te preocupa y qué barreras reales aparecen en tu día a día.</p></article>
-          <article><h3>Diario de tomas</h3><p>Registra tomas, incidencias y objetivos para revisarlos en consulta.</p></article>
-          <article><h3>Hoja de objetivos</h3><p>Define metas concretas junto con tu equipo sanitario.</p></article>
-        </div>
-        <p class="notice reveal">Aviso: esta información no sustituye la valoración individual por profesionales sanitarios.</p>
-      </div>
-    </section>
-
-    <section class="section" id="formacion">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">Modo formación</span>
-          <h2>Tres casos demostrativos para entrenar razonamiento CMO.</h2>
-        </div>
-        <div class="card-grid three reveal">
-          <article class="case-card"><h3>Polifarmacia y olvidos</h3><p>Recomendación CMO inicial: predominio de Capacidad. Priorizar revisión de complejidad, simplificación y recordatorios.</p></article>
-          <article class="case-card"><h3>Baja motivación</h3><p>Recomendación CMO inicial: predominio de Motivación. Explorar creencias, necesidad percibida y objetivos significativos.</p></article>
-          <article class="case-card"><h3>Barreras de acceso</h3><p>Recomendación CMO inicial: predominio de Oportunidad. Valorar telefarmacia, coordinación y circuitos de dispensación.</p></article>
+        <div class="notice notice-privacidad" style="max-width:860px;margin-inline:auto">
+          <div class="notice-icon" aria-hidden="true">🛡</div>
+          <div>
+            <strong>Privacidad y protección de datos.</strong> Esta web no recoge, almacena ni envía ningún dato personal. Todas las herramientas funcionan íntegramente en tu navegador. Si alguna herramienta usa el almacenamiento local del navegador para guardar configuraciones del servicio, lo indicará explícitamente y ofrecerá exportación. Nunca introduzcas datos identificativos de pacientes (nombre, NHC, fecha de nacimiento) en ningún campo.
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section alt" id="informe">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">Generador de informe básico</span>
-          <h2>Redacta un resumen orientativo sin datos identificativos.</h2>
-        </div>
-        <form class="interactive-card form-grid reveal" id="report-form">
-          <label>Perfil de barreras<input name="perfil" type="text" placeholder="Ej.: Capacidad y Oportunidad" required></label>
-          <label>Herramienta recomendada<input name="herramienta" type="text" placeholder="Ej.: entrevista + registro de dispensación" required></label>
-          <label>Intervención sugerida<input name="intervencion" type="text" placeholder="Ej.: educación adaptada y telefarmacia" required></label>
-          <label>Seguimiento propuesto<input name="seguimiento" type="text" placeholder="Ej.: dual en 4 semanas" required></label>
-          <label class="span-all">Indicador de evaluación<input name="indicador" type="text" placeholder="Ej.: PDC, barreras resueltas, objetivo alcanzado" required></label>
-          <button class="btn btn-primary" type="submit">Generar informe</button>
-          <button class="btn btn-secondary" type="button" id="copy-report">Copiar informe</button>
-          <textarea class="span-all report-output" id="report-output" rows="8" readonly aria-label="Informe generado"></textarea>
-          <div class="result-box span-all" id="report-message" aria-live="polite"></div>
-        </form>
-      </div>
-    </section>
-
-    <section class="section legal" id="legal">
-      <div class="container">
-        <div class="legal-card reveal">
-          <h2>Aviso legal y protección de datos</h2>
-          <ul>
-            <li>Herramienta de apoyo profesional y educativo.</li>
-            <li>No sustituye el juicio clínico.</li>
-            <li>No deben introducirse datos identificativos de pacientes.</li>
-            <li>Uso orientativo basado en la Guía ADHEFAR-MAPEX.</li>
-            <li>Diseñada bajo principios de minimización de datos y privacidad desde el diseño.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div><strong>ADHEFAR360</strong><p>Innovación prudente, rigor institucional y aplicabilidad inmediata.</p></div>
-      <a href="#top">Volver arriba</a>
-    </div>
-  </footer>
-
-  <script src="./script.js"></script>
+  <div id="site-footer-placeholder"></div>
+  <script src="js/nav.js"></script>
 </body>
 </html>

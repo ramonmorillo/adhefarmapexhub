@@ -1,0 +1,108 @@
+:root {
+  /* Pilares CMO */
+  --c-capacidad: #2563EB;
+  --c-capacidad-claro: #EFF6FF;
+  --c-capacidad-oscuro: #1D4ED8;
+  --c-capacidad-texto: #1E40AF;
+
+  --c-motivacion: #D97706;
+  --c-motivacion-claro: #FFFBEB;
+  --c-motivacion-oscuro: #B45309;
+  --c-motivacion-texto: #92400E;
+
+  --c-oportunidad: #059669;
+  --c-oportunidad-claro: #ECFDF5;
+  --c-oportunidad-oscuro: #047857;
+  --c-oportunidad-texto: #065F46;
+
+  /* Institucional */
+  --c-institucional: #1E3A5F;
+  --c-institucional-claro: #E8EEF6;
+  --c-acento: #6D28D9;
+  --c-acento-claro: #EDE9FE;
+  --c-acento-texto: #4C1D95;
+
+  /* Semáforo */
+  --c-ok: #059669;
+  --c-ok-claro: #D1FAE5;
+  --c-parcial: #D97706;
+  --c-parcial-claro: #FEF3C7;
+  --c-no: #DC2626;
+  --c-no-claro: #FEE2E2;
+
+  /* Neutros */
+  --c-fondo: #F8FAFC;
+  --c-superficie: #FFFFFF;
+  --c-texto: #1E293B;
+  --c-texto-secundario: #475569;
+  --c-texto-tenue: #94A3B8;
+  --c-borde: #CBD5E1;
+  --c-borde-claro: #E2E8F0;
+
+  /* Tipografía */
+  --ff-display: 'Source Serif 4', Georgia, serif;
+  --ff-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --fs-xs:   0.778rem;  /* ~14px */
+  --fs-sm:   0.889rem;  /* ~16px */
+  --fs-base: 1rem;      /* 18px  */
+  --fs-md:   1.111rem;  /* ~20px */
+  --fs-lg:   1.333rem;  /* ~24px */
+  --fs-xl:   1.556rem;  /* ~28px */
+  --fs-2xl:  2rem;      /* ~36px */
+  --fs-3xl:  2.444rem;  /* ~44px */
+  --fs-4xl:  3.111rem;  /* ~56px */
+
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semi:    600;
+
+  --lh-tight:  1.2;
+  --lh-snug:   1.4;
+  --lh-base:   1.65;
+  --lh-loose:  1.8;
+
+  /* Espaciado (base 4px) */
+  --sp-1:  0.222rem;  /* 4px  */
+  --sp-2:  0.444rem;  /* 8px  */
+  --sp-3:  0.667rem;  /* 12px */
+  --sp-4:  0.889rem;  /* 16px */
+  --sp-5:  1.333rem;  /* 24px */
+  --sp-6:  1.778rem;  /* 32px */
+  --sp-7:  2.222rem;  /* 40px */
+  --sp-8:  2.667rem;  /* 48px */
+  --sp-10: 3.556rem;  /* 64px */
+  --sp-12: 4.444rem;  /* 80px */
+  --sp-14: 5.333rem;  /* 96px */
+  --sp-16: 7.111rem;  /* 128px */
+
+  /* Radios */
+  --radius-sm:    4px;
+  --radius:       8px;
+  --radius-card:  12px;
+  --radius-lg:    16px;
+  --radius-pill:  999px;
+
+  /* Sombras */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,.06);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.06);
+  --shadow-md: 0 2px 6px rgba(0,0,0,.08), 0 8px 24px rgba(0,0,0,.08);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,.08), 0 16px 48px rgba(0,0,0,.1);
+
+  /* Anchura máxima */
+  --max-w: 1200px;
+  --max-w-prose: 72ch;
+
+  /* Transiciones */
+  --t-fast:   150ms ease;
+  --t-base:   250ms ease;
+  --t-slow:   400ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-fast: 0ms;
+    --t-base: 0ms;
+    --t-slow: 0ms;
+  }
+}

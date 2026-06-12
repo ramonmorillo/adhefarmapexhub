@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ADHEFAR360: plataforma inteligente para medir, monitorizar y mejorar la adherencia en consultas externas de Farmacia Hospitalaria.">
+  <title>ADHEFAR360 | Adherencia en Farmacia Hospitalaria</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="site-header" id="top">
+    <nav class="navbar" aria-label="Navegación principal">
+      <a class="brand" href="#inicio" aria-label="ADHEFAR360 inicio">
+        <span class="brand-mark">360</span>
+        <span><strong>ADHEFAR</strong>360</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-menu">
+        <span></span><span></span><span></span>
+        <span class="sr-only">Abrir menú</span>
+      </button>
+      <ul class="nav-menu" id="main-menu">
+        <li><a href="#que-es">Qué es</a></li>
+        <li><a href="#modelo">Modelo</a></li>
+        <li><a href="#motor-cmo">Motor CMO</a></li>
+        <li><a href="#herramientas">Herramientas</a></li>
+        <li><a href="#madurez">Madurez</a></li>
+        <li><a href="#paciente">Paciente</a></li>
+        <li><a class="nav-cta" href="#informe">Informe</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero section" id="inicio">
+      <div class="hero-bg"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <span class="eyebrow">Guía ADHEFAR-MAPEX · Implementación práctica</span>
+          <h1>ADHEFAR360</h1>
+          <p class="hero-subtitle">Plataforma inteligente para medir, monitorizar y mejorar la adherencia en Farmacia Hospitalaria</p>
+          <p class="hero-text">De la guía a la práctica. Del dato a la intervención. De la intervención a la mejora continua.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#que-es">Explorar plataforma</a>
+            <a class="btn btn-secondary" href="#madurez">Evaluar mi servicio</a>
+            <a class="btn btn-ghost" href="#motor-cmo">Valorar un caso</a>
+          </div>
+        </div>
+        <div class="hero-panel reveal" aria-label="Resumen visual ADHEFAR360">
+          <div class="orbital-card main-card">
+            <span class="badge">CMO</span>
+            <h2>Medir, intervenir, evaluar y mejorar.</h2>
+            <p>Capacidad, Motivación y Oportunidad como motor de adherencia.</p>
+          </div>
+          <div class="mini-card card-a">Indicadores</div>
+          <div class="mini-card card-b">Telefarmacia</div>
+          <div class="mini-card card-c">PROMs/PREMs</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="que-es">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Qué es ADHEFAR360</span>
+          <h2>No es una web informativa: es una plataforma de implementación.</h2>
+          <p>ADHEFAR360 convierte la adherencia en un proceso medible, intervenible y evaluable. Aterriza la Guía ADHEFAR-MAPEX en decisiones, circuitos, indicadores y materiales aplicables desde la consulta externa.</p>
+        </div>
+        <div class="card-grid three">
+          <article class="feature-card reveal">
+            <span class="icon">FH</span>
+            <h3>Para farmacéuticos de hospital</h3>
+            <p>Facilita la valoración estructurada, la identificación de barreras CMO, la selección de herramientas y la planificación del seguimiento.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="icon">SF</span>
+            <h3>Para servicios de farmacia</h3>
+            <p>Ayuda a diagnosticar madurez, definir una hoja de ruta, medir indicadores y desplegar mejora continua con criterios compartidos.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="icon">PC</span>
+            <h3>Para pacientes y cuidadores</h3>
+            <p>Ofrece materiales claros para preparar la consulta, organizar la medicación, comunicar dudas y participar en objetivos terapéuticos.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="modelo">
+      <div class="container">
+        <div class="split">
+          <div class="section-heading compact reveal">
+            <span class="eyebrow">Modelo ADHEFAR-MAPEX</span>
+            <h2>De la guía a la práctica clínica real.</h2>
+            <p>El modelo integra adherencia, MAPEX, CMO, atención farmacéutica dual, indicadores y mejora continua en un ciclo operativo único.</p>
+          </div>
+          <div class="model-cycle reveal" aria-label="Ciclo ADHEFAR-MAPEX">
+            <div>Adherencia</div><div>MAPEX</div><div>CMO</div><div>Atención dual</div><div>Indicadores</div><div>Mejora continua</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="motor-cmo">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Motor CMO de barreras</span>
+          <h2>Identifica barreras y prioriza la intervención inicial.</h2>
+          <p>Selecciona las barreras observadas. No introduzcas datos identificativos de pacientes.</p>
+        </div>
+        <form class="interactive-card reveal" id="cmo-form">
+          <div class="barrier-grid">
+            <fieldset>
+              <legend>Capacidad</legend>
+              <label><input type="checkbox" name="capacidad" value="Complejidad terapéutica"> Complejidad terapéutica</label>
+              <label><input type="checkbox" name="capacidad" value="Fragilidad"> Fragilidad</label>
+              <label><input type="checkbox" name="capacidad" value="Eventos adversos"> Eventos adversos</label>
+              <label><input type="checkbox" name="capacidad" value="Deterioro cognitivo"> Deterioro cognitivo</label>
+              <label><input type="checkbox" name="capacidad" value="Baja alfabetización sanitaria"> Baja alfabetización sanitaria</label>
+            </fieldset>
+            <fieldset>
+              <legend>Motivación</legend>
+              <label><input type="checkbox" name="motivacion" value="Creencias negativas"> Creencias negativas</label>
+              <label><input type="checkbox" name="motivacion" value="Baja percepción de necesidad"> Baja percepción de necesidad</label>
+              <label><input type="checkbox" name="motivacion" value="Miedo a efectos adversos"> Miedo a efectos adversos</label>
+              <label><input type="checkbox" name="motivacion" value="Experiencias previas negativas"> Experiencias previas negativas</label>
+              <label><input type="checkbox" name="motivacion" value="Baja activación"> Baja activación</label>
+            </fieldset>
+            <fieldset>
+              <legend>Oportunidad</legend>
+              <label><input type="checkbox" name="oportunidad" value="Dificultad de acceso"> Dificultad de acceso</label>
+              <label><input type="checkbox" name="oportunidad" value="Falta de apoyo"> Falta de apoyo</label>
+              <label><input type="checkbox" name="oportunidad" value="Barreras tecnológicas"> Barreras tecnológicas</label>
+              <label><input type="checkbox" name="oportunidad" value="Problemas de dispensación"> Problemas de dispensación</label>
+              <label><input type="checkbox" name="oportunidad" value="Necesidad de telefarmacia"> Necesidad de telefarmacia</label>
+            </fieldset>
+          </div>
+          <button class="btn btn-primary" type="submit">Calcular perfil CMO</button>
+          <div class="result-box" id="cmo-result" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section alt" id="herramientas">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Selector de herramientas</span>
+          <h2>Combina medición pragmática y rigor metodológico.</h2>
+        </div>
+        <form class="interactive-card form-grid reveal" id="tools-form">
+          <label>Tipo de tratamiento
+            <select name="tratamiento" required>
+              <option value="">Seleccionar</option><option value="oral">Oral</option><option value="inyectable">Inyectable</option><option value="mixto">Mixto</option>
+            </select>
+          </label>
+          <label>Recursos disponibles
+            <select name="recursos" required>
+              <option value="">Seleccionar</option><option value="basicos">Básicos</option><option value="intermedios">Intermedios</option><option value="avanzados">Avanzados</option>
+            </select>
+          </label>
+          <label>Contexto
+            <select name="contexto" required>
+              <option value="">Seleccionar</option><option value="presencial">Presencial</option><option value="telematico">Telemático</option><option value="dual">Dual</option>
+            </select>
+          </label>
+          <label>Necesidad
+            <select name="necesidad" required>
+              <option value="">Seleccionar</option><option value="cribado">Cribado</option><option value="seguimiento">Seguimiento</option><option value="evaluacion">Evaluación de intervención</option>
+            </select>
+          </label>
+          <button class="btn btn-primary span-all" type="submit">Calcular herramientas</button>
+          <div class="result-box span-all" id="tools-result" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section" id="madurez">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Diagnóstico de madurez del servicio</span>
+          <h2>Evalúa tu punto de partida y activa una hoja de ruta 30-60-90 días.</h2>
+        </div>
+        <form class="interactive-card reveal" id="maturity-form">
+          <div class="check-grid">
+            <label><input type="checkbox" value="1"> Medimos adherencia de forma sistemática</label>
+            <label><input type="checkbox" value="1"> Registramos intervenciones</label>
+            <label><input type="checkbox" value="1"> Usamos herramientas validadas</label>
+            <label><input type="checkbox" value="1"> Aplicamos CMO</label>
+            <label><input type="checkbox" value="1"> Tenemos telefarmacia</label>
+            <label><input type="checkbox" value="1"> Usamos indicadores</label>
+            <label><input type="checkbox" value="1"> Evaluamos experiencia del paciente</label>
+            <label><input type="checkbox" value="1"> Tenemos ciclos de mejora continua</label>
+          </div>
+          <button class="btn btn-primary" type="submit">Calcular madurez</button>
+          <div class="result-box" id="maturity-result" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section alt" id="intervenciones">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Biblioteca de intervenciones</span>
+          <h2>Intervenciones accionables alineadas con CMO.</h2>
+        </div>
+        <div class="filter-bar reveal" role="group" aria-label="Filtros de intervención">
+          <button class="filter-btn active" type="button" data-filter="all">Todas</button>
+          <button class="filter-btn" type="button" data-filter="capacidad">Capacidad</button>
+          <button class="filter-btn" type="button" data-filter="motivacion">Motivación</button>
+          <button class="filter-btn" type="button" data-filter="oportunidad">Oportunidad</button>
+        </div>
+        <div class="card-grid interventions" id="intervention-grid">
+          <article class="intervention-card" data-category="capacidad"><span>Capacidad</span><h3>Simplificación terapéutica</h3><p>Revisar régimen, tomas y coordinación prescriptora cuando proceda.</p></article>
+          <article class="intervention-card" data-category="capacidad"><span>Capacidad</span><h3>Revisión de complejidad</h3><p>Detectar puntos críticos del tratamiento y adaptar instrucciones.</p></article>
+          <article class="intervention-card" data-category="capacidad"><span>Capacidad</span><h3>Manejo de eventos adversos</h3><p>Anticipar, monitorizar y pactar actuación ante toxicidad o molestias.</p></article>
+          <article class="intervention-card" data-category="capacidad"><span>Capacidad</span><h3>Educación sanitaria adaptada</h3><p>Material comprensible, teach-back y apoyo visual según alfabetización.</p></article>
+          <article class="intervention-card" data-category="motivacion"><span>Motivación</span><h3>Entrevista motivacional breve</h3><p>Explorar ambivalencia y reforzar autonomía del paciente.</p></article>
+          <article class="intervention-card" data-category="motivacion"><span>Motivación</span><h3>Objetivos farmacoterapéuticos</h3><p>Pactar metas significativas, realistas y evaluables.</p></article>
+          <article class="intervention-card" data-category="motivacion"><span>Motivación</span><h3>Refuerzo positivo</h3><p>Reconocer logros y transformar datos en feedback útil.</p></article>
+          <article class="intervention-card" data-category="motivacion"><span>Motivación</span><h3>Exploración de creencias</h3><p>Identificar ideas, preocupaciones y expectativas sobre el tratamiento.</p></article>
+          <article class="intervention-card" data-category="oportunidad"><span>Oportunidad</span><h3>Telefarmacia</h3><p>Combinar seguimiento remoto con criterios de presencialidad.</p></article>
+          <article class="intervention-card" data-category="oportunidad"><span>Oportunidad</span><h3>Recordatorios</h3><p>Usar alarmas, apps o apoyos simples adaptados al paciente.</p></article>
+          <article class="intervention-card" data-category="oportunidad"><span>Oportunidad</span><h3>Coordinación con cuidadores</h3><p>Definir roles, señales de alarma y comunicación segura.</p></article>
+          <article class="intervention-card" data-category="oportunidad"><span>Oportunidad</span><h3>Seguimiento remoto</h3><p>Monitorizar hitos, incidencias y respuesta a intervenciones.</p></article>
+          <article class="intervention-card" data-category="oportunidad"><span>Oportunidad</span><h3>Accesibilidad al tratamiento</h3><p>Optimizar circuitos de dispensación y acceso cuando sea posible.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="dashboard">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Cuadro de mando conceptual</span>
+          <h2>Indicadores demostrativos para transformar actividad en mejora.</h2>
+        </div>
+        <div class="dashboard-grid reveal">
+          <div class="metric-card"><span>128</span><p>Pacientes evaluados</p></div>
+          <div class="metric-card warning"><span>34%</span><p>Adherencia subóptima</p></div>
+          <div class="metric-card"><span>217</span><p>Barreras detectadas</p></div>
+          <div class="metric-card"><span>91</span><p>Intervenciones realizadas</p></div>
+          <div class="metric-card accent"><span>46%</span><p>Seguimiento dual</p></div>
+          <div class="metric-card"><span>72%</span><p>Objetivos alcanzados</p></div>
+          <div class="metric-card"><span>8,6</span><p>PROMs/PREMs</p></div>
+          <div class="metric-card success"><span>+22%</span><p>Mejora tras intervención</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="paciente">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Área paciente</span>
+          <h2>Información clara para participar mejor en tu tratamiento.</h2>
+          <p>Estos contenidos ayudan a preparar conversaciones con profesionales sanitarios.</p>
+        </div>
+        <div class="card-grid patient-grid reveal">
+          <article><h3>Entiende tu tratamiento</h3><p>Pregunta para qué sirve, cómo tomarlo y qué señales debes vigilar.</p></article>
+          <article><h3>Prepara tu consulta</h3><p>Anota dudas, olvidos, efectos adversos y cambios de rutina.</p></article>
+          <article><h3>Si olvidas una dosis</h3><p>No improvises: consulta las instrucciones recibidas o contacta con tu equipo.</p></article>
+          <article><h3>Organiza tu medicación</h3><p>Usa horarios, pastilleros, alarmas o ayuda de cuidadores si lo necesitas.</p></article>
+          <article><h3>Comunica dudas</h3><p>Explica qué te preocupa y qué barreras reales aparecen en tu día a día.</p></article>
+          <article><h3>Diario de tomas</h3><p>Registra tomas, incidencias y objetivos para revisarlos en consulta.</p></article>
+          <article><h3>Hoja de objetivos</h3><p>Define metas concretas junto con tu equipo sanitario.</p></article>
+        </div>
+        <p class="notice reveal">Aviso: esta información no sustituye la valoración individual por profesionales sanitarios.</p>
+      </div>
+    </section>
+
+    <section class="section" id="formacion">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Modo formación</span>
+          <h2>Tres casos demostrativos para entrenar razonamiento CMO.</h2>
+        </div>
+        <div class="card-grid three reveal">
+          <article class="case-card"><h3>Polifarmacia y olvidos</h3><p>Recomendación CMO inicial: predominio de Capacidad. Priorizar revisión de complejidad, simplificación y recordatorios.</p></article>
+          <article class="case-card"><h3>Baja motivación</h3><p>Recomendación CMO inicial: predominio de Motivación. Explorar creencias, necesidad percibida y objetivos significativos.</p></article>
+          <article class="case-card"><h3>Barreras de acceso</h3><p>Recomendación CMO inicial: predominio de Oportunidad. Valorar telefarmacia, coordinación y circuitos de dispensación.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="informe">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Generador de informe básico</span>
+          <h2>Redacta un resumen orientativo sin datos identificativos.</h2>
+        </div>
+        <form class="interactive-card form-grid reveal" id="report-form">
+          <label>Perfil de barreras<input name="perfil" type="text" placeholder="Ej.: Capacidad y Oportunidad" required></label>
+          <label>Herramienta recomendada<input name="herramienta" type="text" placeholder="Ej.: entrevista + registro de dispensación" required></label>
+          <label>Intervención sugerida<input name="intervencion" type="text" placeholder="Ej.: educación adaptada y telefarmacia" required></label>
+          <label>Seguimiento propuesto<input name="seguimiento" type="text" placeholder="Ej.: dual en 4 semanas" required></label>
+          <label class="span-all">Indicador de evaluación<input name="indicador" type="text" placeholder="Ej.: PDC, barreras resueltas, objetivo alcanzado" required></label>
+          <button class="btn btn-primary" type="submit">Generar informe</button>
+          <button class="btn btn-secondary" type="button" id="copy-report">Copiar informe</button>
+          <textarea class="span-all report-output" id="report-output" rows="8" readonly aria-label="Informe generado"></textarea>
+          <div class="result-box span-all" id="report-message" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section legal" id="legal">
+      <div class="container">
+        <div class="legal-card reveal">
+          <h2>Aviso legal y protección de datos</h2>
+          <ul>
+            <li>Herramienta de apoyo profesional y educativo.</li>
+            <li>No sustituye el juicio clínico.</li>
+            <li>No deben introducirse datos identificativos de pacientes.</li>
+            <li>Uso orientativo basado en la Guía ADHEFAR-MAPEX.</li>
+            <li>Diseñada bajo principios de minimización de datos y privacidad desde el diseño.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><strong>ADHEFAR360</strong><p>Innovación prudente, rigor institucional y aplicabilidad inmediata.</p></div>
+      <a href="#top">Volver arriba</a>
+    </div>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>

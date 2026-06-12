@@ -1,0 +1,107 @@
+@media print {
+  /* Ocultar navegación y controles */
+  .site-header,
+  .site-footer,
+  .nav-toggle,
+  .btn-group,
+  .no-print,
+  .btn:not(.print-visible) {
+    display: none !important;
+  }
+
+  /* Base de impresión */
+  body {
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+    font-family: Georgia, serif;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: Georgia, serif;
+    color: #000;
+    page-break-after: avoid;
+  }
+
+  /* Mostrar URL en enlaces */
+  a::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+  }
+  a[href^="#"]::after,
+  a[href^="javascript"]::after {
+    content: "";
+  }
+
+  /* Tarjetas: sin sombra ni borde decorativo */
+  .card, .pillar-card, .feature-card {
+    box-shadow: none;
+    border: 1pt solid #ccc;
+    break-inside: avoid;
+  }
+
+  /* Evitar saltos de página dentro de elementos */
+  .step, .notice, .semaforo-item, tr {
+    break-inside: avoid;
+  }
+
+  /* Ocultar resultados vacíos */
+  .result-box:not(.visible) { display: none !important; }
+
+  /* Márgenes de página */
+  @page {
+    margin: 2cm 1.5cm;
+  }
+
+  /* Pie de impresión */
+  .print-footer {
+    display: block !important;
+    font-size: 9pt;
+    color: #666;
+    border-top: 1pt solid #ccc;
+    padding-top: 6pt;
+    margin-top: 24pt;
+  }
+
+  /* Herramientas de consulta: cabecera de impresión */
+  .print-header {
+    display: block !important;
+    margin-bottom: 16pt;
+    padding-bottom: 8pt;
+    border-bottom: 2pt solid #000;
+  }
+
+  /* Checklist: mostrar casillas claramente */
+  .check-label input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 12pt;
+    height: 12pt;
+    border: 1.5pt solid #000;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6pt;
+  }
+  .check-label input[type="checkbox"]:checked::before {
+    content: "✓";
+    font-size: 10pt;
+    line-height: 1;
+  }
+
+  /* Tabla de indicadores */
+  table { font-size: 9pt; }
+  th { background: #f0f0f0 !important; }
+}
+
+/* Clase utilitaria para elementos solo visibles en impresión */
+.print-only {
+  display: none;
+}
+.print-footer { display: none; }
+.print-header { display: none; }
+
+@media print {
+  .print-only { display: block; }
+}
