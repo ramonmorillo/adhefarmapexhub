@@ -34,7 +34,7 @@
     <a class="nav-brand" href="index.html" aria-label="MAPEX-ADHEFAR Hub — Inicio">
       <div class="nav-logo">
         <span class="nav-logo-title">MAPEX-ADHEFAR <span style="color:rgba(255,255,255,.45);font-weight:400">Hub</span></span>
-        <span class="nav-logo-sub">SEFH · Guía 2026</span>
+        <span class="nav-logo-sub">Guía 2026 · Apoyo profesional</span>
       </div>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú de navegación">
@@ -52,10 +52,10 @@
 <footer class="site-footer">
   <div class="container">
     <div class="footer-grid">
-      <div class="footer-brand">
+      <div class="footer-brand footer-brand-wide">
         <a class="footer-logo" href="index.html">MAPEX-ADHEFAR Hub</a>
-        <p>Recurso operativo oficial de la Guía MAPEX-ADHEFAR para la medición, monitorización y mejora de la adherencia en consultas externas de Farmacia Hospitalaria.</p>
-        <p class="footer-privacy-notice">Esta web no recoge ni envía datos. Todo se procesa en su navegador.</p>
+        <p>Herramienta digital de apoyo profesional basada en la Guía MAPEX-ADHEFAR para la medición, monitorización y mejora de la adherencia en consultas externas de Farmacia Hospitalaria.</p>
+        <p class="footer-privacy-notice">No se han detectado cookies, analítica ni comunicaciones a servidor. El cuadro de mando de implantación puede guardar configuración local del servicio en el navegador.</p>
       </div>
       <div class="footer-col">
         <h4>Para profesionales</h4>
@@ -71,23 +71,29 @@
         <ul>
           <li><a href="glosario.html">Glosario</a></li>
           <li><a href="pacientes.html">Para pacientes</a></li>
-          <li><a href="acerca.html">Acerca de / Créditos</a></li>
+          <li><a href="acerca.html#citar">Cómo citar la guía</a></li>
           <li><a href="https://www.sefh.es/mapex" target="_blank" rel="noopener">sefh.es/mapex ↗</a></li>
         </ul>
       </div>
-      <div class="footer-col">
-        <h4>SEFH</h4>
+      <div class="footer-col footer-legal-links">
+        <h4>Información legal</h4>
         <ul>
-          <li><a href="https://www.sefh.es" target="_blank" rel="noopener">sefh.es ↗</a></li>
-          <li><a href="https://www.sefh.es/mapex/q-pex.php" target="_blank" rel="noopener">Norma Q-PEX ↗</a></li>
-          <li><a href="acerca.html#citar">Cómo citar la guía</a></li>
+          <li><a href="acerca.html#autoria-cesion">Autoría y cesión</a></li>
           <li><a href="acerca.html#legal">Aviso legal</a></li>
+          <li><a href="acerca.html#proteccion-datos">Protección de datos</a></li>
+          <li><a href="acerca.html#condiciones-uso">Condiciones de uso</a></li>
         </ul>
       </div>
     </div>
+
+    <div class="footer-attribution" aria-label="Autoría, cesión y uso profesional">
+      <p><strong>Desarrollada por Ramón Morillo Verdugo</strong> · Basada en la Guía MAPEX-ADHEFAR para la medición, monitorización y mejora de la adherencia en consultas externas de Farmacia Hospitalaria · Cedida gratuitamente a SEFH-MAPEX para uso institucional, docente y asistencial no comercial · 2026</p>
+      <p>Herramienta de apoyo profesional. No sustituye el juicio clínico, la entrevista farmacoterapéutica ni los protocolos locales de cada centro.</p>
+    </div>
+
     <div class="footer-bottom">
-      <p>© Sociedad Española de Farmacia Hospitalaria (SEFH). Grupo ADHEFAR · Iniciativa MAPEX · 2026.</p>
-      <p>Este recurso es el complemento operativo de la guía; el texto íntegro está protegido por derechos de autor SEFH.</p>
+      <p>Uso institucional, docente, científico y asistencial no comercial. Cesión institucional pendiente de formalización documental cuando proceda.</p>
+      <p>No usar logotipos de SEFH, MAPEX ni ADHEFAR salvo autorización expresa.</p>
     </div>
   </div>
 </footer>`;
