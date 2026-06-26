@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Herramientas de consulta — MAPEX-ADHEFAR Hub</title>
-  <meta name="description" content="Calculadora PDC/MPR, checklists de visita inicial y sucesiva, guion ADHEFAR-EM, clasificador de barreras CMO, plantillas de registro y hoja-resumen. Sin datos de pacientes.">
+  <meta name="description" content="Calculadora PDC/MPR, ADHeCuaR, checklists de visita, guion ADHEFAR-EM, clasificador de barreras CMO, plantillas de registro y hoja-resumen. Sin datos de pacientes.">
   <meta property="og:title" content="Herramientas — MAPEX-ADHEFAR Hub">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_ES">
@@ -143,6 +143,20 @@
     .resumen-tabla td { padding:var(--sp-3); border:1px solid var(--c-borde-claro); vertical-align:top; line-height:var(--lh-snug); color:var(--c-texto); }
     .resumen-tabla tr:nth-child(even) td { background:var(--c-fondo); }
     .resumen-tabla .dim { font-weight:600; color:var(--c-institucional); background:var(--c-institucional-claro) !important; }
+
+
+    /* ADHeCuaR */
+    .adhecuar-mode { display:flex; flex-wrap:wrap; gap:var(--sp-3); margin-bottom:var(--sp-5); }
+    .adhecuar-mode label { display:flex; align-items:center; gap:var(--sp-2); padding:var(--sp-3) var(--sp-4); border:1.5px solid var(--c-borde-claro); border-radius:var(--radius-pill); cursor:pointer; font-size:var(--fs-sm); background:var(--c-fondo); }
+    .adhecuar-mode input { accent-color:var(--c-acento); }
+    .adhecuar-panel { display:none; }
+    .adhecuar-panel.active { display:block; }
+    .adhecuar-output { width:100%; min-height:260px; font-family:monospace; font-size:0.778rem; line-height:1.6; color:var(--c-texto); background:var(--c-fondo); border:1.5px solid var(--c-borde); border-radius:var(--radius); padding:var(--sp-4); resize:vertical; }
+    .adhecuar-causas { display:none; margin-top:var(--sp-6); }
+    .adhecuar-causas.visible { display:block; }
+    .adhecuar-intervencion { display:none; margin:var(--sp-2) 0 0 28px; font-size:var(--fs-xs); color:var(--c-texto-secundario); line-height:var(--lh-snug); }
+    label:has(input:checked) .adhecuar-intervencion { display:block; }
+
     @media print {
       .resumen-tabla { font-size:8pt; }
       .resumen-tabla th { font-size:7pt; }
@@ -163,7 +177,7 @@
         </nav>
         <span class="eyebrow">Para farmacéuticos de hospital</span>
         <h1>Herramientas de consulta</h1>
-        <p class="lead">Siete herramientas interactivas para la práctica diaria. Todas funcionan en tu navegador, sin enviar ningún dato. Imprimibles y exportables.</p>
+        <p class="lead">Ocho herramientas interactivas para la práctica diaria. Todas funcionan en tu navegador, sin enviar ningún dato. Imprimibles y exportables.</p>
       </div>
     </div>
 
@@ -187,6 +201,7 @@
             <option value="clasificador">E · Clasificador de barreras CMO</option>
             <option value="plantillas">F · Plantillas de registro</option>
             <option value="hoja-resumen">G · Hoja-resumen de consulta</option>
+            <option value="adhecuar">H · ADHeCuaR</option>
           </select>
         </div>
 
@@ -203,6 +218,7 @@
               <li><a href="#clasificador">E · Clasificador CMO</a></li>
               <li><a href="#plantillas">F · Plantillas de registro</a></li>
               <li><a href="#hoja-resumen">G · Hoja-resumen</a></li>
+              <li><a href="#adhecuar">H · ADHeCuaR</a></li>
             </ul>
           </nav>
 
@@ -858,6 +874,94 @@
                 <div class="print-footer">
                   Hoja-resumen de consulta · Guía MAPEX-ADHEFAR (SEFH, 2026) · Grupo ADHEFAR · mapex-adhefar hub
                 </div>
+              </div>
+            </article>
+
+
+
+            <!-- ══════════════════════════════════
+                 H. ADHeCuaR
+            ══════════════════════════════════ -->
+            <article class="herr-seccion" id="adhecuar" aria-labelledby="h-adhecuar">
+              <div class="herr-seccion-head">
+                <div>
+                  <div class="pillar-badge oportunidad" style="margin-bottom:var(--sp-3)">H · Adherencia · Calculadora · Registro en HCE</div>
+                  <h2 id="h-adhecuar">ADHeCuaR</h2>
+                  <p class="herr-seccion-desc">Calculadora de adherencia que permite estimar la tasa de adherencia mediante datos de dispensación y contaje, identificar posibles causas de adherencia subóptima y generar un informe estructurado para facilitar su registro en la historia clínica electrónica.</p>
+                </div>
+              </div>
+              <div class="herr-body">
+                <h3 style="margin-bottom:var(--sp-2)">ADHeCuaR</h3>
+                <p class="herr-seccion-desc" style="margin-bottom:var(--sp-5)">Calculadora de adherencia y apoyo al registro en HCE.</p>
+
+                <div class="notice notice-privacidad" style="margin-bottom:var(--sp-5)">
+                  <div class="notice-icon" aria-hidden="true">🛡</div>
+                  <div>Esta herramienta no almacena datos de pacientes. Se recomienda no introducir información identificativa. El informe generado debe revisarse por el farmacéutico antes de incorporarse a la historia clínica electrónica.</div>
+                </div>
+
+                <form id="form-adhecuar" novalidate>
+                  <fieldset class="check-fieldset">
+                    <legend>Selector de modo</legend>
+                    <div class="adhecuar-mode">
+                      <label><input type="radio" name="adhecuar-mode" value="continuous" checked> Tratamiento continuo</label>
+                      <label><input type="radio" name="adhecuar-mode" value="onoff"> Pauta ON-OFF</label>
+                    </div>
+
+                    <div id="adhecuar-continuous" class="adhecuar-panel active">
+                      <div class="grid-2">
+                        <div class="form-group"><label for="adh-prev-date">Fecha de dispensación previa</label><input type="date" id="adh-prev-date" class="input"></div>
+                        <div class="form-group"><label for="adh-current-date">Fecha actual</label><input type="date" id="adh-current-date" class="input"></div>
+                        <div class="form-group"><label for="adh-daily-dose">Número de comprimidos/día</label><input type="number" id="adh-daily-dose" class="input" min="0" step="0.01"></div>
+                        <div class="form-group"><label for="adh-available">Medicación disponible</label><input type="number" id="adh-available" class="input" min="0" step="0.01"><span class="hint">Remanente de consulta previa más medicación dispensada.</span></div>
+                        <div class="form-group"><label for="adh-remaining">Comprimidos remanentes a fecha de hoy</label><input type="number" id="adh-remaining" class="input" min="0" step="0.01"></div>
+                        <div class="form-group"><label for="adh-eva">Adherencia reportada mediante EVA (%)</label><input type="number" id="adh-eva" class="input" min="0" max="100" step="0.1"></div>
+                      </div>
+                    </div>
+
+                    <div id="adhecuar-onoff" class="adhecuar-panel">
+                      <div class="grid-2">
+                        <div class="form-group"><label for="adh-on-days">Días ON del ciclo</label><input type="number" id="adh-on-days" class="input" min="0" step="1"></div>
+                        <div class="form-group"><label for="adh-on-daily-dose">Número de comprimidos/día</label><input type="number" id="adh-on-daily-dose" class="input" min="0" step="0.01"></div>
+                        <div class="form-group"><label for="adh-on-available">Medicación disponible al inicio del ciclo</label><input type="number" id="adh-on-available" class="input" min="0" step="0.01"></div>
+                        <div class="form-group"><label for="adh-on-remaining">Comprimidos remanentes a fecha de hoy</label><input type="number" id="adh-on-remaining" class="input" min="0" step="0.01"></div>
+                        <div class="form-group"><label for="adh-on-eva">Adherencia reportada mediante EVA (%)</label><input type="number" id="adh-on-eva" class="input" min="0" max="100" step="0.1"></div>
+                      </div>
+                    </div>
+                  </fieldset>
+
+                  <div class="btn-group" style="margin-bottom:var(--sp-5)">
+                    <button type="submit" class="btn btn-primary">Calcular</button>
+                    <button type="button" id="adh-clear" class="btn btn-ghost">Limpiar</button>
+                  </div>
+                </form>
+
+                <div id="adh-errors" class="result-box alerta" aria-live="polite"></div>
+                <div id="adh-results" class="result-box" aria-live="polite"></div>
+
+                <section id="adh-causes" class="adhecuar-causas" aria-labelledby="adh-causes-title">
+                  <h3 id="adh-causes-title">Checklist de posibles causas e intervenciones sugeridas</h3>
+                  <div id="adh-causes-list" class="check-items"></div>
+                </section>
+
+                <section style="margin-top:var(--sp-6)" aria-labelledby="adh-report-title">
+                  <h3 id="adh-report-title">Informe generado para HCE</h3>
+                  <textarea id="adh-report" class="adhecuar-output" readonly aria-label="Informe ADHeCuaR generado"></textarea>
+                  <div class="btn-group" style="margin-top:var(--sp-4)">
+                    <button type="button" id="adh-copy" class="btn btn-secondary">Copiar informe para HCE</button>
+                  </div>
+                </section>
+
+                <section class="notice notice-disclaimer" style="margin-top:var(--sp-6)" aria-labelledby="adh-auth-title">
+                  <div class="notice-icon" aria-hidden="true">©</div>
+                  <div>
+                    <h3 id="adh-auth-title" style="margin-bottom:var(--sp-3)">Autoría y condiciones de uso de ADHeCuaR</h3>
+                    <p>© 2022 Beatriz Bernárdez, Inés Soto, Enrique Bandín, Manuel Tourís, Elena López, Alba García e Irene Zarra.</p>
+                    <p>El formulario digital ADHeCuaR es propiedad de Beatriz Bernárdez, Inés Soto, Enrique Bandín, Manuel Tourís, Elena López, Alba García e Irene Zarra. ADHeCuaR ha sido diseñado y creado por los autores para su uso exclusivo por Servicios de Farmacia Hospitalaria bajo la supervisión y/o actuación profesional de un farmacéutico especialista en Farmacia Hospitalaria.</p>
+                    <p>Los titulares de los derechos de propiedad intelectual autorizan el uso y explotación no comercial de ADHeCuaR únicamente a los servicios de Farmacia Hospitalaria bajo la supervisión y/o actuación profesional de un farmacéutico especialista en Farmacia Hospitalaria.</p>
+                    <p>Cualquier uso y/o explotación de ADHeCuaR en el que no intervenga un farmacéutico especialista requerirá autorización expresa y por escrito de los propietarios de la herramienta metodológica de software ADHeCuaR.</p>
+                    <p>ADHeCuaR se incorpora a este hub con permiso de sus autores, respetando íntegramente su autoría, condiciones de uso y finalidad no comercial.</p>
+                  </div>
+                </section>
               </div>
             </article>
 

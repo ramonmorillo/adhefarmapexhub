@@ -1,4 +1,4 @@
-/* herramientas.js — Lógica de las 7 herramientas de consulta */
+/* herramientas.js — Lógica de las 8 herramientas de consulta */
 'use strict';
 
 /* ─────────────────────────────────────────
@@ -520,5 +520,174 @@ function mostrarResultado(el, html, tipo) {
       const el = document.getElementById(this.value);
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  });
+})();
+
+/* ─────────────────────────────────────────
+   H. ADHeCuaR
+───────────────────────────────────────── */
+const ADHECUAR_CAUSES = [
+  { group: 'Causas involuntarias', label: 'Olvido.', intervention: 'Simplificación de la pauta, revisión del plan farmacoterapéutico, uso de pastilleros o sistemas personalizados de dosificación, alarmas o aplicaciones de recordatorio e implicación de un cuidador si procede.' },
+  { group: 'Causas involuntarias', label: 'Dificultad con la pauta.', intervention: 'Simplificación de la pauta, revisión del plan farmacoterapéutico, uso de pastilleros o sistemas personalizados de dosificación, alarmas o aplicaciones de recordatorio e implicación de un cuidador si procede.' },
+  { group: 'Causas involuntarias', label: 'Otras causas involuntarias.', intervention: 'Simplificación de la pauta, revisión del plan farmacoterapéutico, uso de pastilleros o sistemas personalizados de dosificación, alarmas o aplicaciones de recordatorio e implicación de un cuidador si procede.' },
+  { group: 'Causas intencionales', label: 'Intolerancia o efectos adversos.', intervention: 'Mejora de la comunicación profesional sanitario-paciente, intervención educacional, intervención afectiva, entrevista motivacional e intervención cognitivo-conductual adaptada a las barreras identificadas.' },
+  { group: 'Causas intencionales', label: 'Pérdida de confianza en el tratamiento.', intervention: 'Mejora de la comunicación profesional sanitario-paciente, intervención educacional, intervención afectiva, entrevista motivacional e intervención cognitivo-conductual adaptada a las barreras identificadas.' },
+  { group: 'Causas intencionales', label: 'Otras causas intencionales.', intervention: 'Mejora de la comunicación profesional sanitario-paciente, intervención educacional, intervención afectiva, entrevista motivacional e intervención cognitivo-conductual adaptada a las barreras identificadas.' },
+  { group: 'Causas no identificadas', label: 'No se identifican causas concretas en la entrevista.', intervention: 'Combinación de intervenciones y reevaluación longitudinal de la adherencia en próximas visitas.' }
+];
+
+function pctAdhecuar(n) { return Number(n).toLocaleString('es-ES', { minimumFractionDigits: 1, maximumFractionDigits: 1 }); }
+function isoHoy() { return new Date().toISOString().slice(0, 10); }
+function valNum(id) { const v = document.getElementById(id)?.value; return v === '' ? NaN : Number(v); }
+
+function classifyAdherence(adherencePercentage) {
+  return adherencePercentage < 90 ? 'subóptima' : 'adecuada';
+}
+
+function validateAdhecuarInputs(inputs, mode) {
+  const errors = [];
+  const required = mode === 'continuous'
+    ? ['previousDate', 'currentDate', 'dailyDose', 'available', 'remaining', 'eva']
+    : ['onDays', 'dailyDose', 'available', 'remaining', 'eva'];
+  required.forEach(k => {
+    if (inputs[k] === '' || inputs[k] === null || Number.isNaN(inputs[k])) errors.push('Complete todos los campos obligatorios antes de calcular.');
+  });
+  ['dailyDose', 'available', 'remaining', 'eva', 'onDays'].forEach(k => {
+    if (inputs[k] !== undefined && !Number.isNaN(inputs[k]) && inputs[k] < 0) errors.push('No se permiten valores negativos.');
+  });
+  if (!Number.isNaN(inputs.eva) && (inputs.eva < 0 || inputs.eva > 100)) errors.push('La adherencia reportada por EVA debe estar entre 0 y 100 %.');
+  if (!Number.isNaN(inputs.remaining) && !Number.isNaN(inputs.available) && inputs.remaining > inputs.available) errors.push('Los comprimidos remanentes no pueden ser superiores a la medicación disponible.');
+  if (!Number.isNaN(inputs.dailyDose) && inputs.dailyDose <= 0) errors.push('El número de comprimidos al día debe ser mayor que cero para evitar división por cero.');
+
+  if (mode === 'continuous') {
+    const prev = inputs.previousDate ? parseFecha(inputs.previousDate) : null;
+    const current = inputs.currentDate ? parseFecha(inputs.currentDate) : null;
+    const today = parseFecha(isoHoy());
+    if (prev && prev > today) errors.push('La fecha de dispensación previa no puede ser futura.');
+    if (current && current > today) errors.push('La fecha actual no puede ser futura.');
+    if (prev && current && current < prev) errors.push('La fecha actual no puede ser anterior a la fecha de dispensación previa.');
+    if (prev && current && diffDias(prev, current) <= 0) errors.push('El período debe incluir al menos un día desde la dispensación previa.');
+  } else if (!Number.isNaN(inputs.onDays) && inputs.onDays <= 0) {
+    errors.push('Los días ON del ciclo deben ser mayores que cero para evitar división por cero.');
+  }
+  return [...new Set(errors)];
+}
+
+function calculateContinuousAdherence(inputs) {
+  const days = diffDias(parseFecha(inputs.previousDate), parseFecha(inputs.currentDate));
+  const taken = inputs.available - inputs.remaining;
+  const expected = days * inputs.dailyDose;
+  const adherence = taken / expected * 100;
+  return { ...inputs, mode: 'continuous', days, taken, expected, adherence, classification: classifyAdherence(adherence) };
+}
+
+function calculateOnOffAdherence(inputs) {
+  const taken = inputs.available - inputs.remaining;
+  const expected = inputs.onDays * inputs.dailyDose;
+  const adherence = taken / expected * 100;
+  return { ...inputs, mode: 'onoff', taken, expected, adherence, classification: classifyAdherence(adherence) };
+}
+
+function selectedAdhecuarCauses() {
+  return Array.from(document.querySelectorAll('#adh-causes-list input[type="checkbox"]:checked')).map(i => ADHECUAR_CAUSES[Number(i.value)]);
+}
+
+function generateAdhecuarReport(result, selectedCauses, mode) {
+  if (!result) return '';
+  const period = mode === 'continuous'
+    ? `Período estudiado: desde ${fmtFecha(parseFecha(result.previousDate))} hasta ${fmtFecha(parseFecha(result.currentDate))}.`
+    : `Período/ciclo evaluado: ${result.onDays} días ON.`;
+  let txt = `Evaluación de adherencia terapéutica.\n\n${period}\n\n`;
+  txt += `Adherencia por método objetivo mediante dispensación y contaje: ${pctAdhecuar(result.adherence)}%.\n`;
+  txt += `Adherencia reportada por el paciente mediante EVA: ${pctAdhecuar(result.eva)}%.\n\n`;
+  if (result.classification === 'adecuada') {
+    txt += 'El paciente presenta una adherencia adecuada según el cálculo realizado. Se refuerza positivamente la conducta adherente y se recomienda mantener seguimiento periódico según práctica habitual.';
+  } else {
+    const causes = selectedCauses.length ? selectedCauses : [{ label: 'No se registran causas seleccionadas.', intervention: 'Explorar barreras e individualizar intervenciones según entrevista clínica.' }];
+    txt += 'Paciente con adherencia subóptima. La adherencia es un proceso multidimensional y se exploran posibles causas durante la consulta farmacéutica.\n\n';
+    txt += 'Causas identificadas:\n' + causes.map(c => `- ${c.label}`).join('\n') + '\n\n';
+    txt += 'Intervenciones farmacéuticas propuestas:\n' + [...new Set(causes.map(c => c.intervention))].map(i => `- ${i}`).join('\n') + '\n\n';
+    txt += 'Se recomienda reevaluar la adherencia en próximas visitas y adaptar las intervenciones según evolución clínica, farmacoterapéutica y necesidades del paciente.';
+  }
+  return txt;
+}
+
+function copyReportToClipboard() {
+  const report = document.getElementById('adh-report');
+  const txt = report?.value || '';
+  if (!txt) { alert('Genere primero un informe.'); return; }
+  navigator.clipboard?.writeText(txt).then(() => alert('Informe copiado para HCE.')).catch(() => {
+    report.select(); document.execCommand('copy'); alert('Informe copiado para HCE.');
+  });
+}
+
+(function inicioAdhecuar() {
+  const form = document.getElementById('form-adhecuar');
+  if (!form) return;
+  const currentDate = document.getElementById('adh-current-date');
+  const errorsEl = document.getElementById('adh-errors');
+  const resultsEl = document.getElementById('adh-results');
+  const causesEl = document.getElementById('adh-causes');
+  const causesList = document.getElementById('adh-causes-list');
+  const reportEl = document.getElementById('adh-report');
+  let lastResult = null;
+
+  if (currentDate && !currentDate.value) currentDate.value = isoHoy();
+  errorsEl.style.display = 'none';
+
+  function mode() { return form.querySelector('input[name="adhecuar-mode"]:checked')?.value || 'continuous'; }
+  function inputs() {
+    return mode() === 'continuous'
+      ? { previousDate: document.getElementById('adh-prev-date').value, currentDate: document.getElementById('adh-current-date').value, dailyDose: valNum('adh-daily-dose'), available: valNum('adh-available'), remaining: valNum('adh-remaining'), eva: valNum('adh-eva') }
+      : { onDays: valNum('adh-on-days'), dailyDose: valNum('adh-on-daily-dose'), available: valNum('adh-on-available'), remaining: valNum('adh-on-remaining'), eva: valNum('adh-on-eva') };
+  }
+  function renderCauses() {
+    let html = '', group = '';
+    ADHECUAR_CAUSES.forEach((c, i) => {
+      if (c.group !== group) { group = c.group; html += `<h4 style="margin-top:var(--sp-4)">${group}</h4>`; }
+      html += `<label><input type="checkbox" value="${i}"><span>${c.label}<span class="adhecuar-intervencion"><strong>Intervención sugerida:</strong> ${c.intervention}</span></span></label>`;
+    });
+    causesList.innerHTML = html;
+    causesList.addEventListener('change', updateReport);
+  }
+  function updateReport() {
+    reportEl.value = generateAdhecuarReport(lastResult, selectedAdhecuarCauses(), mode());
+  }
+  function renderResult(result) {
+    const diff = result.adherence - result.eva;
+    const sub = result.classification === 'subóptima';
+    const warn = result.adherence > 110 ? '<div class="notice notice-warning" style="margin-top:var(--sp-4)"><div class="notice-icon">⚠️</div><div>La adherencia calculada es superior al 110%. Revise los datos introducidos, posible acumulación, error de contaje o discrepancia entre dispensación y consumo real.</div></div>' : '';
+    const interp = sub
+      ? 'Existe adherencia subóptima. Se recomienda explorar barreras, creencias, tolerabilidad, comprensión de la pauta y posibles dificultades prácticas.'
+      : 'Adherencia adecuada según el umbral establecido. Reforzar positivamente y mantener seguimiento periódico.';
+    mostrarResultado(resultsEl, `<div style="display:grid;gap:10px"><strong>Adherencia objetiva calculada: ${pctAdhecuar(result.adherence)}%</strong><span>Comprimidos tomados: ${pctAdhecuar(result.taken).replace(',0','')} · Comprimidos esperados: ${pctAdhecuar(result.expected).replace(',0','')}</span><span>Adherencia reportada por el paciente: ${pctAdhecuar(result.eva)}%</span><span>Diferencia objetiva - reportada: ${pctAdhecuar(diff)} puntos porcentuales</span><span>Clasificación: <strong>adherencia ${result.classification}</strong></span><p style="margin:0">${interp}</p>${warn}</div>`, sub ? 'alerta' : 'ok');
+    causesEl.classList.toggle('visible', sub);
+    updateReport();
+  }
+
+  renderCauses();
+  form.querySelectorAll('input[name="adhecuar-mode"]').forEach(r => r.addEventListener('change', () => {
+    document.getElementById('adhecuar-continuous').classList.toggle('active', mode() === 'continuous');
+    document.getElementById('adhecuar-onoff').classList.toggle('active', mode() === 'onoff');
+    lastResult = null; resultsEl.className = 'result-box'; resultsEl.innerHTML = ''; causesEl.classList.remove('visible'); reportEl.value = '';
+  }));
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const currentMode = mode();
+    const data = inputs();
+    const errors = validateAdhecuarInputs(data, currentMode);
+    if (errors.length) {
+      errorsEl.style.display = 'block';
+      errorsEl.innerHTML = '<strong>No se puede calcular todavía:</strong><ul>' + errors.map(e => `<li>${e}</li>`).join('') + '</ul>';
+      resultsEl.className = 'result-box'; resultsEl.innerHTML = ''; causesEl.classList.remove('visible'); reportEl.value = ''; lastResult = null;
+      return;
+    }
+    errorsEl.style.display = 'none';
+    lastResult = currentMode === 'continuous' ? calculateContinuousAdherence(data) : calculateOnOffAdherence(data);
+    renderResult(lastResult);
+  });
+  document.getElementById('adh-copy')?.addEventListener('click', copyReportToClipboard);
+  document.getElementById('adh-clear')?.addEventListener('click', () => {
+    form.reset(); if (currentDate) currentDate.value = isoHoy(); lastResult = null; errorsEl.style.display = 'none'; resultsEl.className = 'result-box'; resultsEl.innerHTML = ''; causesEl.classList.remove('visible'); reportEl.value = ''; causesList.querySelectorAll('input').forEach(c => { c.checked = false; });
   });
 })();
