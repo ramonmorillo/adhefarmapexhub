@@ -43,12 +43,12 @@ p { margin-bottom: var(--sp-4); }
 p:last-child { margin-bottom: 0; }
 
 a {
-  color: var(--c-capacidad);
+  color: var(--c-marca);
   text-decoration: underline;
   text-underline-offset: 3px;
   transition: color var(--t-fast);
 }
-a:hover { color: var(--c-capacidad-oscuro); }
+a:hover { color: var(--c-marca-hover); }
 
 strong { font-weight: var(--fw-semi); }
 
@@ -73,7 +73,7 @@ input, select, textarea, button {
 
 /* Accesibilidad: foco visible */
 :focus-visible {
-  outline: 3px solid var(--c-acento);
+  outline: 3px solid var(--c-foco);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
@@ -179,3 +179,15 @@ th {
   letter-spacing: .05em;
 }
 tr:last-child td { border-bottom: none; }
+
+/* La cabecera sticky no debe ocultar destinos ni el foco. */
+html { scroll-padding-top: 160px; }
+[id] { scroll-margin-top: 160px; }
+h1, h2 { letter-spacing: -.035em; text-wrap: balance; }
+input, select, textarea { min-width: 0; }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--c-marca); }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

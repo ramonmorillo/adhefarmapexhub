@@ -10,7 +10,7 @@
   <meta property="og:locale" content="es_ES">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
@@ -49,7 +49,7 @@
 
     .tip-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
       gap: var(--sp-5);
       margin-top: var(--sp-6);
     }
@@ -131,7 +131,7 @@
 
     .derecho-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
       gap: var(--sp-5);
       margin-top: var(--sp-6);
     }
@@ -187,17 +187,17 @@
 
   <main id="contenido-principal">
 
-    <div class="page-hero" style="background: linear-gradient(135deg, var(--c-oportunidad) 0%, var(--c-institucional) 100%)">
+    <div class="page-hero" style="background:var(--c-marca-claro)">
       <div class="container">
         <nav class="breadcrumb" aria-label="Ruta de navegación">
           <ol>
-            <li><a href="index.html" style="color:rgba(255,255,255,.7)">Inicio</a></li>
-            <li style="color:#fff">Para pacientes</li>
+            <li><a href="index.html" style="color:var(--c-texto-secundario)">Inicio</a></li>
+            <li style="color:var(--c-texto)">Para pacientes</li>
           </ol>
         </nav>
-        <span class="eyebrow" style="color:rgba(255,255,255,.8)">Información para usted y sus familiares</span>
-        <h1 style="color:#fff">Tomar bien su tratamiento</h1>
-        <p class="lead" style="color:rgba(255,255,255,.85)">Información en lenguaje claro sobre la adherencia al tratamiento, la consulta de farmacia hospitalaria y consejos para organizar su medicación.</p>
+        <span class="eyebrow" style="color:var(--c-texto-secundario)">Información para usted y sus familiares</span>
+        <h1 style="color:var(--c-texto)">Tomar bien su tratamiento</h1>
+        <p class="lead" style="color:var(--c-texto-secundario)">Información en lenguaje claro sobre la adherencia al tratamiento, la consulta de farmacia hospitalaria y consejos para organizar su medicación.</p>
       </div>
     </div>
 

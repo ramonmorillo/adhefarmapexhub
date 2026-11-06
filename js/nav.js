@@ -33,8 +33,8 @@
   <nav class="navbar" aria-label="Navegación principal">
     <a class="nav-brand" href="index.html" aria-label="MAPEX-ADHEFAR Hub — Inicio">
       <div class="nav-logo">
-        <span class="nav-logo-title">MAPEX-ADHEFAR <span style="color:rgba(255,255,255,.45);font-weight:400">Hub</span></span>
-        <span class="nav-logo-sub">Guía 2026 · Apoyo profesional</span>
+        <span class="nav-logo-title">MAPEX-ADHEFAR <span>Hub</span></span>
+        <span class="nav-logo-sub">Guía 2026 · Herramienta de apoyo profesional</span>
       </div>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú de navegación">

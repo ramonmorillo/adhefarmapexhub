@@ -11,7 +11,7 @@
   <meta property="og:locale" content="es_ES">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
@@ -20,21 +20,13 @@
   <style>
     /* Estilos específicos de portada */
     .hero {
-      background: var(--c-institucional);
-      color: #fff;
+      background: var(--c-marca-claro);
+      color: var(--c-texto);
       padding-block: var(--sp-14) var(--sp-12);
       position: relative;
       overflow: hidden;
     }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 70% at 80% 50%, rgba(109,40,217,.18) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(5,150,105,.12) 0%, transparent 60%);
-      pointer-events: none;
-    }
+    .hero::before { content: none; }
     .hero-inner {
       position: relative;
       display: grid;
@@ -52,7 +44,7 @@
       font-weight: var(--fw-semi);
       text-transform: uppercase;
       letter-spacing: .1em;
-      color: rgba(255,255,255,.6);
+      color: var(--c-texto-secundario);
       margin-bottom: var(--sp-4);
     }
     .hero-eyebrow::before {
@@ -64,14 +56,14 @@
       border-radius: var(--radius-pill);
     }
     .hero h1 {
-      color: #fff;
+      color: var(--c-texto);
       font-size: clamp(var(--fs-2xl), 5vw, var(--fs-4xl));
       margin-bottom: var(--sp-5);
       line-height: 1.1;
     }
     .hero-subtitle {
       font-size: var(--fs-md);
-      color: rgba(255,255,255,.8);
+      color: var(--c-texto-secundario);
       line-height: var(--lh-snug);
       margin-bottom: var(--sp-6);
       max-width: 52ch;
@@ -82,35 +74,15 @@
       gap: var(--sp-3);
       margin-bottom: var(--sp-8);
     }
-    .btn-hero-primary {
-      background: var(--c-acento);
-      color: #fff;
-      border: 2px solid var(--c-acento);
-      padding: 0.75em 1.6em;
-      font-size: var(--fs-base);
-    }
-    .btn-hero-primary:hover {
-      background: var(--c-acento-texto);
-      border-color: var(--c-acento-texto);
-      color: #fff;
-    }
-    .btn-hero-secondary {
-      background: rgba(255,255,255,.1);
-      color: #fff;
-      border: 2px solid rgba(255,255,255,.3);
-      padding: 0.75em 1.6em;
-      font-size: var(--fs-base);
-    }
-    .btn-hero-secondary:hover {
-      background: rgba(255,255,255,.18);
-      border-color: rgba(255,255,255,.5);
-      color: #fff;
-    }
+    .btn-hero-primary { background: var(--c-marca); color: #fff; border-color: var(--c-marca); padding: .8em 1.3em; }
+    .btn-hero-primary:hover { background: var(--c-marca-hover); border-color: var(--c-marca-hover); color: #fff; }
+    .btn-hero-secondary { background: var(--c-superficie); color: var(--c-marca); border-color: var(--c-marca); padding: .8em 1.3em; }
+    .btn-hero-secondary:hover { background: var(--c-marca-claro); color: var(--c-marca-hover); }
     .hero-citation {
       font-size: var(--fs-xs);
-      color: rgba(255,255,255,.45);
+      color: var(--c-texto-secundario);
       line-height: var(--lh-snug);
-      border-top: 1px solid rgba(255,255,255,.12);
+      border-top: 1px solid var(--c-borde);
       padding-top: var(--sp-5);
     }
     .hero-citation cite { font-style: italic; }
@@ -121,8 +93,8 @@
       gap: var(--sp-4);
     }
     .cmo-item {
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.12);
+      background: var(--c-superficie);
+      border: 1px solid var(--c-borde);
       border-radius: var(--radius-card);
       padding: var(--sp-5);
       display: flex;
@@ -144,14 +116,14 @@
       font-weight: var(--fw-semi);
       text-transform: uppercase;
       letter-spacing: .07em;
-      color: rgba(255,255,255,.5);
+      color: var(--c-texto-secundario);
       margin-bottom: var(--sp-2);
     }
-    .cmo-item.cap .cmo-label { color: rgba(96,165,250,.9); }
-    .cmo-item.mot .cmo-label { color: rgba(251,191,36,.9); }
-    .cmo-item.opp .cmo-label { color: rgba(52,211,153,.9); }
+    .cmo-item.cap .cmo-label { color: var(--c-capacidad-texto); }
+    .cmo-item.mot .cmo-label { color: var(--c-motivacion-texto); }
+    .cmo-item.opp .cmo-label { color: var(--c-oportunidad-texto); }
     .cmo-desc {
-      color: rgba(255,255,255,.75);
+      color: var(--c-texto-secundario);
       font-size: var(--fs-sm);
       line-height: var(--lh-snug);
     }
@@ -159,10 +131,22 @@
       font-size: var(--fs-xs);
       text-transform: uppercase;
       letter-spacing: .08em;
-      color: rgba(255,255,255,.4);
+      color: var(--c-texto-secundario);
       margin-bottom: var(--sp-4);
       font-weight: var(--fw-semi);
     }
+
+    .hero { border-bottom: 1px solid var(--c-borde); }
+    .hero h1 { max-width: 15ch; font-weight: 600; }
+    .cmo-panel { padding: var(--sp-5); border: 1px solid var(--c-borde); border-radius: var(--radius-lg); background: var(--c-superficie); }
+    .cmo-panel-title { margin-bottom: 0; color: var(--c-marca); }
+    .cmo-item { background: var(--c-fondo); border: 0; }
+    .cmo-item .cmo-label { margin-bottom: 8px; }
+    .cmo-item.cap { border-left: 3px solid var(--c-capacidad); }
+    .cmo-item.mot { border-left: 3px solid var(--c-motivacion); }
+    .cmo-item.opp { border-left: 3px solid var(--c-oportunidad); }
+    @media (max-width: 639px) { .hero { padding-block: var(--sp-8); } .hero-inner { gap: var(--sp-6); } .hero-actions .btn { width: 100%; } }
+    @media (prefers-reduced-motion: reduce) { .puerta:hover { transform: none; } }
 
     /* Tres puertas de entrada */
     .puertas {
@@ -172,7 +156,7 @@
       display: grid;
       gap: var(--sp-5);
     }
-    @media (min-width: 768px) {
+    @media (min-width: 1024px) {
       .puertas-grid { grid-template-columns: repeat(3, 1fr); }
     }
     .puerta {
@@ -233,22 +217,22 @@
 
     /* Qué es */
     .que-es {
-      background: var(--c-institucional);
-      color: #fff;
+      background: var(--c-marca-claro);
+      color: var(--c-texto);
       padding-block: var(--sp-12);
     }
-    .que-es .section-header { color: #fff; }
-    .que-es .section-header h2 { color: #fff; }
-    .que-es .eyebrow { color: rgba(255,255,255,.55); }
-    .que-es .lead { color: rgba(255,255,255,.75); }
+    .que-es .section-header { color: var(--c-texto); }
+    .que-es .section-header h2 { color: var(--c-texto); }
+    .que-es .eyebrow { color: var(--c-texto-secundario); }
+    .que-es .lead { color: var(--c-texto-secundario); }
     .decalogo-preview {
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.12);
+      background: var(--c-superficie);
+      border: 1px solid var(--c-borde);
       border-radius: var(--radius-card);
       padding: var(--sp-6);
     }
     .decalogo-preview h3 {
-      color: rgba(255,255,255,.9);
+      color: var(--c-texto-secundario);
       font-size: var(--fs-md);
       margin-bottom: var(--sp-5);
     }
@@ -257,11 +241,11 @@
       margin: 0;
     }
     .decalogo-preview li {
-      color: rgba(255,255,255,.7);
+      color: var(--c-texto-secundario);
       font-size: var(--fs-sm);
       margin-bottom: var(--sp-3);
     }
-    .decalogo-preview li strong { color: rgba(255,255,255,.9); }
+    .decalogo-preview li strong { color: var(--c-texto-secundario); }
 
     /* Qué ofrece la web */
     .que-ofrece {
@@ -296,8 +280,9 @@
       letter-spacing: .08em;
       padding: var(--sp-1) var(--sp-4);
       border-radius: var(--radius-pill);
-      background: var(--c-institucional);
-      color: #fff;
+      background: var(--c-superficie);
+      border: 1px solid var(--c-borde);
+      color: var(--c-marca);
     }
   </style>
 </head>
@@ -310,7 +295,7 @@
     <section class="hero" aria-labelledby="hero-titulo">
       <div class="container hero-inner">
         <div>
-          <div class="hero-eyebrow">Herramienta de apoyo profesional · MAPEX-ADHEFAR · 2026</div>
+          <div class="hero-eyebrow">MAPEX · ADHEFAR · 2026</div>
           <h1 id="hero-titulo">Guía MAPEX-ADHEFAR<br>en la práctica</h1>
           <p class="hero-subtitle">
             El hub operativo de la Guía para la medición, monitorización y mejora de la adherencia en consultas externas de Farmacia Hospitalaria. Herramientas, algoritmos, indicadores y casos prácticos listos para usar.
@@ -378,19 +363,19 @@
         </div>
         <div class="puertas-grid">
           <a class="puerta farmaceutico" href="herramientas.html">
-            <div class="puerta-icon" aria-hidden="true">⚕</div>
+            <div class="puerta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/></svg></div>
             <h3>Soy farmacéutico/a de hospital</h3>
             <p>Accede a las herramientas de consulta: calculadora PDC/MPR, checklists de visita, guion ADHEFAR-EM, clasificador de barreras CMO y plantillas de registro.</p>
             <span class="puerta-cta">Ir a Herramientas →</span>
           </a>
           <a class="puerta profesional" href="modelo.html">
-            <div class="puerta-icon" aria-hidden="true">🏥</div>
+            <div class="puerta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 21V5h16v16M9 21v-5h6v5M9 9h6m-3-3v6"/></svg></div>
             <h3>Soy otro profesional sanitario</h3>
             <p>Entiende el circuito asistencial, el modelo CMO y el algoritmo ADHEFAR-EM de 7 pasos. Plantillas de comunicación multidisciplinar y decálogo de implantación.</p>
             <span class="puerta-cta">Ir a El modelo →</span>
           </a>
           <a class="puerta paciente" href="pacientes.html">
-            <div class="puerta-icon" aria-hidden="true">🌿</div>
+            <div class="puerta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 20c1-8 5-13 15-16 0 9-4 16-12 15M5 20l9-9"/></svg></div>
             <h3>Soy paciente o cuidador/a</h3>
             <p>Información en lenguaje claro sobre qué es la adherencia, qué esperar de la consulta de farmacia hospitalaria y cómo organizar mejor la medicación.</p>
             <span class="puerta-cta">Ir a Pacientes →</span>
@@ -407,7 +392,7 @@
             <span class="eyebrow">Qué es este hub</span>
             <h2 id="que-es-titulo">De la guía a la práctica clínica real</h2>
             <p class="lead">Este recurso está basado en la Guía MAPEX-ADHEFAR (2026) y facilita su aplicación práctica mediante herramientas, algoritmos y materiales de apoyo para la consulta.</p>
-            <p class="lead" style="color:rgba(255,255,255,.65)">Este sitio no reproduce la guía: ofrece resúmenes propios y herramientas prácticas. Para el texto íntegro, acude a la publicación oficial en <a href="https://www.sefh.es/mapex" target="_blank" rel="noopener" style="color:rgba(255,255,255,.85)">sefh.es/mapex</a>.</p>
+            <p class="lead" style="color:var(--c-texto-secundario)">Este sitio no reproduce la guía: ofrece resúmenes propios y herramientas prácticas. Para el texto íntegro, acude a la publicación oficial en <a href="https://www.sefh.es/mapex" target="_blank" rel="noopener" style="color:var(--c-marca)">sefh.es/mapex</a>.</p>
             <div class="btn-group" style="margin-top:var(--sp-6)">
               <a class="btn btn-hero-primary" href="modelo.html">Conocer el modelo</a>
               <a class="btn btn-hero-secondary" href="implantacion.html">Implantación y calidad</a>
@@ -445,42 +430,42 @@
         </div>
         <div class="grid-4">
           <a class="feature-card" href="modelo.html" style="text-decoration:none">
-            <div class="feature-icon violeta" aria-hidden="true">◈</div>
+            <div class="feature-icon violeta" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m12 3 9 9-9 9-9-9zM8 12h8m-4-4v8"/></svg></div>
             <h3>El modelo</h3>
             <p>CMO, taxonomía ABC, algoritmo ADHEFAR-EM de 7 pasos y decálogo de implantación.</p>
           </a>
           <a class="feature-card" href="herramientas.html" style="text-decoration:none">
-            <div class="feature-icon azul" aria-hidden="true">⚙</div>
+            <div class="feature-icon azul" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h2m4 0h2m-8 4h2m4 0h2"/></svg></div>
             <h3>Herramientas</h3>
             <p>Calculadora PDC/MPR, checklists de visita, guion de 10 min, clasificador CMO y plantillas.</p>
           </a>
           <a class="feature-card" href="implantacion.html" style="text-decoration:none">
-            <div class="feature-icon verde" aria-hidden="true">📊</div>
+            <div class="feature-icon verde" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 3v18h17M8 16v-5m5 5V7m5 9V4"/></svg></div>
             <h3>Implantación</h3>
             <p>Autoevaluación, cuadro de mando configurable, hoja de ruta por fases y Q-PEX.</p>
           </a>
           <a class="feature-card" href="casos.html" style="text-decoration:none">
-            <div class="feature-icon ambar" aria-hidden="true">📋</div>
+            <div class="feature-icon ambar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M8 10l2 2 5-5m-7 9h8"/></svg></div>
             <h3>Casos prácticos</h3>
             <p>Cuatro casos reales de la guía: IC, artritis reumatoide, esclerosis múltiple, asma grave.</p>
           </a>
           <a class="feature-card" href="glosario.html" style="text-decoration:none">
-            <div class="feature-icon azul" aria-hidden="true">📖</div>
+            <div class="feature-icon azul" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 5v16M3 4c4-1 7 0 9 2 2-2 5-3 9-2v15c-4-1-7 0-9 2-2-2-5-3-9-2z"/></svg></div>
             <h3>Glosario</h3>
             <p>Términos canónicos: PDC, MPR, OFT, PROMs, PREMs, MAPEX, Q-PEX y más, con buscador.</p>
           </a>
           <a class="feature-card" href="pacientes.html" style="text-decoration:none">
-            <div class="feature-icon verde" aria-hidden="true">🌿</div>
+            <div class="feature-icon verde" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 20c1-8 5-13 15-16 0 9-4 16-12 15M5 20l9-9"/></svg></div>
             <h3>Para pacientes</h3>
             <p>Contenido en lenguaje llano sobre adherencia, consulta de farmacia y organización del tratamiento.</p>
           </a>
           <a class="feature-card" href="acerca.html" style="text-decoration:none">
-            <div class="feature-icon violeta" aria-hidden="true">ℹ</div>
+            <div class="feature-icon violeta" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></svg></div>
             <h3>Acerca de</h3>
             <p>Autoría, cesión gratuita, cita de la guía, condiciones de uso, protección de datos y aviso legal.</p>
           </a>
           <div class="feature-card" style="background:var(--c-fondo);border-style:dashed">
-            <div class="feature-icon" style="background:var(--c-fondo);font-size:1.6rem" aria-hidden="true">🔒</div>
+            <div class="feature-icon" style="background:var(--c-fondo);font-size:1.6rem" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></svg></div>
             <h3>Sin datos personales</h3>
             <p>Ninguna herramienta recoge ni envía datos identificativos. Todo se procesa en tu navegador.</p>
           </div>

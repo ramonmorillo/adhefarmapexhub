@@ -1,68 +1,64 @@
-# Sistema de diseño — MAPEX-ADHEFAR Hub
+# Sistema visual — MAPEX-ADHEFAR Hub
 
-## Concepto
+Interfaz editorial clara: cabecera y pie blancos, navegación activa en turquesa,
+jerarquía sans-serif y tarjetas con bordes y sombras discretos. Se comparte entre
+Inicio, Modelo, Herramientas, Implantación, Casos, Glosario, Pacientes y Acerca de.
 
-El color no es decoración: es el sistema semántico de la guía. Los tres pilares CMO tienen un color propio que se aplica de forma consistente en toda la web — en las herramientas, los checklists, el clasificador de barreras, el cuadro de mando y los casos prácticos. Ver el color es ver el pilar.
+## Identidad y procedencia
 
-## Paleta
+La paleta se inspira en la orientación facilitada para el rediseño. No se presenta
+como normativa corporativa SEFH. La consulta a https://www.sefh.es/ el 6 de noviembre
+de 2026 fue bloqueada por la política de red (403); no se pudo contrastar un manual
+oficial. No se aportaron capturas institucionales ni recursos de marca autorizados.
+No se incorporan logotipos ni se atribuye aval institucional. Se conservan los
+créditos y avisos de autorización existentes.
 
-| Token | Nombre | Hex | Uso |
-|---|---|---|---|
-| `--c-capacidad` | Cobalto | `#2563EB` | Pilar Capacidad, barreras C, intervenciones C |
-| `--c-motivacion` | Ámbar | `#D97706` | Pilar Motivación, barreras M, intervenciones M |
-| `--c-oportunidad` | Esmeralda | `#059669` | Pilar Oportunidad, barreras O, intervenciones O |
-| `--c-institucional` | Pizarra profunda | `#1E3A5F` | Marca global, cabecera, SEFH/MAPEX/ADHEFAR |
-| `--c-acento` | Violeta | `#6D28D9` | Q-PEX, decálogo, acciones primarias |
-| `--c-fondo` | Nieve | `#F8FAFC` | Fondos principales |
-| `--c-superficie` | Blanco roto | `#FFFFFF` | Tarjetas, formularios |
-| `--c-texto` | Pizarra | `#1E293B` | Texto principal |
-| `--c-texto-secundario` | Gris medio | `#475569` | Texto secundario, etiquetas |
-| `--c-borde` | Gris claro | `#CBD5E1` | Bordes, separadores |
+| Uso | Token | Color |
+| --- | --- | --- |
+| Acción principal, enlaces, foco | `--c-marca` / `--c-foco` | `#08787C` |
+| Hover principal | `--c-marca-hover` | `#06666A` |
+| Detalle turquesa decorativo | `--c-marca-vivo` | `#00AFA9` |
+| Superficie turquesa clara | `--c-marca-claro` | `#EDF8F7` |
+| Acento magenta | `--c-acento` | `#A60076` |
+| Texto principal | `--c-texto` | `#173D4B` |
+| Texto secundario | `--c-texto-secundario` | `#46616D` |
+| Fondo / superficie | `--c-fondo` / `--c-superficie` | `#F6F9FA` / `#FFFFFF` |
+| Borde decorativo / control | `--c-borde` / `--c-control-borde` | `#DCE7E9` / `#738C96` |
 
-Variantes claras de cada pilar (para fondos de tarjetas):
-- `--c-capacidad-claro`: `#EFF6FF`
-- `--c-motivacion-claro`: `#FFFBEB`
-- `--c-oportunidad-claro`: `#ECFDF5`
-- `--c-acento-claro`: `#EDE9FE`
+El turquesa y el magenta para texto/acciones se oscurecen respecto a la propuesta
+inicial para mantener contraste AA. El turquesa vivo queda como detalle decorativo.
 
-Semáforo de autoevaluación:
-- `--c-ok`: `#059669` (verde)
-- `--c-parcial`: `#D97706` (ámbar)
-- `--c-no`: `#DC2626` (rojo)
+## Semántica clínica
 
-## Tipografía
+Se mantienen los tokens CMO documentados en el glosario: Capacidad azul `#2563EB`,
+Motivación ámbar `#D97706`, Oportunidad verde `#059669`. No se reasignan a magenta:
+el color ya comunica un pilar en contenidos, clasificadores y casos. Los estados
+verde/ámbar/rojo conservan su interpretación. En badges y textos de resultados se
+usan variantes oscuras de la misma familia para mejorar legibilidad; barras,
+bordes, valores, puntos de corte y lógica permanecen intactos.
 
-| Rol | Familia | Pesos usados | Origen |
-|---|---|---|---|
-| Titulares (display) | Source Serif 4 | 400, 600 | Google Fonts |
-| Cuerpo y UI | Inter | 400, 500, 600 | Google Fonts |
+## Tipografía y componentes
 
-- **Tamaño base:** 18 px (cuerpo de contenido)
-- **Escala:** 14 → 16 → 18 → 22 → 28 → 36 → 48 px (tokens `--fs-*`)
-- **Interlineado:** 1.6 en cuerpo, 1.2 en titulares
+Inter (400, 500, 600), con alternativas locales `system-ui`, `-apple-system`,
+`sans-serif`. Se reutiliza la integración existente de Google Fonts, sin nuevas
+dependencias de aplicación. Cuerpo base de 18 px. Espaciado principal de 8 px,
+con 4 px para ajustes ópticos. Radios de 8–16 px; sombras contenidas. Iconos SVG
+locales de trazo homogéneo en las tarjetas de portada.
 
-## Espaciado
+Los tokens están en `css/tokens.css`; base, layout y componentes en sus hojas
+compartidas. Header/footer se editan en `js/nav.js`. Los estilos específicos siguen
+en cada HTML. No se modifica la arquitectura ni la versión histórica `legacy/`.
 
-Sistema de 4 px base (tokens `--sp-1` a `--sp-16`): 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 96, 112, 128 px.
+## Accesibilidad y mantenimiento
 
-## Radios y sombras
+Foco visible, objetivos principales de 44 px, menú móvil con teclado y Escape,
+tablas desplazables accesibles por teclado y movimiento reducido. El encabezado
+sticky tiene espacio de anclaje; la búsqueda del glosario respeta su altura.
+La visualización móvil se apila sin ocultar contenidos. La lógica clínica y los
+scripts embebidos no se modifican. No almacenar datos de pruebas en perfiles reales.
 
-- Tarjetas: `--radius-card`: 12px
-- Botones: `--radius-btn`: 8px
-- Badges: `--radius-badge`: 999px
-- Sombra suave: `0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06)`
-
-## Accesibilidad
-
-- Contraste mínimo 4.5:1 en texto normal (WCAG 2.1 AA)
-- Cobalto `#2563EB` sobre blanco: 5.9:1 ✓
-- Ámbar `#D97706` sobre blanco: 3.0:1 — solo para iconos/bordes; el texto en tarjetas ámbar usa `#92400E` (8.0:1) ✓
-- Esmeralda `#059669` sobre blanco: 3.9:1 — solo para iconos; texto en tarjetas verdes usa `#065F46` (8.7:1) ✓
-- Foco de teclado: `outline: 3px solid var(--c-acento); outline-offset: 2px`
-- `prefers-reduced-motion`: sin animaciones de transición cuando está activo
-
-## Notas de mantenimiento
-
-- El header/footer comunes están en `js/nav.js` (función `inyectarNav()`).
-- Para editar la navegación, editar solo `js/nav.js`.
-- Los tokens CSS están en `css/tokens.css`; no hardcodear colores en otros ficheros.
+Validación realizada con Chromium: ocho rutas en 375/768/1024/1440 px, auditoría
+axe-core WCAG A/AA de páginas iniciales y resultados representativos, pruebas
+funcionales de navegación, PDC/MPR, clasificador, checklist, plantillas,
+autoevaluación, exportación/importación y persistencia. Las auditorías automáticas
+no sustituyen una evaluación manual completa con lectores de pantalla.
