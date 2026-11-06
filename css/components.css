@@ -13,34 +13,35 @@
   border: 2px solid transparent;
   cursor: pointer;
   text-decoration: none;
-  white-space: nowrap;
+  white-space: normal;
+  min-height: 44px;
   transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast);
 }
 
 .btn-primary {
-  background: var(--c-acento);
+  background: var(--c-marca);
   color: #fff;
-  border-color: var(--c-acento);
+  border-color: var(--c-marca);
 }
 .btn-primary:hover {
-  background: var(--c-acento-texto);
-  border-color: var(--c-acento-texto);
+  background: var(--c-marca-hover);
+  border-color: var(--c-marca-hover);
   color: #fff;
 }
 
 .btn-secondary {
   background: transparent;
-  color: var(--c-acento);
-  border-color: var(--c-acento);
+  color: var(--c-marca);
+  border-color: var(--c-marca);
 }
 .btn-secondary:hover {
-  background: var(--c-acento-claro);
+  background: var(--c-marca-claro);
 }
 
 .btn-ghost {
   background: transparent;
   color: var(--c-texto-secundario);
-  border-color: var(--c-borde);
+  border-color: var(--c-control-borde);
 }
 .btn-ghost:hover {
   background: var(--c-fondo);
@@ -120,11 +121,11 @@
   color: #fff;
 }
 .pillar-badge.motivacion {
-  background: var(--c-motivacion);
+  background: var(--c-motivacion-oscuro);
   color: #fff;
 }
 .pillar-badge.oportunidad {
-  background: var(--c-oportunidad);
+  background: var(--c-oportunidad-oscuro);
   color: #fff;
 }
 .pillar-badge.institucional {
@@ -198,15 +199,16 @@
   font-size: var(--fs-sm);
   color: var(--c-texto);
   background: var(--c-superficie);
-  border: 1.5px solid var(--c-borde);
+  border: 1.5px solid var(--c-control-borde);
   border-radius: var(--radius);
   transition: border-color var(--t-fast), box-shadow var(--t-fast);
   line-height: var(--lh-snug);
 }
 .input:focus, .select:focus, .textarea:focus {
-  outline: none;
-  border-color: var(--c-acento);
-  box-shadow: 0 0 0 3px rgba(109,40,217,.15);
+  outline: 3px solid var(--c-foco);
+  outline-offset: 2px;
+  border-color: var(--c-marca);
+  box-shadow: none;
 }
 .input::placeholder, .textarea::placeholder {
   color: var(--c-texto-tenue);
@@ -326,7 +328,8 @@ legend {
   border-bottom: 2px solid transparent;
   margin-bottom: -2px;
   transition: color var(--t-fast), border-color var(--t-fast);
-  white-space: nowrap;
+  white-space: normal;
+  min-height: 44px;
 }
 .tab-btn:hover { color: var(--c-texto); }
 .tab-btn[aria-selected="true"] {
@@ -445,3 +448,21 @@ legend {
   font-size: var(--fs-xs);
   color: var(--c-texto);
 }
+
+/* Navegación secundaria y superficies de lectura */
+.tab-btn, .caso-tab, .pac-tab, .filtro-btn { min-height: 44px; }
+.toc a { display: inline-block; padding-block: 4px; }
+.feature-icon svg, .puerta-icon svg { width: 26px; height: 26px; }
+.feature-icon { border-radius: var(--radius); }
+@media (prefers-reduced-motion: reduce) {
+  .feature-card:hover { transform: none; }
+}
+
+/* El texto semántico usa variantes oscuras de la misma familia de color.
+   Solo cambia la tinta: se conservan los colores de barras, bordes y semáforos.
+   !important es necesario frente a los estilos inline de los resultados existentes. */
+.result-box [style*="color:var(--c-motivacion)"],
+.result-box [style*="color:var(--c-parcial)"] { color: var(--c-motivacion-texto) !important; }
+.result-box [style*="color:var(--c-oportunidad)"],
+.result-box [style*="color:var(--c-ok)"] { color: var(--c-oportunidad-texto) !important; }
+.result-box [style*="color:var(--c-no)"] { color: #991B1B !important; }

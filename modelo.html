@@ -10,7 +10,7 @@
   <meta property="og:locale" content="es_ES">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
@@ -56,8 +56,8 @@
 
     .diagrama-layout { display:grid; gap:var(--sp-8); align-items:start; }
     @media(min-width:860px){ .diagrama-layout{ grid-template-columns:1fr 1fr; } }
-    .diagrama-wrapper { background:var(--c-institucional); border-radius:var(--radius-lg); padding:var(--sp-6) var(--sp-5); }
-    .diagrama-titulo-lbl { font-family:var(--ff-body); font-size:var(--fs-xs); font-weight:var(--fw-semi); text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.45); text-align:center; margin-bottom:var(--sp-5); display:block; }
+    .diagrama-wrapper { background:var(--c-superficie);border:1px solid var(--c-borde); border-radius:var(--radius-lg); padding:var(--sp-6) var(--sp-5); }
+    .diagrama-titulo-lbl { font-family:var(--ff-body); font-size:var(--fs-xs); font-weight:var(--fw-semi); text-transform:uppercase; letter-spacing:.1em; color:var(--c-texto-secundario); text-align:center; margin-bottom:var(--sp-5); display:block; }
     .pasos-secuencia { display:flex; flex-direction:column; }
     .paso-item { display:flex; gap:var(--sp-4); align-items:flex-start; padding-bottom:var(--sp-5); }
     .paso-item:last-child { padding-bottom:0; }
@@ -66,29 +66,29 @@
     .paso-linea { width:2px; flex:1; min-height:20px; margin-top:6px; border-radius:var(--radius-pill); opacity:.35; }
     .paso-item:last-child .paso-linea { display:none; }
     .paso-content { flex:1; padding-bottom:var(--sp-2); }
-    .paso-tag { font-size:var(--fs-xs); font-weight:var(--fw-semi); text-transform:uppercase; letter-spacing:.07em; margin-bottom:var(--sp-2); opacity:.65; }
-    .paso-content h4 { font-size:var(--fs-base); color:#fff; margin-bottom:var(--sp-2); font-family:var(--ff-body); font-weight:var(--fw-semi); }
-    .paso-content p { font-size:var(--fs-sm); color:rgba(255,255,255,.65); margin:0; line-height:var(--lh-snug); }
-    .p1 .paso-num{background:var(--c-acento)} .p1 .paso-linea{background:var(--c-acento)} .p1 .paso-tag{color:rgba(167,139,250,.9)}
-    .p2 .paso-num{background:var(--c-capacidad)} .p2 .paso-linea{background:var(--c-capacidad)} .p2 .paso-tag{color:rgba(96,165,250,.9)}
-    .p3 .paso-num{background:var(--c-motivacion)} .p3 .paso-linea{background:var(--c-motivacion)} .p3 .paso-tag{color:rgba(251,191,36,.9)}
-    .p4 .paso-num{background:var(--c-oportunidad)} .p4 .paso-linea{background:var(--c-oportunidad)} .p4 .paso-tag{color:rgba(52,211,153,.9)}
-    .p5 .paso-num{background:#7C3AED} .p5 .paso-linea{background:#7C3AED} .p5 .paso-tag{color:rgba(196,181,253,.9)}
-    .p6 .paso-num{background:#0E7490} .p6 .paso-linea{background:#0E7490} .p6 .paso-tag{color:rgba(103,232,249,.9)}
-    .p7 .paso-num{background:#065F46} .p7 .paso-linea{background:#065F46} .p7 .paso-tag{color:rgba(110,231,183,.9)}
+    .paso-tag { font-size:var(--fs-xs); font-weight:var(--fw-semi); text-transform:uppercase; letter-spacing:.07em; margin-bottom:var(--sp-2); opacity:1; }
+    .paso-content h4 { font-size:var(--fs-base); color:var(--c-texto); margin-bottom:var(--sp-2); font-family:var(--ff-body); font-weight:var(--fw-semi); }
+    .paso-content p { font-size:var(--fs-sm); color:var(--c-texto-secundario); margin:0; line-height:var(--lh-snug); }
+    .p1 .paso-num{background:var(--c-acento)} .p1 .paso-linea{background:var(--c-acento)} .p1 .paso-tag{color:var(--c-texto-secundario)}
+    .p2 .paso-num{background:var(--c-capacidad)} .p2 .paso-linea{background:var(--c-capacidad)} .p2 .paso-tag{color:var(--c-texto-secundario)}
+    .p3 .paso-num{background:var(--c-motivacion)} .p3 .paso-linea{background:var(--c-motivacion)} .p3 .paso-tag{color:var(--c-texto-secundario)}
+    .p4 .paso-num{background:var(--c-oportunidad)} .p4 .paso-linea{background:var(--c-oportunidad)} .p4 .paso-tag{color:var(--c-texto-secundario)}
+    .p5 .paso-num{background:#7C3AED} .p5 .paso-linea{background:#7C3AED} .p5 .paso-tag{color:var(--c-texto-secundario)}
+    .p6 .paso-num{background:#0E7490} .p6 .paso-linea{background:#0E7490} .p6 .paso-tag{color:var(--c-texto-secundario)}
+    .p7 .paso-num{background:#065F46} .p7 .paso-linea{background:#065F46} .p7 .paso-tag{color:var(--c-texto-secundario)}
 
     .diagrama-notas { display:flex; flex-direction:column; gap:var(--sp-5); }
-    .nota-card { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius-card); padding:var(--sp-5); }
-    .nota-card h4 { font-size:var(--fs-sm); color:rgba(255,255,255,.9); margin-bottom:var(--sp-3); font-family:var(--ff-body); font-weight:var(--fw-semi); }
-    .nota-card p { font-size:var(--fs-xs); color:rgba(255,255,255,.6); margin:0; line-height:var(--lh-snug); }
-    .medicion-dual { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius-card); padding:var(--sp-5); }
-    .medicion-dual h4 { font-size:var(--fs-sm);font-weight:var(--fw-semi); color:rgba(255,255,255,.9);margin-bottom:var(--sp-4);font-family:var(--ff-body); }
+    .nota-card { background:var(--c-superficie); border:1px solid var(--c-borde); border-radius:var(--radius-card); padding:var(--sp-5); }
+    .nota-card h4 { font-size:var(--fs-sm); color:var(--c-texto-secundario); margin-bottom:var(--sp-3); font-family:var(--ff-body); font-weight:var(--fw-semi); }
+    .nota-card p { font-size:var(--fs-xs); color:var(--c-texto-secundario); margin:0; line-height:var(--lh-snug); }
+    .medicion-dual { background:var(--c-superficie); border:1px solid var(--c-borde); border-radius:var(--radius-card); padding:var(--sp-5); }
+    .medicion-dual h4 { font-size:var(--fs-sm);font-weight:var(--fw-semi); color:var(--c-texto-secundario);margin-bottom:var(--sp-4);font-family:var(--ff-body); }
     .dual-cols { display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4); }
     .dual-col { border-radius:var(--radius);padding:var(--sp-4); }
-    .dual-col.obj{background:rgba(37,99,235,.2)} .dual-col.sub{background:rgba(217,119,6,.2)}
+    .dual-col.obj{background:var(--c-capacidad-claro)} .dual-col.sub{background:var(--c-motivacion-claro)}
     .dual-col-label { font-size:var(--fs-xs);font-weight:var(--fw-semi);text-transform:uppercase;letter-spacing:.07em;margin-bottom:var(--sp-3); }
-    .dual-col.obj .dual-col-label{color:rgba(147,197,253,.9)} .dual-col.sub .dual-col-label{color:rgba(253,211,77,.9)}
-    .dual-col ul{list-style:none;padding:0;margin:0} .dual-col li{font-size:var(--fs-xs);color:rgba(255,255,255,.65);margin-bottom:var(--sp-2)}
+    .dual-col.obj .dual-col-label{color:var(--c-capacidad-texto)} .dual-col.sub .dual-col-label{color:var(--c-motivacion-texto)}
+    .dual-col ul{list-style:none;padding:0;margin:0} .dual-col li{font-size:var(--fs-xs);color:var(--c-texto-secundario);margin-bottom:var(--sp-2)}
     .dual-col li:last-child{margin-bottom:0}
 
     .estrat-grid{display:grid;gap:var(--sp-5)}
@@ -112,13 +112,19 @@
     .dec-n{font-family:var(--ff-display);font-size:var(--fs-2xl);font-weight:var(--fw-semi);color:var(--c-acento);line-height:1;flex-shrink:0;min-width:2ch}
     .dec-texto{flex:1} .dec-texto p{font-size:var(--fs-sm);color:var(--c-texto);font-weight:var(--fw-medium);margin:0;line-height:var(--lh-snug)}
 
-    .dual-strip{background:var(--c-institucional);border-radius:var(--radius-card);padding:var(--sp-6);color:#fff;display:grid;gap:var(--sp-6)}
+    .dual-strip{background:var(--c-marca-claro);border:1px solid var(--c-borde);border-radius:var(--radius-card);padding:var(--sp-6);color:var(--c-texto);display:grid;gap:var(--sp-6)}
     @media(min-width:768px){.dual-strip{grid-template-columns:1fr 1fr;align-items:center}}
-    .dual-strip h3{color:#fff;font-size:var(--fs-xl);margin-bottom:var(--sp-3)} .dual-strip p{color:rgba(255,255,255,.75);font-size:var(--fs-sm);margin:0}
+    .dual-strip h3{color:var(--c-texto);font-size:var(--fs-xl);margin-bottom:var(--sp-3)} .dual-strip p{color:var(--c-texto-secundario);font-size:var(--fs-sm);margin:0}
     .dual-badges{display:flex;flex-wrap:wrap;gap:var(--sp-3)}
     .dual-badge{padding:var(--sp-4) var(--sp-5);border-radius:var(--radius-card);text-align:center;flex:1;min-width:120px}
-    .dual-badge.pres{background:rgba(37,99,235,.25);border:1px solid rgba(96,165,250,.3)} .dual-badge.tele{background:rgba(5,150,105,.25);border:1px solid rgba(52,211,153,.3)}
-    .dual-badge span{display:block;font-size:var(--fs-sm);font-weight:var(--fw-semi);color:#fff;margin-bottom:var(--sp-2)} .dual-badge small{font-size:var(--fs-xs);color:rgba(255,255,255,.6)}
+    .dual-badge.pres{background:var(--c-capacidad-claro);border:1px solid rgba(96,165,250,.3)} .dual-badge.tele{background:var(--c-oportunidad-claro);border:1px solid rgba(52,211,153,.3)}
+    .dual-badge span{display:block;font-size:var(--fs-sm);font-weight:var(--fw-semi);color:var(--c-texto);margin-bottom:var(--sp-2)} .dual-badge small{font-size:var(--fs-xs);color:var(--c-texto-secundario)}
+    .abc-num { color: var(--c-marca); }
+    .cmo-card.mot .cmo-card-icon { background: var(--c-motivacion-oscuro); }
+    .cmo-card.opp .cmo-card-icon { background: var(--c-oportunidad-oscuro); }
+    .paso-item.p3 .paso-num { color: var(--c-texto); background: var(--c-motivacion-claro); border: 2px solid var(--c-motivacion); }
+    .paso-item.p4 .paso-num { background: var(--c-oportunidad-oscuro); }
+    @media (max-width: 639px) { .dual-cols { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -397,10 +403,10 @@
             <div class="nota-card">
               <h4>La consulta de 10 minutos</h4>
               <p>El algoritmo está diseñado para aplicarse en el tiempo habitual de consulta. El guion ADHEFAR-EM desglosa la secuencia en bloques de 1-3 minutos para facilitar su uso en la práctica diaria.</p>
-              <a href="herramientas.html#guion" class="btn btn-ghost btn-sm" style="margin-top:var(--sp-4);color:rgba(255,255,255,.75);border-color:rgba(255,255,255,.2)">Ver guion de 10 min &rarr;</a>
+              <a href="herramientas.html#guion" class="btn btn-ghost btn-sm" style="margin-top:var(--sp-4);color:var(--c-texto-secundario);border-color:var(--c-texto-secundario)">Ver guion de 10 min &rarr;</a>
             </div>
-            <div style="background:rgba(255,255,255,.07);border-left:4px solid var(--c-acento);border-radius:0 var(--radius) var(--radius) 0;padding:var(--sp-4) var(--sp-5)">
-              <p style="font-size:var(--fs-sm);color:rgba(255,255,255,.75);margin:0">Los <strong style="color:#fff">checklists de visita inicial y sucesiva</strong> desarrollan estos 7 pasos con el detalle operativo necesario para su aplicación directa. <a href="herramientas.html#checklists" style="color:rgba(167,139,250,.9);display:block;margin-top:var(--sp-3)">Ir a herramientas &rarr;</a></p>
+            <div style="background:var(--c-superficie);border-left:4px solid var(--c-acento);border-radius:0 var(--radius) var(--radius) 0;padding:var(--sp-4) var(--sp-5)">
+              <p style="font-size:var(--fs-sm);color:var(--c-texto-secundario);margin:0">Los <strong style="color:var(--c-texto)">checklists de visita inicial y sucesiva</strong> desarrollan estos 7 pasos con el detalle operativo necesario para su aplicación directa. <a href="herramientas.html#checklists" style="color:var(--c-marca);display:block;margin-top:var(--sp-3)">Ir a herramientas &rarr;</a></p>
             </div>
           </div>
         </div>

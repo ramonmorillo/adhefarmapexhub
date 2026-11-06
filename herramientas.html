@@ -10,7 +10,7 @@
   <meta property="og:locale" content="es_ES">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
@@ -19,10 +19,10 @@
   <style>
     /* Layout con barra lateral */
     .herr-layout { display:grid; gap:var(--sp-8); align-items:start; }
-    @media(min-width:1024px) { .herr-layout { grid-template-columns:240px 1fr; } }
+    @media(min-width:1024px) { .herr-layout { grid-template-columns:224px minmax(0, 1fr); } }
 
     .herr-sidebar {
-      position:sticky; top:80px;
+      position:sticky; top:160px;
       background:var(--c-superficie);
       border-radius:var(--radius-card);
       border:1.5px solid var(--c-borde-claro);
@@ -46,7 +46,7 @@
       box-shadow:var(--shadow-sm);
       overflow:hidden;
       margin-bottom:var(--sp-8);
-      scroll-margin-top:90px;
+      scroll-margin-top:160px;
     }
     .herr-seccion-head {
       padding:var(--sp-5) var(--sp-6);
@@ -161,6 +161,10 @@
       .resumen-tabla { font-size:8pt; }
       .resumen-tabla th { font-size:7pt; }
     }
+    .herr-seccion-head { background: var(--c-fondo); }
+    .herr-sidebar { max-height: calc(100dvh - 176px); overflow-y: auto; }
+    .herr-body .input, .herr-body .select { min-height: 44px; }
+    @media (max-width: 639px) { .herr-body, .herr-seccion-head { padding: var(--sp-5) var(--sp-4); } }
   </style>
 </head>
 <body>
@@ -510,7 +514,7 @@
                     <button class="btn btn-hero-secondary btn-sm" id="timer-start" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3)">Iniciar</button>
                     <button class="btn btn-ghost btn-sm" id="timer-reset" style="color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.2)">Reiniciar</button>
                   </div>
-                  <div style="font-size:0.667rem;color:rgba(255,255,255,.4);max-width:200px">El bloque activo se resalta automáticamente según el tiempo transcurrido.</div>
+                  <div style="font-size:0.667rem;color:rgba(255,255,255,.8);max-width:200px">El bloque activo se resalta automáticamente según el tiempo transcurrido.</div>
                 </div>
 
                 <div class="guion-bloques" role="list">
@@ -699,7 +703,7 @@
 
                     <div class="grid-2">
                       <div class="form-group">
-                        <label for="plt-barrera">Barrera CMO predominante</label>
+                        <label for="plt-intervencion">Barrera CMO predominante</label>
                         <select id="plt-intervencion" class="select">
                           <option value="">Seleccionar...</option>
                           <option value="Capacidad — barrera de práctica">Capacidad — barrera de práctica</option>
@@ -779,7 +783,7 @@
                   <button class="btn btn-primary btn-sm" onclick="window.print()">Imprimir una cara</button>
                 </div>
               </div>
-              <div class="herr-body" style="overflow-x:auto">
+              <div class="herr-body" style="overflow-x:auto" tabindex="0" role="region" aria-label="Hoja-resumen de consulta, tabla desplazable">
                 <div class="print-header">
                   <strong>Hoja-resumen de consulta · MAPEX-ADHEFAR Hub</strong><br>
                   <span style="font-size:0.778rem">Grupo ADHEFAR · SEFH · 2026</span>
